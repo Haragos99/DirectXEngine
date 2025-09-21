@@ -72,24 +72,16 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 
 
 
-	D3D11_RASTERIZER_DESC rasterDesc = {};
-	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;   // Wireframe mode
-	rasterDesc.CullMode = D3D11_CULL_BACK;        // Or D3D11_CULL_NONE if you want to see both sides
-	rasterDesc.FrontCounterClockwise = FALSE;
-	rasterDesc.DepthClipEnable = TRUE;
+	// Rasterizer states
+	D3D11_RASTERIZER_DESC rsDesc = {};
+	rsDesc.FillMode = D3D11_FILL_SOLID;
+	rsDesc.CullMode = D3D11_CULL_BACK;
+	rsDesc.DepthClipEnable = TRUE;
+	gfx->CreateRasterizerState(&rsDesc, &solidRS);
 
-	hr = gfx->CreateRasterizerState(&rasterDesc, &wireframeRS);
-	if (FAILED(hr))
-	{
-		throw std::runtime_error("Failed to create wireframe rasterizer state");
-	}
-
-
-
-	// Solid
-	D3D11_RASTERIZER_DESC solidDesc = rasterDesc;
-	solidDesc.FillMode = D3D11_FILL_SOLID;
-	gfx->CreateRasterizerState(&solidDesc, &solidRS);
+	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rsDesc.CullMode = D3D11_CULL_NONE; // Show all edges
+	gfx->CreateRasterizerState(&rsDesc, &wireframeRS);
 
 	// Load Shaders
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
@@ -106,18 +98,29 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 
 		throw std::runtime_error("Vertex Shader compilation failed");
 	}
-	 hr = hr = D3DCompileFromFile(
+	 hr = D3DCompileFromFile(
 		 L"PixelShader.hlsl", nullptr, nullptr,
 		 "PSMain", "ps_5_0",
 		 D3DCOMPILE_ENABLE_STRICTNESS, 0,
 		 &psBlob, &errorBlob
 	 );
 
+
+
 	 if (FAILED(hr))
 	 {
 
 		 throw std::runtime_error("Vertex Shader compilation failed");
 	 }
+
+
+	 // Black pixel shader (for wireframe)
+	 Microsoft::WRL::ComPtr<ID3DBlob> psBlobB;
+	 D3DCompileFromFile(L"BlackPixelShader.hlsl", nullptr, nullptr,
+		 "PSMain", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
+		 &psBlobB, nullptr);
+
+	gfx->CreatePixelShader(psBlobB->GetBufferPointer(), psBlobB->GetBufferSize(),nullptr, &blackPixelShader);
 	gfx->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
 	gfx->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
 
@@ -158,19 +161,27 @@ void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera came
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	gfx->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	// Bind index buffer
 	gfx->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	gfx->IASetInputLayout(inputLayout.Get());
 	gfx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	gfx->VSSetShader(vertexShader.Get(), nullptr, 0);
-	gfx->PSSetShader(pixelShader.Get(), nullptr, 0);
-	// Update constant buffer
+
+	// Constant buffer update
 	MatrixBuffer mb;
 	mb.world = DirectX::XMMatrixTranspose(world);
 	mb.view = DirectX::XMMatrixTranspose(view);
 	mb.projection = DirectX::XMMatrixTranspose(projection);
 	gfx->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
 	gfx->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
-	gfx->RSSetState(wireframeEnabled ? wireframeRS.Get() : solidRS.Get());
-	gfx->DrawIndexed(36, 0,0);
+
+	// Solid
+	gfx->RSSetState(solidRS.Get());
+	gfx->VSSetShader(vertexShader.Get(), nullptr, 0);
+	gfx->PSSetShader(pixelShader.Get(), nullptr, 0);
+	gfx->DrawIndexed(36, 0, 0);
+
+	// Wireframe overlay
+	gfx->RSSetState(wireframeRS.Get());
+	gfx->PSSetShader(blackPixelShader.Get(), nullptr, 0);
+
+	gfx->DrawIndexed(36, 0, 0);
 }

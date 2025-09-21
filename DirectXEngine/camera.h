@@ -9,7 +9,7 @@ public:
     void SetPosition(float x, float y, float z);
     void Move(float dx, float dy, float dz);
     void Rotate(float _pitch, float _yaw);
-
+    DirectX::XMFLOAT3 getPos() { return eye; }
     DirectX::XMMATRIX GetViewMatrix() const;
     DirectX::XMMATRIX GetProjectionMatrix() const;
 

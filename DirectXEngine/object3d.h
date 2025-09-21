@@ -21,16 +21,25 @@ struct MatrixBuffer
 };
 
 
+enum class RenderMode
+{
+	Solid,
+	WireframeOnly,
+	SolidWireframe
+};
+
+
+
 class Object3D
 {
 public:
 	Object3D() = default;
 	Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx);
 	void Update(float time);     // animate rotation
-	void Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera);
+	virtual void Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera);
 	bool wireframeEnabled;
 
-private:
+protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
@@ -38,6 +47,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> wireframeRS;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> blackPixelShader;
+
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> solidRS;
 	DirectX::XMMATRIX world;
 };
