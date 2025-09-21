@@ -17,7 +17,7 @@ public:
 
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
-    
+    void changeWireFrame() { cube.wireframeEnabled = !cube.wireframeEnabled; }
     Object3D cube;
 	Camera camera;
 private:

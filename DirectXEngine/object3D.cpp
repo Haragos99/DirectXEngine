@@ -69,6 +69,28 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	if (FAILED(hr))
 		throw std::runtime_error("Failed to create index buffer");
 
+
+
+
+	D3D11_RASTERIZER_DESC rasterDesc = {};
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;   // Wireframe mode
+	rasterDesc.CullMode = D3D11_CULL_BACK;        // Or D3D11_CULL_NONE if you want to see both sides
+	rasterDesc.FrontCounterClockwise = FALSE;
+	rasterDesc.DepthClipEnable = TRUE;
+
+	hr = gfx->CreateRasterizerState(&rasterDesc, &wireframeRS);
+	if (FAILED(hr))
+	{
+		throw std::runtime_error("Failed to create wireframe rasterizer state");
+	}
+
+
+
+	// Solid
+	D3D11_RASTERIZER_DESC solidDesc = rasterDesc;
+	solidDesc.FillMode = D3D11_FILL_SOLID;
+	gfx->CreateRasterizerState(&solidDesc, &solidRS);
+
 	// Load Shaders
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob; // This will hold compilation errors
@@ -115,6 +137,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	cbd.ByteWidth = sizeof(MatrixBuffer);
 	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	gfx->CreateBuffer(&cbd, nullptr, &constantBuffer);
+	wireframeEnabled = false;
 }
 
 
@@ -148,5 +171,6 @@ void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera came
 	mb.projection = DirectX::XMMatrixTranspose(projection);
 	gfx->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
 	gfx->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+	gfx->RSSetState(wireframeEnabled ? wireframeRS.Get() : solidRS.Get());
 	gfx->DrawIndexed(36, 0,0);
 }

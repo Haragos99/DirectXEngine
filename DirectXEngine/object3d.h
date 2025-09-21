@@ -28,6 +28,7 @@ public:
 	Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx);
 	void Update(float time);     // animate rotation
 	void Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera);
+	bool wireframeEnabled;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
@@ -36,6 +37,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> wireframeRS;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> solidRS;
 	DirectX::XMMATRIX world;
 };

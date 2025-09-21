@@ -30,7 +30,7 @@ int Engine::Run()
 			if (keyboardEvent->IsKeyDown('D')) graphics.camera.Move(speed, 0, 0);
 			if (keyboardEvent->IsKeyDown(VK_SPACE)) graphics.camera.Move(0, speed, 0);
 			if (keyboardEvent->IsKeyDown(VK_SHIFT)) graphics.camera.Move(0, -speed, 0);
-
+			if (keyboardEvent->IsKeyDown('T')) graphics.changeWireFrame();
 
 			if (mouseEvent->IsButtonDown(VK_LBUTTON))
 			{
