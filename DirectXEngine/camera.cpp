@@ -2,46 +2,93 @@
 using namespace DirectX;
 
 Camera::Camera(float aspectRatio)
-    : position(XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f)),
-    pitch(0.0f),
-    yaw(0.0f),
-	roll(0.0f)
+	: position(XMVectorSet(0.0f, 0.0f, -5.0f, 1.0f)),
+	pitch(0.0f),
+	yaw(0.0f),
+	roll(0.0f),
+	fov(XM_PIDIV4), aspect(aspectRatio), nearZ(0.1f), farZ(100.0f), eye(0.0f, 0.0f, -5.0f), lookAt(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f)
 {
-    projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, aspectRatio, 0.1f, 100.0f);
+
 }
 
 void Camera::SetPosition(float x, float y, float z)
 {
-    position = XMVectorSet(x, y, z, 1.0f);
+	position = XMVectorSet(x, y, z, 1.0f);
 }
 
 void Camera::Move(float dx, float dy, float dz)
 {
-    XMMATRIX rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
-    XMVECTOR forward = XMVector3TransformCoord(XMVectorSet(0, 0, 1, 0), rotation);
-    XMVECTOR right = XMVector3TransformCoord(XMVectorSet(1, 0, 0, 0), rotation);
-    XMVECTOR up = XMVectorSet(0, 1, 0, 0);
+	float speed = 0.5f;
 
-    position += dx * right + dy * up + dz * forward;
+
+	// Load vectors
+	XMVECTOR eyeVec = XMLoadFloat3(&eye);
+	XMVECTOR lookAtVec = XMLoadFloat3(&lookAt);
+	XMVECTOR upVec = XMLoadFloat3(&up);
+
+	// Forward, right, up vectors
+	XMVECTOR forward = XMVector3Normalize(lookAtVec - eyeVec);
+	XMVECTOR right = XMVector3Normalize(XMVector3Cross(upVec, forward));
+
+	// Movement direction
+	XMVECTOR moveVec =
+		forward * dz +
+		right * dx +
+		upVec * dy;
+
+	moveVec = XMVectorScale(moveVec, speed);
+
+	// Apply movement to both eye and lookAt
+	eyeVec += moveVec;
+	lookAtVec += moveVec;
+
+	XMStoreFloat3(&eye, eyeVec);
+	XMStoreFloat3(&lookAt, lookAtVec);
 }
 
-void Camera::Rotate(float _pitch, float _yaw, float _rool)
+void Camera::Rotate(float _pitch, float _yaw)
 {
-    pitch += _pitch;
-    yaw += _yaw;
-	roll += _rool;
+	// Convert to vectors
+	XMVECTOR wEye = XMLoadFloat3(&eye);
+	XMVECTOR wLookat = XMLoadFloat3(&lookAt);
+	XMVECTOR wVup = XMLoadFloat3(&up);
+
+	// View direction and right axis
+	XMVECTOR w = XMVector3Normalize(wEye - wLookat);
+	XMVECTOR u = XMVector3Normalize(XMVector3Cross(wVup, w));
+
+	// Build rotation matrices
+	XMMATRIX rotX = XMMatrixRotationAxis(u, _pitch);   // Horizontal
+	XMMATRIX rotY = XMMatrixRotationAxis(wVup, _yaw);// Vertical
+
+	// Local eye vector
+	XMVECTOR lEye = wEye - wLookat;
+
+	// Rotate around Y (safe)
+	lEye = XMVector3Transform(lEye, rotY);
+	wEye = lEye + wLookat;
+
+	// Rotate around X (check gimbal lock)
+	XMVECTOR lEyeTest = XMVector3Transform(lEye, rotX);
+
+	// Dot product check (avoid looking straight up/down)
+	XMVECTOR lEyeNorm = XMVector3Normalize(lEyeTest);
+	float dotUp = XMVectorGetX(XMVector3Dot(lEyeNorm, XMVector3Normalize(wVup)));
+
+	if (fabsf(dotUp) < 0.95f) {
+		lEye = lEyeTest;
+		wEye = lEye + wLookat;
+	}
+
+	XMStoreFloat3(&eye, wEye);
 }
 
 XMMATRIX Camera::GetViewMatrix() const
 {
-    XMMATRIX rotation = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
-    XMVECTOR target = XMVector3TransformCoord(XMVectorSet(0, 0, 1, 0), rotation);
-    XMVECTOR up = XMVector3TransformCoord(XMVectorSet(0, 1, 0, 0), rotation);
-
-    return XMMatrixLookAtLH(position, position + target, up);
+	return XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up));
 }
 
 XMMATRIX Camera::GetProjectionMatrix() const
 {
-    return projection;
+	return XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ);
 }

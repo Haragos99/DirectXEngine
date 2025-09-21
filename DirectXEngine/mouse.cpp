@@ -1,5 +1,5 @@
 #include "mouse.h"
-#include <Windows.h>
+#include <windows.h>
 void Mouse::OnMouseMove(int newX, int newY)
 {
     prevX = x;

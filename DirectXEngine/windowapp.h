@@ -13,6 +13,8 @@ public:
     static std::unique_ptr<Mouse> mouseEvent;
     static std::unique_ptr<Keyboard> keyboardEvent;
 private:
+    int windowWidth;
+    int windowHeight;
     HINSTANCE hInst;
     HWND hWnd;
 };

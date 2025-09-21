@@ -4,7 +4,7 @@ std::unique_ptr<Mouse> WindowApp::mouseEvent = nullptr;
 std::unique_ptr<Keyboard> WindowApp::keyboardEvent = nullptr;
 
 
-WindowApp::WindowApp(HINSTANCE hInstance, LPCWSTR window_title, LPCWSTR window_class, int width, int height, int nCmdShow)
+WindowApp::WindowApp(HINSTANCE hInstance, LPCWSTR window_title, LPCWSTR window_class, int width, int height, int nCmdShow) : windowHeight(height), windowWidth(width)
 {
     WNDCLASS wc = {};
     wc.lpfnWndProc = WndProc;
@@ -34,6 +34,8 @@ LRESULT CALLBACK WindowApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 {
     int x;
     int y;
+    float cX;
+    float cY;
     switch (msg)
     {
     case WM_KEYDOWN:
@@ -45,6 +47,10 @@ LRESULT CALLBACK WindowApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     case WM_MOUSEMOVE:
         x = LOWORD(lParam);
         y = HIWORD(lParam);
+
+        // Convert to normalized device space
+        cX = 2.0f * x / 1280 - 1;	// flip y axis
+        cY = 1.0f - 2.0f * y / 720;
         mouseEvent->OnMouseMove(x, y);
         return 0;
     case WM_LBUTTONDOWN:
