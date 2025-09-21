@@ -1,4 +1,4 @@
-#include "object3d.h"
+﻿#include "object3d.h"
 #include <stdexcept>
 #include <d3dcompiler.h>
 
@@ -6,62 +6,42 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	: world(DirectX::XMMatrixIdentity())
 {
 	// Define a simple triangle
-
-	Vertex vertices[] = {
-		// Front face (z = +0.5)
-		{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-
-		{ { -0.5f, -0.5f,  0.5f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
-		{ {  0.5f, -0.5f,  0.5f }, { 1.0f, 1.0f, 0.0f, 1.0f } },
-
-		// Back face (z = -0.5)
-		{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-		{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-		{ { -0.5f,  0.5f, -0.5f }, { 0.5f, 0.5f, 0.5f, 1.0f } },
-
-		{ { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f, 1.0f } },
-		{ {  0.5f, -0.5f, -0.5f }, { 0.0f, 0.5f, 0.5f, 1.0f } },
-		{ {  0.5f,  0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f, 1.0f } },
-
-		// Left face (x = -0.5)
-		{ { -0.5f, -0.5f, -0.5f }, { 0.3f, 0.2f, 0.5f, 1.0f } },
-		{ { -0.5f,  0.5f,  0.5f }, { 0.9f, 0.2f, 0.1f, 1.0f } },
-		{ { -0.5f,  0.5f, -0.5f }, { 0.1f, 0.8f, 0.1f, 1.0f } },
-
-		{ { -0.5f, -0.5f, -0.5f }, { 0.3f, 0.2f, 0.5f, 1.0f } },
-		{ { -0.5f, -0.5f,  0.5f }, { 0.2f, 0.7f, 0.4f, 1.0f } },
-		{ { -0.5f,  0.5f,  0.5f }, { 0.9f, 0.2f, 0.1f, 1.0f } },
-
-		// Right face (x = +0.5)
-		{ {  0.5f, -0.5f, -0.5f }, { 0.8f, 0.8f, 0.2f, 1.0f } },
-		{ {  0.5f,  0.5f, -0.5f }, { 0.7f, 0.1f, 0.9f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.1f, 0.6f, 0.9f, 1.0f } },
-
-		{ {  0.5f, -0.5f, -0.5f }, { 0.8f, 0.8f, 0.2f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.1f, 0.6f, 0.9f, 1.0f } },
-		{ {  0.5f, -0.5f,  0.5f }, { 0.7f, 0.7f, 0.7f, 1.0f } },
-
-		// Top face (y = +0.5)
-		{ { -0.5f,  0.5f, -0.5f }, { 0.9f, 0.0f, 0.3f, 1.0f } },
-		{ { -0.5f,  0.5f,  0.5f }, { 0.0f, 0.3f, 0.9f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.6f, 0.2f, 0.1f, 1.0f } },
-
-		{ { -0.5f,  0.5f, -0.5f }, { 0.9f, 0.0f, 0.3f, 1.0f } },
-		{ {  0.5f,  0.5f,  0.5f }, { 0.6f, 0.2f, 0.1f, 1.0f } },
-		{ {  0.5f,  0.5f, -0.5f }, { 0.2f, 0.9f, 0.5f, 1.0f } },
-
-		// Bottom face (y = -0.5)
-		{ { -0.5f, -0.5f, -0.5f }, { 0.4f, 0.4f, 0.4f, 1.0f } },
-		{ {  0.5f, -0.5f,  0.5f }, { 0.3f, 0.7f, 0.7f, 1.0f } },
-		{ { -0.5f, -0.5f,  0.5f }, { 0.6f, 0.6f, 0.1f, 1.0f } },
-
-		{ { -0.5f, -0.5f, -0.5f }, { 0.4f, 0.4f, 0.4f, 1.0f } },
-		{ {  0.5f, -0.5f, -0.5f }, { 0.5f, 0.2f, 0.8f, 1.0f } },
-		{ {  0.5f, -0.5f,  0.5f }, { 0.3f, 0.7f, 0.7f, 1.0f } },
+	Vertex vertices[] =
+	{
+		// 8 corners of a cube
+	   { {-1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+		{ {1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
+		{ {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} },
+		{ {-1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
+		{ {-1.0f, -1.0f, -1.0f},{ 1.0f, 0.0f, 1.0f, 1.0f} },
+		{ {1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} },
+		{ {1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f} },
+		{ {-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f} },
 	};
+
+
+	// 12 triangles  36 indices
+	UINT indices[] =
+	{
+	3,1,0,
+	2,1,3,
+
+	0,5,4,
+	1,5,0,
+
+	3,4,7,
+	0,4,3,
+
+	1,6,5,
+	2,6,1,
+
+	2,7,6,
+	3,7,2,
+
+	6,4,5,
+	7,4,6,
+	};
+
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.ByteWidth = sizeof(vertices);
@@ -72,6 +52,22 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	HRESULT hr = gfx->CreateBuffer(&bd, &initData, &vertexBuffer);
 	if (FAILED(hr))
 		throw std::runtime_error("Failed to create vertex buffer");
+
+
+
+	// Index Buffer
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.ByteWidth = sizeof(indices);
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA iinitData = {};
+	iinitData.pSysMem = indices;
+
+	
+	gfx->CreateBuffer(&ibd, &iinitData, &indexBuffer);
+	if (FAILED(hr))
+		throw std::runtime_error("Failed to create index buffer");
 
 	// Load Shaders
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
@@ -139,6 +135,8 @@ void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera came
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	gfx->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	// Bind index buffer
+	gfx->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	gfx->IASetInputLayout(inputLayout.Get());
 	gfx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gfx->VSSetShader(vertexShader.Get(), nullptr, 0);
@@ -150,5 +148,5 @@ void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera came
 	mb.projection = DirectX::XMMatrixTranspose(projection);
 	gfx->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
 	gfx->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
-	gfx->Draw(36, 0);
+	gfx->DrawIndexed(36, 0,0);
 }

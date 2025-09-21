@@ -36,7 +36,9 @@ int Engine::Run()
 			{
 				int deltax = mouseEvent->GetDeltaX();
 				int deltay = mouseEvent->GetDeltaY();
-				graphics.camera.Rotate(deltax * 0.05, deltay * 0.05);
+				float x = (2.0f * deltax) / 1280 - 1.0f;
+				float y = 1.0f - (2.0f * deltay) / 720;
+				graphics.camera.Rotate(deltay * 0.005, deltax * 0.005);
 			}
 			graphics.RenderFrame();
 		}
