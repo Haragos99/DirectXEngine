@@ -3,7 +3,7 @@
 class EnvCube : public Object3D
 {
 public:
-    EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> cubeMapSRV);
+    EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx);
 
     void Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera) override;
 
