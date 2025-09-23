@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{90190580-a16f-4c23-92c5-86204ba3e422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{0f0f477a-cdaa-4ae1-ba55-b6942c4af44d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,7 +45,13 @@
     <ClCompile Include="object3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="envcube .cpp">
+    <ClCompile Include="..\External\DDSTextureLoader.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\WICTextureLoader.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="envcube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,22 +80,28 @@
     <ClInclude Include="envcube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\External\DDSTextureLoader.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\WICTextureLoader.h">
+      <Filter>External</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>Source Files</Filter>
+    <FxCompile Include="shaders\BlackPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>Source Files</Filter>
+    <FxCompile Include="shaders\EnvPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="EnvVertexShader.hlsl">
-      <Filter>Source Files</Filter>
+    <FxCompile Include="shaders\EnvVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="EnvPixelShader.hlsl">
-      <Filter>Source Files</Filter>
+    <FxCompile Include="shaders\PixelShader.hlsl">
+      <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="BlackPixelShader.hlsl">
-      <Filter>Source Files</Filter>
+    <FxCompile Include="shaders\VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -2,9 +2,14 @@
 #include <stdexcept>
 #include <d3dcompiler.h>
 
+
 Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	: world(DirectX::XMMatrixIdentity())
 {
+	std::wstring shaderPathV =  L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\VertexShader.hlsl";
+	std::wstring shaderPathP =  L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\PixelShader.hlsl";
+	std::wstring shaderPathB = L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\BlackPixelShader.hlsl";
+
 	// Define a simple triangle
 	Vertex vertices[] =
 	{
@@ -87,7 +92,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob; // This will hold compilation errors
 	hr = D3DCompileFromFile(
-		L"VertexShader.hlsl",  // file path
+		shaderPathV.c_str(),  // file path
 		nullptr, nullptr,
 		"VSMain", "vs_5_0",
 		D3DCOMPILE_ENABLE_STRICTNESS, 0,
@@ -99,7 +104,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 		throw std::runtime_error("Vertex Shader compilation failed");
 	}
 	 hr = D3DCompileFromFile(
-		 L"PixelShader.hlsl", nullptr, nullptr,
+		 shaderPathP.c_str(), nullptr, nullptr,
 		 "PSMain", "ps_5_0",
 		 D3DCOMPILE_ENABLE_STRICTNESS, 0,
 		 &psBlob, &errorBlob
@@ -116,7 +121,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 
 	 // Black pixel shader (for wireframe)
 	 Microsoft::WRL::ComPtr<ID3DBlob> psBlobB;
-	 D3DCompileFromFile(L"BlackPixelShader.hlsl", nullptr, nullptr,
+	 D3DCompileFromFile(shaderPathB.c_str(), nullptr, nullptr,
 		 "PSMain", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
 		 &psBlobB, nullptr);
 

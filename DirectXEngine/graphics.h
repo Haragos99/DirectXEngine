@@ -3,6 +3,7 @@
 #include <wrl.h> // Microsoft::WRL::ComPtr
 #include "camera.h"
 #include "object3d.h"
+#include "envcube.h"
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
@@ -19,6 +20,7 @@ public:
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeWireFrame() { cube.wireframeEnabled = !cube.wireframeEnabled; }
     Object3D cube;
+    EnvCube envcube;
 	Camera camera;
 private:
     

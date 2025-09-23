@@ -4,7 +4,7 @@
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
 {
     DXGI_SWAP_CHAIN_DESC scd = {};
-    scd.BufferCount = 1;
+    scd.BufferCount = 2;
     scd.BufferDesc.Width = width;
     scd.BufferDesc.Height = height;
     scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -92,6 +92,7 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     viewport.TopLeftY = 0;
     context->RSSetViewports(1, &viewport);
 	cube = Object3D(device);
+    envcube = EnvCube(device,context);
 }
 
 void Graphics::Clear(float r, float g, float b, float a)
@@ -104,6 +105,7 @@ void Graphics::Clear(float r, float g, float b, float a)
 
 void Graphics::RenderFrame()
 {
+    envcube.Draw(context, camera);
 	cube.Draw(context, camera);
     swapChain->Present(1, 0); // vsync on
 }
