@@ -104,4 +104,12 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\Background.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Resources\cloudy_skybox.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

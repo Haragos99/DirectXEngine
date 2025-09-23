@@ -5,7 +5,7 @@
 EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> fx) 
 {
 
-    std::wstring name =  L"C:\\Dev\\DirectXEngine\\DirectXEngine\\cloudy_skybox.dds";
+    std::wstring name =  L"..\\Resources\\cloudy_skybox.dds";
 
     // Initialize cube vertex & index buffers same as Object3D (reuse your cube data)
     HRESULT hr = DirectX::CreateDDSTextureFromFile(
@@ -22,8 +22,8 @@ EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPt
         throw std::runtime_error("CUBE compilation failed");
     }
 
-    std::wstring shaderPathV = L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\EnvVertexShader.hlsl";
-    std::wstring shaderPathP = L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\EnvPixelShader.hlsl";
+    std::wstring shaderPathV = L"shaders\\EnvVertexShader.hlsl";
+    std::wstring shaderPathP = L"shaders\\EnvPixelShader.hlsl";
 
     // Load environment shaders
     Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;

@@ -6,9 +6,9 @@
 Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
 	: world(DirectX::XMMatrixIdentity())
 {
-	std::wstring shaderPathV =  L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\VertexShader.hlsl";
-	std::wstring shaderPathP =  L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\PixelShader.hlsl";
-	std::wstring shaderPathB = L"C:\\Dev\\DirectXEngine\\DirectXEngine\\shaders\\BlackPixelShader.hlsl";
+	std::wstring shaderPathV =  L"shaders\\VertexShader.hlsl";
+	std::wstring shaderPathP =  L"shaders\\PixelShader.hlsl";
+	std::wstring shaderPathB =  L"shaders\\BlackPixelShader.hlsl";
 
 	// Define a simple triangle
 	Vertex vertices[] =
@@ -185,8 +185,8 @@ void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera came
 	gfx->DrawIndexed(36, 0, 0);
 
 	// Wireframe overlay
-	gfx->RSSetState(wireframeRS.Get());
-	gfx->PSSetShader(blackPixelShader.Get(), nullptr, 0);
+	//gfx->RSSetState(wireframeRS.Get());
+	//gfx->PSSetShader(blackPixelShader.Get(), nullptr, 0);
 
 	gfx->DrawIndexed(36, 0, 0);
 }
