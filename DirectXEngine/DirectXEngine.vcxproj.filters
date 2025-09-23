@@ -54,6 +54,9 @@
     <ClCompile Include="envcube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -86,6 +89,9 @@
     <ClInclude Include="..\External\WICTextureLoader.h">
       <Filter>External</Filter>
     </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BlackPixelShader.hlsl">
@@ -109,6 +115,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Resources\cloudy_skybox.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Resources\wood.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

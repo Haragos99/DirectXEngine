@@ -1,10 +1,17 @@
+// Texture sampler
+SamplerState gTextureSampler : register(s0);
+
+// Textures
+Texture2D gTextureDiffuse : register(t0);
+
 struct VS_OUT
 {
-    float4 pos : SV_POSITION;
-    float3 col : COLOR;
+    float4 position : SV_POSITION;
+    float2 tex : TEXTURE;
 };
 
 float4 PSMain(VS_OUT input) : SV_TARGET
 {
-    return float4(input.col, 1.0f); // RGB + alpha = 1
+    float4 diffuse_texture = gTextureDiffuse.Sample(gTextureSampler, input.tex);
+    return diffuse_texture;
 }

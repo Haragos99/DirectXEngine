@@ -1,152 +1,173 @@
 ﻿#include "object3d.h"
 #include <stdexcept>
 #include <d3dcompiler.h>
+using namespace DirectX;
 
-
-Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> gfx)
-	: world(DirectX::XMMatrixIdentity())
+Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contexx) : world(DirectX::XMMatrixIdentity()), device(_device), context(_contexx)
 {
-	std::wstring shaderPathV =  L"shaders\\VertexShader.hlsl";
-	std::wstring shaderPathP =  L"shaders\\PixelShader.hlsl";
-	std::wstring shaderPathB =  L"shaders\\BlackPixelShader.hlsl";
-
-	// Define a simple triangle
-	Vertex vertices[] =
-	{
-		// 8 corners of a cube
-	   { {-1.0f, 1.0f, -1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
-		{ {1.0f, 1.0f, -1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-		{ {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} },
-		{ {-1.0f, 1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-		{ {-1.0f, -1.0f, -1.0f},{ 1.0f, 0.0f, 1.0f, 1.0f} },
-		{ {1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} },
-		{ {1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f} },
-		{ {-1.0f, -1.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f} },
-	};
-
-
+	createTexturedCube();
+	texture = std::make_unique<Texture>(device, context);
+	texture->LoadTextureFromFile(L"..\\Resources\\wood.png");
 	// 12 triangles  36 indices
-	UINT indices[] =
-	{
-	3,1,0,
-	2,1,3,
-
-	0,5,4,
-	1,5,0,
-
-	3,4,7,
-	0,4,3,
-
-	1,6,5,
-	2,6,1,
-
-	2,7,6,
-	3,7,2,
-
-	6,4,5,
-	7,4,6,
+	indices = {
+		// Front (-Z)
+		0, 1, 2, 0, 2, 3,
+		// Back (+Z)
+		4, 5, 6, 4, 6, 7,
+		// Left (-X)
+		8, 9, 10, 8, 10, 11,
+		// Right (+X)
+		12, 13, 14, 12, 14, 15,
+		// Top (+Y)
+		16, 17, 18, 16, 18, 19,
+		// Bottom (-Y)
+		20, 21, 22, 20, 22, 23
 	};
-
-	D3D11_BUFFER_DESC bd = {};
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(vertices);
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA initData = {};
-	initData.pSysMem = vertices;
-	HRESULT hr = gfx->CreateBuffer(&bd, &initData, &vertexBuffer);
-	if (FAILED(hr))
-		throw std::runtime_error("Failed to create vertex buffer");
+	createVertexBuffer();
+	createInexxBuffer();
+	loadShaders();
+	createConstantBuffer();
+	wireframeEnabled = false;
+}
 
 
+void Object3D::createConstantBuffer()
+{
+	// Constant Buffer
+	D3D11_BUFFER_DESC cbd = {};
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(MatrixBuffer);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	device->CreateBuffer(&cbd, nullptr, &constantBuffer);
+}
 
-	// Index Buffer
-	D3D11_BUFFER_DESC ibd = {};
-	ibd.Usage = D3D11_USAGE_DEFAULT;
-	ibd.ByteWidth = sizeof(indices);
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA iinitData = {};
-	iinitData.pSysMem = indices;
-
-	
-	gfx->CreateBuffer(&ibd, &iinitData, &indexBuffer);
-	if (FAILED(hr))
-		throw std::runtime_error("Failed to create index buffer");
-
-
-
-
-	// Rasterizer states
-	D3D11_RASTERIZER_DESC rsDesc = {};
-	rsDesc.FillMode = D3D11_FILL_SOLID;
-	rsDesc.CullMode = D3D11_CULL_BACK;
-	rsDesc.DepthClipEnable = TRUE;
-	gfx->CreateRasterizerState(&rsDesc, &solidRS);
-
-	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
-	rsDesc.CullMode = D3D11_CULL_NONE; // Show all edges
-	gfx->CreateRasterizerState(&rsDesc, &wireframeRS);
+void Object3D::loadShaders()
+{
+	std::wstring shaderPathV = L"shaders\\VertexShader.hlsl";
+	std::wstring shaderPathP = L"shaders\\PixelShader.hlsl";
+	std::wstring shaderPathB = L"shaders\\BlackPixelShader.hlsl";
 
 	// Load Shaders
 	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
 	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob; // This will hold compilation errors
-	hr = D3DCompileFromFile(
+	HRESULT hr = D3DCompileFromFile(
 		shaderPathV.c_str(),  // file path
 		nullptr, nullptr,
 		"VSMain", "vs_5_0",
 		D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		&vsBlob, &errorBlob);
+		&vsBlob, &errorBlob
+	);
 
 	if (FAILED(hr))
 	{
 
 		throw std::runtime_error("Vertex Shader compilation failed");
 	}
-	 hr = D3DCompileFromFile(
-		 shaderPathP.c_str(), nullptr, nullptr,
-		 "PSMain", "ps_5_0",
-		 D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		 &psBlob, &errorBlob
-	 );
+	hr = D3DCompileFromFile(
+		shaderPathP.c_str(), nullptr, nullptr,
+		"PSMain", "ps_5_0",
+		D3DCOMPILE_ENABLE_STRICTNESS, 0,
+		&psBlob, &errorBlob
+	);
+	if (FAILED(hr))
+	{
 
+		throw std::runtime_error("Vertex Shader compilation failed");
+	}
 
+	// Black pixel shader (for wireframe)
+	Microsoft::WRL::ComPtr<ID3DBlob> psBlobB;
+	D3DCompileFromFile(shaderPathB.c_str(), nullptr, nullptr,
+		"PSMain", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
+		&psBlobB, nullptr);
 
-	 if (FAILED(hr))
-	 {
-
-		 throw std::runtime_error("Vertex Shader compilation failed");
-	 }
-
-
-	 // Black pixel shader (for wireframe)
-	 Microsoft::WRL::ComPtr<ID3DBlob> psBlobB;
-	 D3DCompileFromFile(shaderPathB.c_str(), nullptr, nullptr,
-		 "PSMain", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		 &psBlobB, nullptr);
-
-	gfx->CreatePixelShader(psBlobB->GetBufferPointer(), psBlobB->GetBufferSize(),nullptr, &blackPixelShader);
-	gfx->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
-	gfx->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
-
+	device->CreatePixelShader(psBlobB->GetBufferPointer(), psBlobB->GetBufferSize(), nullptr, &blackPixelShader);
+	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
+	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
 
 	// Input Layout
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,   D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12,  D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	gfx->CreateInputLayout(layout, 2, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
-
-	// Constant Buffer
-	D3D11_BUFFER_DESC cbd = {};
-	cbd.Usage = D3D11_USAGE_DEFAULT;
-	cbd.ByteWidth = sizeof(MatrixBuffer);
-	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	gfx->CreateBuffer(&cbd, nullptr, &constantBuffer);
-	wireframeEnabled = false;
+	device->CreateInputLayout(layout, ARRAYSIZE(layout), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
 }
+
+
+void Object3D::createVertexBuffer()
+{
+	D3D11_BUFFER_DESC bd = {};
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.ByteWidth = (vertices.size() * sizeof(Vertex));
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
+	HRESULT hr = device->CreateBuffer(&bd, &initData, &vertexBuffer);
+	if (FAILED(hr))
+		throw std::runtime_error("Failed to create vertex buffer");
+}
+
+void Object3D::createInexxBuffer()
+{
+	// Index Buffer
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.ByteWidth = indices.size() * sizeof(UINT);
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	D3D11_SUBRESOURCE_DATA iinitData = {};
+	iinitData.pSysMem = indices.data();
+
+	HRESULT hr = device->CreateBuffer(&ibd, &iinitData, &indexBuffer);
+	if (FAILED(hr))
+		throw std::runtime_error("Failed to create index buffer");
+}
+
+
+void Object3D::createRasterize()
+{
+	// Rasterizer states
+	D3D11_RASTERIZER_DESC rsDesc = {};
+	rsDesc.FillMode = D3D11_FILL_SOLID;
+	rsDesc.CullMode = D3D11_CULL_BACK;
+	rsDesc.DepthClipEnable = TRUE;
+	device->CreateRasterizerState(&rsDesc, &solidRS);
+
+	rsDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rsDesc.CullMode = D3D11_CULL_NONE; // Show all edges
+	device->CreateRasterizerState(&rsDesc, &wireframeRS);
+}
+
+
+void Object3D::createTexturedCube()
+{
+	vertices.clear();
+
+	vertices = {
+		// Front (-Z)
+		  { {-1,-1,-1}, {0,0,-1}, {0,1} }, { {-1,1,-1}, {0,0,-1}, {0,0} },
+		  { {1,1,-1},  {0,0,-1}, {1,0} }, { {1,-1,-1}, {0,0,-1}, {1,1} },
+		  // Back (+Z)
+		  { {-1,-1,1}, {0,0,1}, {1,1} }, { {1,-1,1}, {0,0,1}, {0,1} },
+		  { {1,1,1},   {0,0,1}, {0,0} }, { {-1,1,1}, {0,0,1}, {1,0} },
+		  // Left (-X)
+		  { {-1,-1,1}, {-1,0,0}, {0,1} }, { {-1,1,1}, {-1,0,0}, {0,0} },
+		  { {-1,1,-1}, {-1,0,0}, {1,0} }, { {-1,-1,-1}, {-1,0,0}, {1,1} },
+		  // Right (+X)
+		  { {1,-1,-1}, {1,0,0}, {0,1} }, { {1,1,-1}, {1,0,0}, {0,0} },
+		  { {1,1,1},   {1,0,0}, {1,0} }, { {1,-1,1}, {1,0,0}, {1,1} },
+		  // Top (+Y)
+		  { {-1,1,-1}, {0,1,0}, {0,1} }, { {-1,1,1}, {0,1,0}, {0,0} },
+		  { {1,1,1},   {0,1,0}, {1,0} }, { {1,1,-1}, {0,1,0}, {1,1} },
+		  // Bottom (-Y)
+		  { {-1,-1,1}, {0,-1,0}, {1,1} }, { {-1,-1,-1}, {0,-1,0}, {0,1} },
+		  { {1,-1,-1}, {0,-1,0}, {0,0} }, { {1,-1,1}, {0,-1,0}, {1,0} },
+	};
+}
+
 
 
 void Object3D::Update(float time)
@@ -155,38 +176,35 @@ void Object3D::Update(float time)
 }
 
 
-
-
-
-
-void Object3D::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera)
+void Object3D::Draw( Camera camera)
 {
 	DirectX::XMMATRIX projection = camera.GetProjectionMatrix();
 	DirectX::XMMATRIX view = camera.GetViewMatrix();
+	texture->Use();
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
-	gfx->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	gfx->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-	gfx->IASetInputLayout(inputLayout.Get());
-	gfx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	context->IASetInputLayout(inputLayout.Get());
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Constant buffer update
 	MatrixBuffer mb;
 	mb.world = DirectX::XMMatrixTranspose(world);
 	mb.view = DirectX::XMMatrixTranspose(view);
 	mb.projection = DirectX::XMMatrixTranspose(projection);
-	gfx->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
-	gfx->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+	context->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
+	context->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 
 	// Solid
-	gfx->RSSetState(solidRS.Get());
-	gfx->VSSetShader(vertexShader.Get(), nullptr, 0);
-	gfx->PSSetShader(pixelShader.Get(), nullptr, 0);
-	gfx->DrawIndexed(36, 0, 0);
+	context->RSSetState(solidRS.Get());
+	context->VSSetShader(vertexShader.Get(), nullptr, 0);
+	context->PSSetShader(pixelShader.Get(), nullptr, 0);
+	context->DrawIndexed(indices.size(), 0, 0);
 
 	// Wireframe overlay
-	//gfx->RSSetState(wireframeRS.Get());
-	//gfx->PSSetShader(blackPixelShader.Get(), nullptr, 0);
+	//context->RSSetState(wireframeRS.Get());
+	//context->PSSetShader(blackPixelShader.Get(), nullptr, 0);
 
-	gfx->DrawIndexed(36, 0, 0);
+	//context->DrawIndexed(indices.size(), 0, 0);
 }

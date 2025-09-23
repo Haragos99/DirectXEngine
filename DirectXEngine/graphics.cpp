@@ -91,7 +91,7 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
     context->RSSetViewports(1, &viewport);
-	cube = Object3D(device);
+	cube = Object3D(device, context);
     envcube = EnvCube(device,context);
 }
 
@@ -106,6 +106,6 @@ void Graphics::Clear(float r, float g, float b, float a)
 void Graphics::RenderFrame()
 {
     envcube.Draw(context, camera);
-	cube.Draw(context, camera);
+	cube.Draw(camera);
     swapChain->Present(1, 0); // vsync on
 }

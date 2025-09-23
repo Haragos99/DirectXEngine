@@ -135,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="windowapp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +148,7 @@
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="object3d.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="windowapp.h" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +177,7 @@
   <ItemGroup>
     <Image Include="..\Resources\Background.dds" />
     <Image Include="..\Resources\cloudy_skybox.dds" />
+    <Image Include="..\Resources\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
