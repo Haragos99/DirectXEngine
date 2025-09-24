@@ -32,7 +32,12 @@ enum class RenderMode
 	WireframeOnly,
 	SolidWireframe
 };
-
+struct LightBuffer
+{
+	DirectX::XMFLOAT3 lightDirection;
+	float padding;
+	DirectX::XMFLOAT4 lightColor;
+};
 
 
 class Object3D
@@ -50,6 +55,7 @@ protected:
 	void createInexxBuffer();
 	void createRasterize();
 	void createConstantBuffer();
+	void creaetLightBuffer();
 	void createTexturedCube();
 	void loadShaders();
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
@@ -62,8 +68,10 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> lightBuffer;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> wireframeRS;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> blackPixelShader;
+	//TODO: create shader class
 	std::unique_ptr<Texture> texture;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> solidRS;
 	DirectX::XMMATRIX world;

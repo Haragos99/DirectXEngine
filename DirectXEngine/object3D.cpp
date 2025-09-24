@@ -27,6 +27,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL:
 	createInexxBuffer();
 	loadShaders();
 	createConstantBuffer();
+	creaetLightBuffer();
 	wireframeEnabled = false;
 }
 
@@ -127,6 +128,21 @@ void Object3D::createInexxBuffer()
 }
 
 
+void Object3D::creaetLightBuffer()
+{
+	// Light Buffer
+	D3D11_BUFFER_DESC lightBufferDesc = {};
+	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	lightBufferDesc.ByteWidth = sizeof(LightBuffer);
+	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	lightBufferDesc.MiscFlags = 0;
+	lightBufferDesc.StructureByteStride = 0;
+	HRESULT hr = device->CreateBuffer(&lightBufferDesc, nullptr, &lightBuffer);
+	if (FAILED(hr))
+		throw std::runtime_error("Failed to create light buffer");
+}
+
 void Object3D::createRasterize()
 {
 	// Rasterizer states
@@ -195,6 +211,26 @@ void Object3D::Draw( Camera camera)
 	mb.projection = DirectX::XMMatrixTranspose(projection);
 	context->UpdateSubresource(constantBuffer.Get(), 0, nullptr, &mb, 0, 0);
 	context->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+
+	LightBuffer lightData;
+	lightData.lightDirection = DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f); // example
+	lightData.padding = 0.0f;
+	lightData.lightColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f); // white light
+
+
+	// Map -> copy -> Unmap (correct for D3D11_USAGE_DYNAMIC)
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = context->Map(lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (SUCCEEDED(hr))
+	{
+		memcpy(mappedResource.pData, &lightData, sizeof(LightBuffer));
+		context->Unmap(lightBuffer.Get(), 0);
+	}
+	else
+	{
+		// Optional: handle/log the error
+	}
+	context->PSSetConstantBuffers(1, 1, lightBuffer.GetAddressOf());
 
 	// Solid
 	context->RSSetState(solidRS.Get());
