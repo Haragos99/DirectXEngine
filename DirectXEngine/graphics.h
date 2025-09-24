@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "object3d.h"
 #include "envcube.h"
+#include "cube.h"
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
@@ -18,8 +19,9 @@ public:
 
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
-    void changeWireFrame() { cube.wireframeEnabled = !cube.wireframeEnabled; }
-    Object3D cube;
+    void changeWireFrame() { cube->wireframeEnabled = !cube->wireframeEnabled; }
+    std::shared_ptr<Object3D> cube;
+    std::shared_ptr<Object3D> plane;
     EnvCube envcube;
 	Camera camera;
 private:

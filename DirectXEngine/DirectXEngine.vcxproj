@@ -128,6 +128,7 @@
     <ClCompile Include="..\External\DDSTextureLoader.cpp" />
     <ClCompile Include="..\External\WICTextureLoader.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="cube.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="envcube.cpp" />
     <ClCompile Include="graphics.cpp" />
@@ -135,6 +136,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="plane.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="windowapp.cpp" />
@@ -143,12 +145,14 @@
     <ClInclude Include="..\External\DDSTextureLoader.h" />
     <ClInclude Include="..\External\WICTextureLoader.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="cube.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="envcube.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="object3d.h" />
+    <ClInclude Include="plane.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="vertex.h" />
@@ -180,6 +184,7 @@
   <ItemGroup>
     <Image Include="..\Resources\Background.dds" />
     <Image Include="..\Resources\cloudy_skybox.dds" />
+    <Image Include="..\Resources\moss.png" />
     <Image Include="..\Resources\wood.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

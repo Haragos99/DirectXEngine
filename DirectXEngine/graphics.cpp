@@ -1,5 +1,6 @@
 #include "Graphics.h"
 #include <stdexcept>
+#include "plane.h"
 
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
 {
@@ -58,11 +59,8 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     depthDesc.ArraySize = 1;
     depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     depthDesc.SampleDesc.Count = 1;
-    depthDesc.SampleDesc.Quality = 0;
     depthDesc.Usage = D3D11_USAGE_DEFAULT;
-    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    depthDesc.CPUAccessFlags = 0;
-    depthDesc.MiscFlags = 0;
+    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;;
 
     Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
     hr = device->CreateTexture2D(&depthDesc, nullptr, &depthStencilBuffer);
@@ -91,7 +89,8 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
     context->RSSetViewports(1, &viewport);
-	cube = Object3D(device, context);
+	cube = std::make_shared<Cube>(device, context);
+    plane = std::make_shared<Plane>(device, context);
     envcube = EnvCube(device,context);
 }
 
@@ -106,6 +105,8 @@ void Graphics::Clear(float r, float g, float b, float a)
 void Graphics::RenderFrame()
 {
     envcube.Draw(context, camera);
-	cube.Draw(camera);
+    plane->Draw(camera);
+	cube->Draw(camera);
+	
     swapChain->Present(1, 0); // vsync on
 }

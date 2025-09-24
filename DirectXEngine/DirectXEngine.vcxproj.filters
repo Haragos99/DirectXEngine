@@ -60,6 +60,12 @@
     <ClCompile Include="shaders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -101,6 +107,12 @@
     <ClInclude Include="vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BlackPixelShader.hlsl">
@@ -127,6 +139,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Resources\wood.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Resources\moss.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
