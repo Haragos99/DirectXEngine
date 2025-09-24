@@ -135,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="shaders.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="windowapp.cpp" />
   </ItemGroup>
@@ -148,7 +149,9 @@
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="object3d.h" />
+    <ClInclude Include="shaders.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="vertex.h" />
     <ClInclude Include="windowapp.h" />
   </ItemGroup>
   <ItemGroup>
