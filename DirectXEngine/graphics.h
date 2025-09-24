@@ -5,6 +5,7 @@
 #include "object3d.h"
 #include "envcube.h"
 #include "cube.h"
+#include "plane.h"
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
@@ -19,9 +20,9 @@ public:
 
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
-    void changeWireFrame() { cube->wireframeEnabled = !cube->wireframeEnabled; }
-    std::shared_ptr<Object3D> cube;
-    std::shared_ptr<Object3D> plane;
+    void changeWireFrame() {  }
+    std::vector< std::shared_ptr<Object3D>> cubes;
+    std::shared_ptr<Plane> plane;
     EnvCube envcube;
 	Camera camera;
 private:
@@ -31,4 +32,5 @@ private:
     Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 };
