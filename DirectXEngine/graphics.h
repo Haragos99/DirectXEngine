@@ -9,6 +9,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
+#include "raytracer.h"
 class Graphics
 {
 public:
@@ -24,6 +25,7 @@ public:
     std::vector< std::shared_ptr<Object3D>> cubes;
     std::shared_ptr<Plane> plane;
     EnvCube envcube;
+    std::shared_ptr<Raytracer> raytracer;
 	Camera camera;
 private:
     

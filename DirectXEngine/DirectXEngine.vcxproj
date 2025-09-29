@@ -137,6 +137,7 @@
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="object3D.cpp" />
     <ClCompile Include="plane.cpp" />
+    <ClCompile Include="raytracer.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="windowapp.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="mouse.h" />
     <ClInclude Include="object3d.h" />
     <ClInclude Include="plane.h" />
+    <ClInclude Include="raytracer.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="vertex.h" />
@@ -175,6 +177,14 @@
     <FxCompile Include="shaders\PixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerPS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerVS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\VertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>

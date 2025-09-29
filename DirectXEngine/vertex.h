@@ -21,3 +21,16 @@ struct MatrixBuffer
 	DirectX::XMMATRIX view;
 	DirectX::XMMATRIX projection;
 };
+
+struct VertexRT
+{
+    DirectX::XMFLOAT3 pos;
+    DirectX::XMFLOAT2 uv;
+};
+
+struct CameraCB
+{
+    DirectX::XMMATRIX invViewProj;
+    DirectX::XMFLOAT3 camPos;
+    float padding;
+};

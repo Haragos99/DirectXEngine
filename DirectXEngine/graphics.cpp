@@ -103,13 +103,13 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     viewport.TopLeftY = 0;
     context->RSSetViewports(1, &viewport);
 
-
+    raytracer = std::make_shared<Raytracer>(device, context);
     for (int i = 0; i < 5; ++i)
     {
-        cubes.push_back(std::make_shared<Cube>(device, context));
-        cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
+        //cubes.push_back(std::make_shared<Cube>(device, context));
+        //cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
     }
-    plane = std::make_shared<Plane>(device, context);
+    //plane = std::make_shared<Plane>(device, context);
     envcube = EnvCube(device,context);
 }
 
@@ -131,13 +131,16 @@ void Graphics::RenderFrame()
 
     // Bind state
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
-
+    //envcube.Draw(context, camera);
+	raytracer->Draw(camera, envcube.getCubeMap(), envcube.getsamplerState());
+    /*
     plane->Draw(camera);
     for (auto& cube : cubes)
     {
        
         cube->Draw(camera);
     }
-    envcube.Draw(context, camera);
+    */
+   
     swapChain->Present(1, 0); // vsync on
 }

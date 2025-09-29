@@ -14,7 +14,8 @@ public:
     EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> fx);
 
     void Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camera);
-
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> getCubeMap() { return cubeMapSRV; }
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> getsamplerState() { return samplerState; }
 private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> cubeMapSRV;
     Microsoft::WRL::ComPtr<ID3D11Buffer> matrixBuffer;
