@@ -110,7 +110,7 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
         //cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
     }
     //plane = std::make_shared<Plane>(device, context);
-    envcube = EnvCube(device,context);
+    //envcube = EnvCube(device,context);
 }
 
 void Graphics::Clear(float r, float g, float b, float a)
@@ -132,7 +132,7 @@ void Graphics::RenderFrame()
     // Bind state
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
     //envcube.Draw(context, camera);
-	raytracer->Draw(camera, envcube.getCubeMap(), envcube.getsamplerState());
+	raytracer->Draw(camera);
     /*
     plane->Draw(camera);
     for (auto& cube : cubes)

@@ -1,6 +1,7 @@
 #include "raytracer.h"
 #include <d3dcompiler.h>
 #include <stdexcept>
+#include "../External/DDSTextureLoader.h"
 
 using namespace DirectX;
 
@@ -40,6 +41,7 @@ Raytracer::Raytracer(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WR
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     device->CreateBuffer(&cbd, nullptr, &cameraBuffer);
 
+
     // Compile shaders
     Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob, err;
 
@@ -63,7 +65,7 @@ Raytracer::Raytracer(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WR
     device->CreateInputLayout(layout, 2, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
 }
 
-void Raytracer::Draw(Camera camera, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> cubeMapSRV, Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState)
+void Raytracer::Draw(Camera camera)
 {
 	auto view = camera.GetViewMatrix();
 	auto proj = camera.GetProjectionMatrix();
@@ -73,6 +75,7 @@ void Raytracer::Draw(Camera camera, Microsoft::WRL::ComPtr<ID3D11ShaderResourceV
     context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     context->IASetInputLayout(inputLayout.Get());
+
 
     context->VSSetShader(vertexShader.Get(), nullptr, 0);
     context->PSSetShader(pixelShader.Get(), nullptr, 0);
@@ -88,8 +91,6 @@ void Raytracer::Draw(Camera camera, Microsoft::WRL::ComPtr<ID3D11ShaderResourceV
     context->UpdateSubresource(cameraBuffer.Get(), 0, nullptr, &cb, 0, 0);
     context->PSSetConstantBuffers(0, 1, cameraBuffer.GetAddressOf());
 
-    context->PSSetShaderResources(0, 1, &cubeMapSRV);
-    context->PSSetSamplers(0, 1, &samplerState);
 
 
     context->DrawIndexed(6, 0, 0);
