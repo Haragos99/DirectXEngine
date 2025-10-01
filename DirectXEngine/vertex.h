@@ -34,3 +34,16 @@ struct CameraCB
     DirectX::XMFLOAT3 camPos;
     float padding;
 };
+
+struct Sphere
+{
+	DirectX::XMFLOAT3 center; 
+	float radius;             
+};
+
+struct SphereBuffer
+{
+	Sphere spheres[16];
+	int sphereCount;
+	float padding[3];
+};

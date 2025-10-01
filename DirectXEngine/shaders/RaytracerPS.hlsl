@@ -1,10 +1,31 @@
 #pragma target ps_3_0
 
+
+
+struct Sphere
+{
+    float3 center;
+    float radius;
+};
+
+
+
+
+
 cbuffer CameraCB : register(b0)
 {
     matrix invViewProj;
     float3 camPos;
     float pad;
+};
+
+
+// Define a constant buffer to pass spheres from CPU to GPU
+cbuffer SphereBuffer : register(b1)
+{
+    Sphere spheres[16]; // up to 16 spheres
+    int sphereCount; // actual number of spheres
+    float3 _padding;
 };
 
 struct PSInput
@@ -33,14 +54,12 @@ struct Ray
 
 
 
-Hit intersectSphere(Ray ray, Hit current_best_hit)
+Hit intersectSphere(Ray ray, Hit current_best_hit, Sphere sphere)
 {
     // Calculate Qudratic equation of sphere 
-    float3 center = float3(0, 0, 0);
-    float radius = 1.0f;
-    float3 rayOriginToCenter = ray.start - center;
+    float3 rayOriginToCenter = ray.start - sphere.center;
     float b = dot(rayOriginToCenter, ray.dir);
-    float c_const = dot(rayOriginToCenter, rayOriginToCenter) - radius * radius;
+    float c_const = dot(rayOriginToCenter, rayOriginToCenter) - sphere.radius * sphere.radius;
     float disc = b * b - c_const;
     if (disc >= 0.0f) // If the discriminant is negative, there is no intersection
     {
@@ -65,7 +84,7 @@ Hit intersectSphere(Ray ray, Hit current_best_hit)
             // Update the closest hit information
             current_best_hit.t = t_closest;
             current_best_hit.position = camPos + ray.dir * current_best_hit.t;
-            current_best_hit.normal = normalize(current_best_hit.position - center);
+            current_best_hit.normal = normalize(current_best_hit.position - sphere.center);
             current_best_hit.mat = 0; 
         }
 
@@ -118,7 +137,10 @@ Hit firstIntersect(Ray ray)
     bestHit.t = 9999.0f;
     bestHit.normal = float3(0, 0, 0); // Default normal for a miss
     bestHit = intersectPlane(ray, bestHit);
-    bestHit = intersectSphere(ray, bestHit);
+    for (int i = 0; i < sphereCount; ++i)
+    {
+        bestHit = intersectSphere(ray, bestHit, spheres[i]);
+    }   
     if (dot(ray.dir, bestHit.normal) > 0)
     {
         bestHit.normal = bestHit.normal * (-1);
@@ -147,7 +169,14 @@ float3 trace(Ray ray)
     float shininess = 70.0f;
     float3 La = float3(0.5f, 0.6f, 0.6f);
     float3 Le = float3(0.9f, 0.9f, 0.9f);
-    float3 lightPosition = float3(0.87f, -3.87f, 0.25f);
+    float3 lightPositions[5] =
+    {
+    float3(0.87f, -3.87f, 0.25f),
+    float3(1.5f, -2.0f, -0.5f),
+    float3(2.0f, -1.0f, 3.0f),
+    float3(-2.0f, -1.0f, 3.0f),
+    float3(1.0f, -1.0f, -3.0f)
+    };
     float3 outRadiance = float3(0, 0, 0);
     for (int i = 0; i < 5; ++i)
     {
@@ -157,11 +186,11 @@ float3 trace(Ray ray)
         // Direct illumination
         if (hit.mat == 0)
         {
-            float3 lightdir = normalize(lightPosition - hit.position);
+            float3 lightdir = normalize(lightPositions[i] - hit.position);
             float cosTheta = dot(hit.normal, lightdir);
             if (cosTheta > 0)
             {
-                float3 LeIn = Le / dot(lightPosition - hit.position, lightPosition - hit.position);
+                float3 LeIn = Le / dot(lightPositions[i] - hit.position, lightPositions[i] - hit.position);
                 outRadiance += ray.weight * LeIn * kd * cosTheta;
                 float3 halfway = normalize(-ray.dir + lightdir);
                 float cosDelta = dot(hit.normal, halfway);
