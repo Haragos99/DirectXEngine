@@ -2,6 +2,7 @@
 
 Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
+	shader = std::make_unique<Shader>(device, context);
 	createTexturedVertex();
 	createIndeces();
 	texture->LoadTextureFromFile(L"..\\Resources\\moss.png");
