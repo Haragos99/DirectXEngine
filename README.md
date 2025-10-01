@@ -1,4 +1,4 @@
-# DirectX 11 Raytracing Project
+# DirectX 11 Engine Project
 
 This project demonstrates **classic ray tracing** and a **mesh-based rendering mode** using DirectX 11.  
 It is designed to showcase real-time raytracing techniques alongside mesh rendering approaches for visual comparison and performance analysis.
@@ -22,7 +22,7 @@ It is designed to showcase real-time raytracing techniques alongside mesh render
 
 Below is a sample rendering result from the project in **Classic Raytracing Mode**:
 
-![Result](pic.png)
+![Result](Results/pic.png)
 
 ## Requirements
 
