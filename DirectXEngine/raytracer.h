@@ -1,18 +1,17 @@
 #pragma once
 #include "object3d.h"
 #include "raytraceshader.h"
-class Raytracer : Object3D
+class Raytracer 
 {
 public:
     Raytracer(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context);
     SphereBuffer initElemt();
-    void Update(float time) override;
-    void Draw(Camera camera) override;
+    void Update(float time) ;
+    void Draw(Camera camera) ;
 
 
 private:
-	void createIndeces() override;
-	void createTexturedVertex() override {};
+	void createIndeces();
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> cameraBuffer;
@@ -23,5 +22,6 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Device> device; 
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
     std::unique_ptr <RaytraceShader> shaderRay;
+    std::vector<UINT>   indices;
 
 };
