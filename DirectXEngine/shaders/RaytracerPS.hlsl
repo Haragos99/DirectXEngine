@@ -1,3 +1,5 @@
+#pragma target ps_3_0
+
 cbuffer CameraCB : register(b0)
 {
     matrix invViewProj;
@@ -13,6 +15,9 @@ struct PSInput
 
 
 
+const int maxdepth = 5;
+
+
 struct Hit
 {
     float t;
@@ -24,6 +29,9 @@ struct Ray
 {
     float3 start, dir, weight;
 };
+
+
+
 
 Hit intersectSphere(Ray ray, Hit current_best_hit)
 {
@@ -54,9 +62,11 @@ Hit intersectSphere(Ray ray, Hit current_best_hit)
         
         if (t_closest < current_best_hit.t)
         {
+            // Update the closest hit information
             current_best_hit.t = t_closest;
             current_best_hit.position = camPos + ray.dir * current_best_hit.t;
             current_best_hit.normal = normalize(current_best_hit.position - center);
+            current_best_hit.mat = 0; 
         }
 
     }
@@ -68,14 +78,14 @@ Hit intersectSphere(Ray ray, Hit current_best_hit)
 Hit intersectPlane(Ray ray, Hit current_best_hit)
 {
     float3 planeNormal = float3(0, 1, 0); // Y-up plane (horizontal)
-    float planeD = -2.0f; // Plane is at y = -2.0, so Ax+By+Cz+D = 0*x + 1*y + 0*z - 2 = 0
+    float planeD = -1.0f; // Plane is at y = -1.0,
     
-    // Ray-Plane Intersection Formula
     float denom = dot(ray.dir, planeNormal);
 
     // Check if the ray is not parallel to the plane (denominator is close to zero)
     if (abs(denom) > 0.0001f)
     {
+        // Calculate intersection distance t
         float t_plane = -(dot(camPos, planeNormal) + planeD) / denom;
         
         if (t_plane > 0.001f && t_plane < current_best_hit.t)
@@ -83,7 +93,7 @@ Hit intersectPlane(Ray ray, Hit current_best_hit)
             current_best_hit.t = t_plane;
             current_best_hit.normal = planeNormal; // The normal is constant for a plane
             current_best_hit.position = ray.start + ray.dir * current_best_hit.t;
-        
+            current_best_hit.mat = 1; // Assign a material index for the plane
             // Simple checkerboard pattern on the plane
             float s = 0.5f;
             float check_x = floor(current_best_hit.position.x / s);
@@ -109,7 +119,11 @@ Hit firstIntersect(Ray ray)
     bestHit.normal = float3(0, 0, 0); // Default normal for a miss
     bestHit = intersectPlane(ray, bestHit);
     bestHit = intersectSphere(ray, bestHit);
-
+    if (dot(ray.dir, bestHit.normal) > 0)
+    {
+        bestHit.normal = bestHit.normal * (-1);
+    }
+    // If no intersection was found, set t to -1
     if (bestHit.t >= 9999.0f)
     {
         bestHit.t = -1.0f;
@@ -118,19 +132,56 @@ Hit firstIntersect(Ray ray)
     
 }
 
-
+float  Fresnel(float3 F0, float cosTheta)
+{
+    return F0+ (float3(1, 1, 1) - F0) * pow(cosTheta, 5);
+}
 
 float3 trace(Ray ray)
 {
-
-    Hit hit = firstIntersect(ray);
-    // Check if the intersection is in front of the camera
-    if (hit.t < 0)
+    // Material properties
+    float epsilon = 0.01f;
+    float3 ks = float3(1, 1, 1);
+    float3 kd = float3(1.5f, 0.6f, 0.5f);
+    float3 ka = float3(0.5f, 0.5f, 0.5f);
+    float shininess = 70.0f;
+    float3 La = float3(0.5f, 0.6f, 0.6f);
+    float3 Le = float3(0.9f, 0.9f, 0.9f);
+    float3 lightPosition = float3(0.87f, -3.87f, 0.25f);
+    float3 outRadiance = float3(0, 0, 0);
+    for (int i = 0; i < 5; ++i)
     {
-        hit.normal = float3(0.2, 0.2, 0.3);
+        Hit hit = firstIntersect(ray);
+        if (hit.t < 0)
+            break;
+        // Direct illumination
+        if (hit.mat == 0)
+        {
+            float3 lightdir = normalize(lightPosition - hit.position);
+            float cosTheta = dot(hit.normal, lightdir);
+            if (cosTheta > 0)
+            {
+                float3 LeIn = Le / dot(lightPosition - hit.position, lightPosition - hit.position);
+                outRadiance += ray.weight * LeIn * kd * cosTheta;
+                float3 halfway = normalize(-ray.dir + lightdir);
+                float cosDelta = dot(hit.normal, halfway);
+                if (cosDelta > 0)
+                {
+                    outRadiance += ray.weight * LeIn * ks * pow(cosDelta, shininess);
+                }
+            }
+        }
+        // Refflected Ambient term
+        if (hit.mat == 1)
+        {
+            ray.weight *= Fresnel(float3(0.2,0.4,0.2), dot(-ray.dir, hit.normal));
+            ray.start = hit.position + hit.normal * epsilon;
+            ray.dir = reflect(ray.dir, hit.normal);
+        }
 
     }
-    return hit.normal * 0.5f + 0.5f;
+    outRadiance += ray.weight * La;
+    return outRadiance;
 }
 
 
@@ -147,6 +198,5 @@ float4 PSMain(PSInput input) : SV_TARGET
     ray.dir = normalize(worldPos.xyz - camPos);;
     ray.weight = float3(1, 1, 1);
     
-    // Use the final normal for shading
     return float4(trace(ray), 1);
 }
