@@ -48,9 +48,12 @@ void MeshModel::Draw(Camera camera)
 	shader->renderDraw(mb, lightData);
 	context->DrawIndexed(indices.size(), 0, 0);
 	// Wireframe overlay
-	//context->RSSetState(wireframeRS.Get());
-	//context->PSSetShader(blackPixelShader.Get(), nullptr, 0);
-	//context->DrawIndexed(indices.size(), 0, 0);
+	if (wireframeEnabled)
+	{
+		context->RSSetState(shader->GetwireframeRS().Get());
+		context->PSSetShader(shader->GetBlackPixelShader().Get(), nullptr, 0);
+		context->DrawIndexed(indices.size(), 0, 0);
+	}
 }
 
 void MeshModel::Update(float time)

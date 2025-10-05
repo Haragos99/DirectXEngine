@@ -18,7 +18,7 @@ void Shader::LoadShaders(const std::wstring& vertexShaderPath, const std::wstrin
 	// Load Shaders
 	loadPixelShader(pixelShaderPath);
 	loadVertexShader(vertexShaderPath);
-	//loadwireframePixelShader();
+	loadwireframePixelShader();
 }
 
 

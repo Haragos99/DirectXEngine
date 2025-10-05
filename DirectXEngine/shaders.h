@@ -19,6 +19,9 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> GetVertexShader() const { return vertexShader; }
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetPixelShader() const { return pixelShader; }
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> GetInputLayout() const { return inputLayout; }
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> GetwireframeRS() const { return wireframeRS; }
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetBlackPixelShader() { return blackPixelShader; }
+
 	void createVertexBuffer(std::vector<Vertex> vertices);
 	void createInexxBuffer(std::vector<UINT> indices);
 	void createRasterize();
