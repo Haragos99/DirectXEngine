@@ -95,6 +95,12 @@ void Shader::createVertexBuffer(std::vector<Vertex> vertices)
 	}	
 }
 
+
+void execute()
+{
+	// Not implemented
+}
+
 void Shader::createInexxBuffer(std::vector<UINT> indices)
 {
 	// Index Buffer
@@ -135,7 +141,7 @@ void Shader::createRasterize()
 	// Rasterizer states
 	D3D11_RASTERIZER_DESC rsDesc = {};
 	rsDesc.FillMode = D3D11_FILL_SOLID;
-	rsDesc.CullMode = D3D11_CULL_BACK;
+	rsDesc.CullMode = D3D11_CULL_NONE;
 	rsDesc.DepthClipEnable = TRUE;
 	device->CreateRasterizerState(&rsDesc, &solidRS);
 

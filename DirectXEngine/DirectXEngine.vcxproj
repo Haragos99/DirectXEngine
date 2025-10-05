@@ -134,6 +134,8 @@
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="meshmodel.cpp" />
     <ClCompile Include="mouse.cpp" />
     <ClCompile Include="object3D.cpp" />
     <ClCompile Include="plane.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="envcube.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="keyboard.h" />
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="meshmodel.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="object3d.h" />
     <ClInclude Include="plane.h" />

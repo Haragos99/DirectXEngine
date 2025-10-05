@@ -23,6 +23,7 @@ public:
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeWireFrame() {  }
     std::vector< std::shared_ptr<Object3D>> cubes;
+    std::shared_ptr<Object3D> teapot;
     std::shared_ptr<Plane> plane;
     EnvCube envcube;
     std::shared_ptr<Raytracer> raytracer;

@@ -72,6 +72,12 @@
     <ClCompile Include="raytraceshader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="meshmodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h">
@@ -123,6 +129,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="raytraceshader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="meshmodel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,13 @@
-#include "plane.h"
+#include "meshmodel.h"
 
-Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
+MeshModel::MeshModel(std::string path,Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
+	mesh = Mesh();
+	mesh.loadMesh(path);
 	createTexturedVertex();
 	createIndeces();
-	texture->LoadTextureFromFile(L"..\\Resources\\moss.png");
+	texture->CreateSolidColorTexture({ 1, 0, 0, 1 });
+	indices = mesh.indices;
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();
@@ -12,31 +15,24 @@ Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPt
 	shader->createRasterize();
 	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PixelShader.hlsl");
 	wireframeEnabled = false;
-	SetPosition(0.0f, -1.0f, 0.0f);
-	Scale(5.0f, 1.0f, 5.0f);
+	Scale(0.5f, 0.5f, 0.5f);
 }
 
 
-void Plane::createIndeces()
+
+void MeshModel::createIndeces()
 {
-	indices = {
-		0, 1, 2, 0, 2, 3
-	};
+	indices = mesh.indices;
 }
 
-void Plane::createTexturedVertex()
+void MeshModel::createTexturedVertex()
 {
-	vertices.clear();
-	vertices = {
-		// Plane in the XZ plane (Y up)
-		  { {-5,0,-5}, {0,1,0}, {0,5} }, { {-5,0,5}, {0,1,0}, {0,0} },
-		  { {5,0,5},  {0,1,0}, {5,0} }, { {5,0,-5}, {0,1,0}, {5,5} },
-	};
+
+	vertices = mesh.vertices;
 }
 
 
-
-void Plane::Draw(Camera camera)
+void MeshModel::Draw(Camera camera)
 {
 	DirectX::XMMATRIX projection = camera.GetProjectionMatrix();
 	DirectX::XMMATRIX view = camera.GetViewMatrix();
@@ -57,7 +53,7 @@ void Plane::Draw(Camera camera)
 	//context->DrawIndexed(indices.size(), 0, 0);
 }
 
-void Plane::Update(float time)
+void MeshModel::Update(float time)
 {
 	Rotate(0.0f, time * 0.5f, 0.0f);
 }

@@ -1,5 +1,6 @@
 #include "Graphics.h"
 #include <stdexcept>
+#include "meshmodel.h"
 
 
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
@@ -104,13 +105,14 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     context->RSSetViewports(1, &viewport);
 
     raytracer = std::make_shared<Raytracer>(device, context);
+	teapot = std::make_shared<MeshModel>("C:\\Users\\Geri\\Downloads\\teapot.obj",device, context);
     for (int i = 0; i < 5; ++i)
     {
-        //cubes.push_back(std::make_shared<Cube>(device, context));
-        //cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
+        cubes.push_back(std::make_shared<Cube>(device, context));
+        cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
     }
-    //plane = std::make_shared<Plane>(device, context);
-    //envcube = EnvCube(device,context);
+    plane = std::make_shared<Plane>(device, context);
+    envcube = EnvCube(device,context);
 }
 
 void Graphics::Clear(float r, float g, float b, float a)
@@ -131,16 +133,16 @@ void Graphics::RenderFrame()
 
     // Bind state
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
-    //envcube.Draw(context, camera);
-	raytracer->Draw(camera);
-    /*
+    
+	//raytracer->Draw(camera);
+    
     plane->Draw(camera);
     for (auto& cube : cubes)
     {
        
         cube->Draw(camera);
     }
-    */
-   
+	teapot->Draw(camera);
+    envcube.Draw(context, camera);
     swapChain->Present(1, 0); // vsync on
 }
