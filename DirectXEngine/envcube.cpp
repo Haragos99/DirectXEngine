@@ -35,7 +35,7 @@ EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPt
 
 
     // Define a simple triangle
-    Vertex vertices[] =
+    VertexData vertices[] =
     {
         // 8 corners of a cube
        { {-1.0f, 1.0f, -1.0f} },
@@ -180,7 +180,7 @@ void EnvCube::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camer
     // Set depth stencil
     gfx->OMSetDepthStencilState(m_DepthStencilState.Get(), 0);
 
-    UINT stride = sizeof(Vertex);
+    UINT stride = sizeof(VertexData);
     UINT offset = 0;
     gfx->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
     gfx->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);

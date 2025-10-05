@@ -38,7 +38,7 @@ protected:
 	std::unique_ptr <Shader> shader;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>  context;
-	std::vector<Vertex> vertices;
+	std::vector<VertexData> vertices;
 	std::vector<UINT>   indices;
 	std::unique_ptr<Texture> texture;
 	DirectX::XMMATRIX world;

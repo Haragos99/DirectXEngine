@@ -79,11 +79,11 @@ void Shader::loadwireframePixelShader()
 }
 
 
-void Shader::createVertexBuffer(std::vector<Vertex> vertices)
+void Shader::createVertexBuffer(std::vector<VertexData> vertices)
 {
 	D3D11_BUFFER_DESC bd = {};
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = (vertices.size() * sizeof(Vertex));
+	bd.ByteWidth = (vertices.size() * sizeof(VertexData));
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 	D3D11_SUBRESOURCE_DATA initData = {};
@@ -169,7 +169,7 @@ void Shader::createConstantBuffer()
 
 void Shader::renderDraw(MatrixBuffer& mb, LightBuffer& lightData)
 {
-	UINT stride = sizeof(Vertex);
+	UINT stride = sizeof(VertexData);
 	UINT offset = 0;
 	// Bind the vertex buffer to the pipeline's Input Assembler stage
 	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);

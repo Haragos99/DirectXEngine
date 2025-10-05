@@ -29,7 +29,7 @@ class Mesh
 	public :
 		Mesh() = default;
 		~Mesh() = default;
-		std::vector<Vertex> vertices;
+		std::vector<VertexData> vertices;
 		std::vector<UINT>   indices;
 		bool loadMesh(const std::string path);
 private:

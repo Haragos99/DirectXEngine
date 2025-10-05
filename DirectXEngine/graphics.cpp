@@ -96,8 +96,8 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
 
     // Setup viewport
     D3D11_VIEWPORT viewport = {};
-    viewport.Width = static_cast<float>(width);
-    viewport.Height = static_cast<float>(height);
+    viewport.Width =(float)(width);
+    viewport.Height = (float)(height);
     viewport.MinDepth = 0.0f;
     viewport.MaxDepth = 1.0f;
     viewport.TopLeftX = 0;
@@ -106,10 +106,11 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
 
     raytracer = std::make_shared<Raytracer>(device, context);
 	teapot = std::make_shared<MeshModel>("..\\Resources\\Models\\teapot.obj", L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl",device, context);
-    for (int i = 0; i < 5; ++i)
+	teapot->SetPosition(0.0f, -1.0f, 0.0f);
+    for (int i = 0; i < 2; ++i)
     {
         cubes.push_back(std::make_shared<Cube>(device, context));
-        cubes[i]->SetPosition(static_cast<float>(i) * 3.0f - 4.0f, 0.0f, static_cast<float>(i) * 3.0f - 4.0f);
+        cubes[i]->SetPosition((float)(i) * 6.0f - 4.0f, 0.0f, (float)(i) * 6.0f - 4.0f);
     }
     plane = std::make_shared<Plane>(device, context);
     envcube = EnvCube(device,context);

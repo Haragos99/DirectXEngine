@@ -11,7 +11,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL:
 
 void Object3D::SetPosition(float x, float y, float z)
 {
-	world = DirectX::XMMatrixTranslation(x, y, z);
+	world *= DirectX::XMMatrixTranslation(x, y, z);
 }
 
 void Object3D::Rotate(float pitch, float yaw, float roll)

@@ -1,6 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-struct Vertex
+struct VertexData
 {
 	DirectX::XMFLOAT3 position;
 	DirectX::XMFLOAT3 normal;

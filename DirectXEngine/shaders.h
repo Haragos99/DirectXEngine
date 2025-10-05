@@ -22,7 +22,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> GetwireframeRS() const { return wireframeRS; }
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetBlackPixelShader() { return blackPixelShader; }
 
-	void createVertexBuffer(std::vector<Vertex> vertices);
+	void createVertexBuffer(std::vector<VertexData> vertices);
 	void createInexxBuffer(std::vector<UINT> indices);
 	void createRasterize();
 	void createConstantBuffer();
