@@ -105,7 +105,7 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     context->RSSetViewports(1, &viewport);
 
     raytracer = std::make_shared<Raytracer>(device, context);
-	teapot = std::make_shared<MeshModel>("..\\Resources\\Models\\teapot.obj",device, context);
+	teapot = std::make_shared<MeshModel>("..\\Resources\\Models\\teapot.obj", L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl",device, context);
     for (int i = 0; i < 5; ++i)
     {
         cubes.push_back(std::make_shared<Cube>(device, context));

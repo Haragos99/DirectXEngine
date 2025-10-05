@@ -160,6 +160,9 @@
     <FxCompile Include="shaders\RaytracerPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\MeshPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Background.dds">

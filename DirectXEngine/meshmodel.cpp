@@ -1,6 +1,6 @@
 #include "meshmodel.h"
 
-MeshModel::MeshModel(std::string path,Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
+MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
 	mesh = Mesh();
 	mesh.loadMesh(path);
@@ -13,7 +13,7 @@ MeshModel::MeshModel(std::string path,Microsoft::WRL::ComPtr<ID3D11Device> _devi
 	shader->createConstantBuffer();
 	shader->creaetLightBuffer();
 	shader->createRasterize();
-	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PixelShader.hlsl");
+	shader->LoadShaders(VSPath, PSPath);
 	wireframeEnabled = false;
 	Scale(0.5f, 0.5f, 0.5f);
 }
