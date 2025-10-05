@@ -24,6 +24,12 @@ Below is a sample rendering result from the project in **Classic Raytracing Mode
 
 ![Result](Results/pic.png)
 
+
+Below is a sample rendering result from the project in **Mesh-Based Rendering Mode**:
+
+![Result](Results/picm.png)
+
+
 ## Requirements
 
 - Windows 10 or later
