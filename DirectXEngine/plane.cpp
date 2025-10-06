@@ -2,15 +2,17 @@
 
 Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
+	normalMap = std::make_unique<Texture>(device, context);
 	createTexturedVertex();
 	createIndeces();
 	texture->LoadTextureFromFile(L"..\\Resources\\moss.png");
+	normalMap->LoadTextureFromFile(L"..\\Resources\\moss_normal.png");
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();
 	shader->creaetLightBuffer();
 	shader->createRasterize();
-	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PixelShader.hlsl");
+	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PlanePixelShader.hlsl");
 	wireframeEnabled = false;
 	SetPosition(0.0f, -1.0f, 0.0f);
 	Scale(5.0f, 1.0f, 5.0f);
@@ -40,7 +42,8 @@ void Plane::Draw(Camera camera)
 {
 	DirectX::XMMATRIX projection = camera.GetProjectionMatrix();
 	DirectX::XMMATRIX view = camera.GetViewMatrix();
-	texture->Use();
+	texture->Use(0);
+	normalMap->Use(1);
 	MatrixBuffer mb;
 	mb.world = DirectX::XMMatrixTranspose(world);
 	mb.view = DirectX::XMMatrixTranspose(view);

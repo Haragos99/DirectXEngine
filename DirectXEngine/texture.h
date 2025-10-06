@@ -14,7 +14,7 @@ public:
 	void LoadTextureFromFile(std::wstring filename);
 	void CreateSolidColorTexture(const DirectX::XMFLOAT4& color);
 	// Bind texture sampler to pipeline
-	void Use();
+	void Use(int slot =  0);
 
 private:
 	ComPtr<ID3D11SamplerState> m_SamplerState;

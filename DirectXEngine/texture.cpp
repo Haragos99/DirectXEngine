@@ -8,11 +8,11 @@ Texture::Texture(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::C
 	CreateSamplerState();
 }
 
-void Texture::Use()
+void Texture::Use(int slot)
 {
 	
-	contex->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
-	contex->PSSetShaderResources(0, 1, m_DiffuseTexture.GetAddressOf());
+	contex->PSSetSamplers(slot, 1, m_SamplerState.GetAddressOf());
+	contex->PSSetShaderResources(slot, 1, m_DiffuseTexture.GetAddressOf());
 }
 
 

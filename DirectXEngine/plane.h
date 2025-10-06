@@ -12,4 +12,6 @@ public:
 	void Update(float time) override;
 	void createTexturedVertex() override;
 	void createIndeces() override;
+private:
+	std::unique_ptr<Texture> normalMap;
 };
