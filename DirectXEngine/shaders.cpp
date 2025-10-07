@@ -79,21 +79,7 @@ void Shader::loadwireframePixelShader()
 }
 
 
-void Shader::createVertexBuffer(std::vector<VertexData> vertices)
-{
-	D3D11_BUFFER_DESC bd = {};
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = (vertices.size() * sizeof(VertexData));
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA initData = {};
-	initData.pSysMem = vertices.data();
-	HRESULT hr = device->CreateBuffer(&bd, &initData, &vertexBuffer);
-	if (FAILED(hr))
-	{
-		throw std::runtime_error("Failed to create vertex buffer");
-	}	
-}
 
 
 void execute()

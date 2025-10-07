@@ -21,8 +21,22 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> GetInputLayout() const { return inputLayout; }
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> GetwireframeRS() const { return wireframeRS; }
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetBlackPixelShader() { return blackPixelShader; }
+	template<typename T>
+	void createVertexBuffer(std::vector<T> vertices)
+	{
+		D3D11_BUFFER_DESC bd = {};
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = (vertices.size() * sizeof(T));
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	void createVertexBuffer(std::vector<VertexData> vertices);
+		D3D11_SUBRESOURCE_DATA initData = {};
+		initData.pSysMem = vertices.data();
+		HRESULT hr = device->CreateBuffer(&bd, &initData, &vertexBuffer);
+		if (FAILED(hr))
+		{
+			//throw std::runtime_error("Failed to create vertex buffer");
+		}
+	}
 	void createInexxBuffer(std::vector<UINT> indices);
 	void createRasterize();
 	void createConstantBuffer();

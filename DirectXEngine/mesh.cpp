@@ -1,4 +1,4 @@
-#include "mesh.h"
+﻿#include "mesh.h"
 
 // Convert .obj index (1-based or negative) to 0-based
 static int fixIndex(int idx, int count) 
@@ -136,6 +136,7 @@ bool Mesh::loadMesh(const std::string path)\
 					indices.push_back(faceIndices[0]);
 					indices.push_back(faceIndices[i + 1]);
 					indices.push_back(faceIndices[i]);
+					faces.push_back(FaceHandle(faceIndices[0], faceIndices[i+1], faceIndices[i]));
 				}
 			}
 
@@ -153,5 +154,41 @@ void Mesh::initvertices()
 		vertices[i].position = { positions[i] };
 		vertices[i].texcoord = { texcoords[i] };
 		vertices[i].normal = { normals[i] };
+	}
+}
+
+
+
+void Mesh::ComputeTangents()
+{
+	using namespace DirectX;
+
+	size_t numVertices = vertices.size();
+	size_t numFaces = faces.size();
+
+	tangents.assign(numVertices, XMFLOAT3(0, 0, 0));
+
+
+	for (size_t i = 0; i < numFaces; ++i)
+	{
+		FaceHandle& face = faces[i];
+		XMFLOAT3 faceTangent = face.computeFaceTangent(positions, normals);
+		
+		// Add to each vertex in this face
+		XMVECTOR t = XMLoadFloat3(&faceTangent);
+		for (int vidx : face.vertexIndices)
+		{
+			XMVECTOR existing = XMLoadFloat3(&tangents[vidx]);
+			XMVECTOR sum = XMVectorAdd(existing, t);
+			XMStoreFloat3(&tangents[vidx], sum);
+		}
+	}
+
+	// --- 2️⃣ Normalize all vertex tangents ---
+	for (size_t i = 0; i < numVertices; ++i)
+	{
+		XMVECTOR t = XMLoadFloat3(&tangents[i]);
+		t = XMVector3Normalize(t);
+		XMStoreFloat3(&tangents[i], t);
 	}
 }
