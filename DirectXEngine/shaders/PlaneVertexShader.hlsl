@@ -1,0 +1,39 @@
+cbuffer MatrixBuffer : register(b0)
+{
+    matrix world;
+    matrix view;
+    matrix proj;
+};
+
+struct VS_IN
+{
+    float3 pos : POSITION;
+    float3 normal : NORMAL;
+    float2 tex : TEXCOORD;
+};
+
+struct VS_OUT
+{
+    float4 pos : SV_POSITION;
+    float3 normal : NORMAL;
+    float3 worldPos : TEXCOORD0;
+    float2 tex : TEXTURE;
+    float3 tangent : TANGENT;
+    float3 bitangent : BINORMAL;
+};
+
+
+VS_OUT VSMain(VS_IN input)
+{
+    VS_OUT output;
+
+    float4 worldPos = mul(float4(input.pos, 1.0f), world);
+    float4 viewPos = mul(worldPos, view);
+    output.worldPos = worldPos.xyz;
+    output.pos = mul(viewPos, proj);
+    output.normal = mul(input.normal, (float3x3) world);
+    output.tex = input.tex; // just pass color along
+    output.tangent = mul(float3(1,0,0), (float3x3) world);
+    output.bitangent = cross(output.normal, output.tangent);
+    return output;
+}

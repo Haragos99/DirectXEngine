@@ -5,14 +5,14 @@ Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPt
 	normalMap = std::make_unique<Texture>(device, context);
 	createTexturedVertex();
 	createIndeces();
-	texture->LoadTextureFromFile(L"..\\Resources\\moss.png");
-	normalMap->LoadTextureFromFile(L"..\\Resources\\moss_normal.png");
+	texture->LoadTextureFromFile(L"..\\Resources\\B_S.png");
+	normalMap->LoadTextureFromFile(L"..\\Resources\\B_N.png");
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();
 	shader->creaetLightBuffer();
 	shader->createRasterize();
-	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PlanePixelShader.hlsl");
+	shader->LoadShaders(L"shaders\\PlaneVertexShader.hlsl", L"shaders\\PlanePixelShader.hlsl");
 	wireframeEnabled = false;
 	SetPosition(0.0f, -1.0f, 0.0f);
 	Scale(5.0f, 1.0f, 5.0f);

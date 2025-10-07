@@ -23,32 +23,35 @@ struct VS_OUT
     float3 normal : NORMAL;
     float3 worldPos : TEXCOORD0;
     float2 tex : TEXTURE;
+    float3 tangent : TANGENT;
+    float3 bitangent : BINORMAL;
 };
 
 float4 PSMain(VS_OUT input) : SV_TARGET
 {
-    float3 N = normalize(input.normal);
-  //  float3 L = normalize(-lightColor); // direction *to* light
-    float3 L = normalize(float3(0.0f, 15.0f, -5.0f) - input.worldPos);
-    // Diffuse factor (clamped to [0,1])
-    float NdotL = saturate(dot(N, L));
-    
-    
-    float diff = max(dot(N, L), 0.0);
-    
     float3 normalFromMap = gNormalMap.Sample(gSampler, input.tex).rgb;
+    normalFromMap.xy *= 1.0F; // Scale normal map influence
     normalFromMap = normalize(normalFromMap * 2.0f - 1.0f);
+    // Build TBN matrix and transform to world space
+    float3x3 TBN = float3x3(normalize(input.tangent),
+                            normalize(input.bitangent),
+                            normalize(input.normal));
 
     
-    float3 lightTerm = diff * lightColor * 1.0f;
+    float3 worldNormal = normalize(mul(normalFromMap, TBN));
+    
     
     float4 texColor = gTextureDiffuse.Sample(gTextureSampler, input.tex);
+    
+    
+    float NdotL = saturate(dot(worldNormal, lightDirection));
+    
     
     float ambientStrength = 0.2f;
     float4 ambient = lightColor * ambientStrength;
     // Apply lighting
     float4 litColor = texColor * (ambient + lightColor * NdotL);
 
-    
-    return float4(texColor.rgb * lightTerm, texColor.a);
+    float3 diffuse = texColor * lightColor * NdotL;
+    return float4(diffuse, 1.0);
 }
