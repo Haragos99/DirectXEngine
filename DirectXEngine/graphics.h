@@ -18,7 +18,7 @@ public:
 
     void Clear(float r, float g, float b, float a);
     void RenderFrame();
-
+	void Update(float time);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeWireFrame() {  }

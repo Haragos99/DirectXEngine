@@ -124,7 +124,16 @@ void Graphics::Clear(float r, float g, float b, float a)
 
 }
 
-
+void Graphics::Update(float time)
+{
+	raytracer->Update(time);
+    plane->Update(time);
+    for (auto& cube : cubes)
+    {
+        cube->Update(time);
+    }
+    teapot->Update(time);
+}
 
 
 void Graphics::RenderFrame()
@@ -135,8 +144,8 @@ void Graphics::RenderFrame()
     // Bind state
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
     
-	//raytracer->Draw(camera);
-    
+	raytracer->Draw(camera);
+    /*
     plane->Draw(camera);
     for (auto& cube : cubes)
     {
@@ -145,5 +154,6 @@ void Graphics::RenderFrame()
     }
 	teapot->Draw(camera);
     envcube.Draw(context, camera);
+    */
     swapChain->Present(1, 0); // vsync on
 }
