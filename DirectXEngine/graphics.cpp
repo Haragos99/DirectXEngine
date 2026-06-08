@@ -114,6 +114,7 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     }
     plane = std::make_shared<Plane>(device, context);
     envcube = EnvCube(device,context);
+	currentRenderMode = RenderMode::Solid;
 }
 
 void Graphics::Clear(float r, float g, float b, float a)
@@ -136,6 +137,22 @@ void Graphics::Update(float time)
 }
 
 
+void Graphics::changeRenderMode()
+{
+    if (currentRenderMode == RenderMode::Solid)
+    {
+        currentRenderMode = RenderMode::WireframeOnly;
+    }
+    else if (currentRenderMode == RenderMode::WireframeOnly)
+    {
+        currentRenderMode = RenderMode::SolidWireframe;
+    }
+    else
+    {
+        currentRenderMode = RenderMode::Solid;
+    }
+}
+
 void Graphics::RenderFrame()
 {
     // Bind render target + depth buffer
@@ -144,16 +161,16 @@ void Graphics::RenderFrame()
     // Bind state
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
     
-	raytracer->Draw(camera);
-    /*
-    plane->Draw(camera);
+	//raytracer->Draw(camera);
+    
+    plane->Draw(camera, currentRenderMode);
     for (auto& cube : cubes)
     {
        
-        cube->Draw(camera);
+        cube->Draw(camera,currentRenderMode);
     }
-	teapot->Draw(camera);
+	teapot->Draw(camera, currentRenderMode);
     envcube.Draw(context, camera);
-    */
+    
     swapChain->Present(1, 0); // vsync on
 }

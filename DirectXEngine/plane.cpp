@@ -38,29 +38,8 @@ void Plane::createTexturedVertex()
 
 
 
-void Plane::Draw(Camera camera)
-{
-	DirectX::XMMATRIX projection = camera.GetProjectionMatrix();
-	DirectX::XMMATRIX view = camera.GetViewMatrix();
-	texture->Use(0);
-	normalMap->Use(1);
-	MatrixBuffer mb;
-	mb.world = DirectX::XMMatrixTranspose(world);
-	mb.view = DirectX::XMMatrixTranspose(view);
-	mb.projection = DirectX::XMMatrixTranspose(projection);
-	LightBuffer lightData;
-	lightData.lightDirection = DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f); // example
-	lightData.padding = 0.0f;
-	lightData.lightColor = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f); // white light
-	shader->renderDraw(mb, lightData);
-	context->DrawIndexed(indices.size(), 0, 0);
-	// Wireframe overlay
-	//context->RSSetState(wireframeRS.Get());
-	//context->PSSetShader(blackPixelShader.Get(), nullptr, 0);
-	//context->DrawIndexed(indices.size(), 0, 0);
-}
 
 void Plane::Update(float time)
 {
-	Rotate(0.0f, time * 0.5f, 0.0f);
+	//Rotate(0.0f, time * 0.5f, 0.0f);
 }

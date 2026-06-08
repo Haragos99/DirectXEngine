@@ -47,9 +47,9 @@ int Engine::Run()
 			{
 				graphics.camera.Move(0, -speed, 0);
 			}
-			if (keyboardEvent->IsKeyDown('T'))
+			if(keyboardEvent->IsKeyDown('R'))
 			{
-				graphics.changeWireFrame();
+				graphics.changeRenderMode();
 			}
 
 			if (mouseEvent->IsButtonDown(VK_LBUTTON))

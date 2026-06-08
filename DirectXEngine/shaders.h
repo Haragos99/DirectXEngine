@@ -7,8 +7,6 @@
 #include <vector>
 #pragma comment(lib, "d3d11.lib")
 
-
-
 class Shader
 {
 public:
@@ -60,4 +58,6 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> wireframeRS;
 private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> blackPixelShader;
+	std::wstring vertexShaderName;
+	std::wstring pixelShaderName;
 };

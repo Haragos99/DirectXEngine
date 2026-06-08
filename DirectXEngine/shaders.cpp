@@ -19,6 +19,8 @@ void Shader::LoadShaders(const std::wstring& vertexShaderPath, const std::wstrin
 	loadPixelShader(pixelShaderPath);
 	loadVertexShader(vertexShaderPath);
 	loadwireframePixelShader();
+	vertexShaderName = vertexShaderPath;
+	pixelShaderName = pixelShaderPath;
 }
 
 
@@ -77,8 +79,6 @@ void Shader::loadwireframePixelShader()
 
 	device->CreatePixelShader(psBlobB->GetBufferPointer(), psBlobB->GetBufferSize(), nullptr, &blackPixelShader);
 }
-
-
 
 
 

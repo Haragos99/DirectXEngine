@@ -38,7 +38,7 @@ void Raytracer::Update(float time)
 {
     for (auto& s : spheres)
     {
-        //s.velocity.y -= 9.81f * time;
+        s.velocity.y -= 9.81f * time;
         s.position.x += s.velocity.x * time;
         s.position.y += s.velocity.y * time;
         s.position.z += s.velocity.z * time;
@@ -188,7 +188,7 @@ void Raytracer::resolveFloorCollision(SpherePhysics& s)
 
     const float FLOOR_Y = 1.0f;
     const float RESTITUTION = 0.f;   // bounciness [0..1]
-    const float FRICTION = 0.999f;  // velocity damping on floor contact
+    const float FRICTION = 0.99f;  // velocity damping on floor contact
     const float SLEEP_EPSILON = 0.01f;  // below this speed, stop bouncing
     float floorContact =  s.radius;
 

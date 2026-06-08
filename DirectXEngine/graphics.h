@@ -21,7 +21,7 @@ public:
 	void Update(float time);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
-    void changeWireFrame() {  }
+    void changeRenderMode();
     std::vector< std::shared_ptr<Object3D>> cubes;
     std::shared_ptr<Object3D> teapot;
     std::shared_ptr<Plane> plane;
@@ -29,7 +29,7 @@ public:
     std::shared_ptr<Raytracer> raytracer;
 	Camera camera;
 private:
-    
+    RenderMode currentRenderMode;
     Microsoft::WRL::ComPtr<ID3D11Device> device;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
     Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
