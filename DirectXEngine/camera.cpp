@@ -83,6 +83,14 @@ void Camera::Rotate(float _pitch, float _yaw)
 	XMStoreFloat3(&eye, wEye);
 }
 
+void Camera::Zoom(float wheelDelta)
+{
+	// wheelDelta comes in multiples of 120 from WM_MOUSEWHEEL
+	float steps = wheelDelta / 120.0f;
+	fov -= steps * 0.08f;
+
+}
+
 XMMATRIX Camera::GetViewMatrix() const
 {
 	return XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up));

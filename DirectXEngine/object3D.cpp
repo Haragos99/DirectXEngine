@@ -27,11 +27,9 @@ void Object3D::Scale(float sx, float sy, float sz)
 
 void Object3D::wireframeOverlay()
 {
-
 	context->RSSetState(shader->GetwireframeRS().Get());
 	context->PSSetShader(shader->GetBlackPixelShader().Get(), nullptr, 0);
-	context->DrawIndexed(indices.size(), 0, 0);
-	
+	context->DrawIndexed(static_cast<UINT>(indices.size()), 0, 0);
 }
 
 void Object3D::solidOverlay(Camera camera)
@@ -53,15 +51,27 @@ void Object3D::solidOverlay(Camera camera)
 
 void Object3D::Draw(Camera camera, RenderMode mode)
 {
-	if(mode == RenderMode::Solid || mode == RenderMode::SolidWireframe)
+	switch (mode)
 	{
+	case RenderMode::Solid:
+		solidOverlay(camera); // sets VB/IB/layout/VS/PS/solid RS/constants
+		context->DrawIndexed(static_cast<UINT>(indices.size()), 0, 0);
+		break;
+
+	case RenderMode::WireframeOnly:
+		solidOverlay(camera); // prepare full pipeline first
+		wireframeOverlay();   // then override RS + PS for wireframe
+		break;
+
+	case RenderMode::SolidWireframe:
 		solidOverlay(camera);
+		context->DrawIndexed(static_cast<UINT>(indices.size()), 0, 0); // solid pass first
+		wireframeOverlay(); // wire pass second
+		break;
+
+	default:
+		throw std::exception("Invalid Render mode");
 	}
-	if(mode == RenderMode::WireframeOnly || mode == RenderMode::SolidWireframe)
-	{
-		wireframeOverlay();
-	}
-	context->DrawIndexed(indices.size(), 0, 0);
 }
 
 

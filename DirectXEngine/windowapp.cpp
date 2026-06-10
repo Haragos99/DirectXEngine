@@ -53,6 +53,9 @@ LRESULT CALLBACK WindowApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
         cY = 1.0f - 2.0f * y / 720;
         mouseEvent->OnMouseMove(x, y);
         return 0;
+    case WM_MOUSEWHEEL:
+        mouseEvent->OnWheelDelta(GET_WHEEL_DELTA_WPARAM(wParam));
+        return 0;
     case WM_LBUTTONDOWN:
         mouseEvent->OnButtonDown(VK_LBUTTON);
         return 0;

@@ -13,11 +13,11 @@ int Mouse::GetDeltaY() { return y - prevY; }
 
 void Mouse::OnButtonDown(int button)
 {
-    if (button == VK_LBUTTON) 
-    { 
-        leftDown = true; 
+    if (button == VK_LBUTTON)
+    {
+        leftDown = true;
     }
-    if (button == VK_RBUTTON) 
+    if (button == VK_RBUTTON)
     {
         rightDown = true;
     }
@@ -25,14 +25,26 @@ void Mouse::OnButtonDown(int button)
 
 void Mouse::OnButtonUp(int button)
 {
-    if (button == VK_LBUTTON) 
-    { 
-        leftDown = false; 
+    if (button == VK_LBUTTON)
+    {
+        leftDown = false;
     }
-    if (button == VK_RBUTTON) 
-    { 
-        rightDown = false; 
+    if (button == VK_RBUTTON)
+    {
+        rightDown = false;
     }
+}
+
+void Mouse::OnWheelDelta(int delta)
+{
+    wheelDelta += delta / 10;
+}
+
+int Mouse::GetWheelDelta()
+{
+    int delta = wheelDelta;
+    wheelDelta = 0;
+    return delta;
 }
 
 bool Mouse::IsButtonDown(int button) const
@@ -40,10 +52,10 @@ bool Mouse::IsButtonDown(int button) const
     if (button == VK_LBUTTON)
     {
         return leftDown;
-    }       
+    }
     if (button == VK_RBUTTON)
     {
         return rightDown;
-    }   
+    }
     return false;
 }

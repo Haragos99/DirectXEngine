@@ -12,6 +12,7 @@ Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"Direc
 int Engine::Run()
 {
 	MSG msg = {};
+	bool rKeyLatch = false;
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -25,11 +26,11 @@ int Engine::Run()
 			float speed = 0.05f;
 			if (keyboardEvent->IsKeyDown('W')) 
 			{ 
-				graphics.camera.Move(0, 0, speed); 
+				graphics.camera.Move(0, speed, 0);
 			}
 			if (keyboardEvent->IsKeyDown('S')) 
 			{ 
-				graphics.camera.Move(0, 0, -speed); 
+				graphics.camera.Move(0, -speed, 0);
 			}
 			if (keyboardEvent->IsKeyDown('A')) 
 			{ 
@@ -47,10 +48,13 @@ int Engine::Run()
 			{
 				graphics.camera.Move(0, -speed, 0);
 			}
-			if(keyboardEvent->IsKeyDown('R'))
+
+			const bool rDown = keyboardEvent->IsKeyDown('R');
+			if (rDown && !rKeyLatch)
 			{
 				graphics.changeRenderMode();
 			}
+			rKeyLatch = rDown;
 
 			if (mouseEvent->IsButtonDown(VK_LBUTTON))
 			{
@@ -60,6 +64,13 @@ int Engine::Run()
 				float y = 1.0f - (2.0f * deltay) / 720;
 				graphics.camera.Rotate(deltay * 0.005, deltax * 0.005);
 			}
+
+			int wheelDelta = mouseEvent->GetWheelDelta();
+			if (wheelDelta != 0)
+			{
+				graphics.camera.Move(0, 0, wheelDelta);
+			}
+
 			float dt = calculateDeltaTime();
 			graphics.Update(dt);
 			graphics.RenderFrame();
