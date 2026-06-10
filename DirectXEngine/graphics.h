@@ -22,9 +22,7 @@ public:
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();
-    std::vector< std::shared_ptr<Object3D>> cubes;
-    std::shared_ptr<Object3D> teapot;
-    std::shared_ptr<Plane> plane;
+    std::vector< std::shared_ptr<Object3D>> sceenObjects;
     EnvCube envcube;
     std::shared_ptr<Raytracer> raytracer;
 	Camera camera;

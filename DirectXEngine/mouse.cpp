@@ -37,7 +37,7 @@ void Mouse::OnButtonUp(int button)
 
 void Mouse::OnWheelDelta(int delta)
 {
-    wheelDelta += delta / 10;
+    wheelDelta += delta / 100;
 }
 
 int Mouse::GetWheelDelta()

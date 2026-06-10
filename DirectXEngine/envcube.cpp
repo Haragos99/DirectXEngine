@@ -196,8 +196,6 @@ void EnvCube::Draw(Microsoft::WRL::ComPtr<ID3D11DeviceContext> gfx, Camera camer
     gfx->UpdateSubresource(matrixBuffer.Get(), 0, nullptr, &buffer, 0, 0);
 
 
-   
-
     gfx->VSSetShader(vertexShader.Get(), nullptr, 0);
     gfx->PSSetShader(pixelShader.Get(), nullptr, 0);
     // Bind cube map and sampler

@@ -105,14 +105,19 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     context->RSSetViewports(1, &viewport);
 
     raytracer = std::make_shared<Raytracer>(device, context);
-	teapot = std::make_shared<MeshModel>("..\\Resources\\Models\\teapot.obj", L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl",device, context);
-	teapot->SetPosition(0.0f, -1.0f, 0.0f);
+
     for (int i = 0; i < 2; ++i)
     {
-        cubes.push_back(std::make_shared<Cube>(device, context));
-        cubes[i]->SetPosition((float)(i) * 6.0f - 4.0f, 0.0f, (float)(i) * 6.0f - 4.0f);
+        sceenObjects.push_back(std::make_shared<Cube>(device, context));
+        sceenObjects[i]->SetPosition((float)(i) * 6.0f - 4.0f, 0.0f, (float)(i) * 6.0f - 4.0f);
     }
-    plane = std::make_shared<Plane>(device, context);
+
+    auto teapot = std::make_shared<MeshModel>("..\\Resources\\Models\\teapot.obj", L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl", device, context);
+    teapot->SetPosition(0.0f, -1.0f, 0.0f);
+    sceenObjects.push_back(teapot);
+
+    auto plane = std::make_shared<Plane>(device, context);
+	sceenObjects.push_back(plane);
     envcube = EnvCube(device,context);
 	currentRenderMode = RenderMode::Solid;
 }
@@ -128,12 +133,10 @@ void Graphics::Clear(float r, float g, float b, float a)
 void Graphics::Update(float time)
 {
 	raytracer->Update(time);
-    plane->Update(time);
-    for (auto& cube : cubes)
+    for (auto& object : sceenObjects)
     {
-        cube->Update(time);
+        object->Update(time);
     }
-    teapot->Update(time);
 }
 
 
@@ -162,14 +165,12 @@ void Graphics::RenderFrame()
     context->OMSetDepthStencilState(depthStencilState.Get(), 1);
     
 	//raytracer->Draw(camera);
-    
-    plane->Draw(camera, currentRenderMode);
-    for (auto& cube : cubes)
+
+    for (auto& object : sceenObjects)
     {
        
-        cube->Draw(camera,currentRenderMode);
+        object->Draw(camera,currentRenderMode);
     }
-	teapot->Draw(camera, currentRenderMode);
     envcube.Draw(context, camera);
     
     swapChain->Present(1, 0); // vsync on
