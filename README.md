@@ -29,6 +29,13 @@ Below is a sample rendering result from the project in **Mesh-Based Rendering Mo
 
 ![Result](Results/picm.png)
 
+## Build Dependencies
+To fetch the required external dependency, run:
+
+```bash
+git submodule add https://github.com/ocornut/imgui.git external/imgui
+git submodule update --init --recursive
+```
 
 ## Requirements
 
