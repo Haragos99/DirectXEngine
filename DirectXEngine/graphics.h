@@ -10,6 +10,7 @@
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
 #include "raytracer.h"
+#include "ui.h"
 class Graphics
 {
 public:
@@ -19,6 +20,7 @@ public:
     void Clear(float r, float g, float b, float a);
     void RenderFrame();
 	void Update(float time);
+    void Resize(UINT width, UINT height);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();
@@ -26,6 +28,7 @@ public:
     EnvCube envcube;
     std::shared_ptr<Raytracer> raytracer;
 	Camera camera;
+    UI ui;
 private:
     RenderMode currentRenderMode;
     Microsoft::WRL::ComPtr<ID3D11Device> device;

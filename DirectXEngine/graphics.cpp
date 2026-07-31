@@ -120,6 +120,76 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
 	sceenObjects.push_back(plane);
     envcube = EnvCube(device,context);
 	currentRenderMode = RenderMode::Solid;
+
+    ui.Init(hwnd, device.Get(), context.Get());
+}
+
+void Graphics::Resize(UINT width, UINT height)
+{
+    if (!swapChain || !device || !context)
+        return;
+    if (width == 0 || height == 0)
+        return; // minimized
+
+    // Detach back-buffer views before resizing the swap chain buffers.
+    ID3D11RenderTargetView* nullRTV[] = { nullptr };
+    context->OMSetRenderTargets(1, nullRTV, nullptr);
+    renderTargetView.Reset();
+    depthStencilView.Reset();
+
+    HRESULT hr = swapChain->ResizeBuffers(0, width, height, DXGI_FORMAT_UNKNOWN, 0);
+    if (FAILED(hr))
+        throw std::runtime_error("Failed to resize swap chain buffers");
+
+    // Recreate render target view from the resized back buffer.
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
+    hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backBuffer.GetAddressOf());
+    if (FAILED(hr))
+        throw std::runtime_error("Failed to get back buffer after resize");
+    hr = device->CreateRenderTargetView(backBuffer.Get(), nullptr, &renderTargetView);
+    if (FAILED(hr))
+        throw std::runtime_error("Failed to create render target view after resize");
+
+    // Recreate depth/stencil buffer + view at the new size.
+    D3D11_TEXTURE2D_DESC depthDesc = {};
+    depthDesc.Width = width;
+    depthDesc.Height = height;
+    depthDesc.MipLevels = 1;
+    depthDesc.ArraySize = 1;
+    depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    depthDesc.SampleDesc.Count = 1;
+    depthDesc.Usage = D3D11_USAGE_DEFAULT;
+    depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+    hr = device->CreateTexture2D(&depthDesc, nullptr, &depthStencilBuffer);
+    if (FAILED(hr))
+        throw std::runtime_error("Failed to create depth stencil buffer after resize");
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+    dsvDesc.Format = depthDesc.Format;
+    dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsvDesc.Texture2D.MipSlice = 0;
+    hr = device->CreateDepthStencilView(depthStencilBuffer.Get(), &dsvDesc, &depthStencilView);
+    if (FAILED(hr))
+        throw std::runtime_error("Failed to create depth stencil view after resize");
+
+    // Update viewport to match the new size.
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = static_cast<float>(width);
+    viewport.Height = static_cast<float>(height);
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    context->RSSetViewports(1, &viewport);
+
+    // Rebind so subsequent draws use the fresh views.
+    context->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
+    context->OMSetDepthStencilState(depthStencilState.Get(), 1);
+
+    // Keep the camera's projection matching the new aspect ratio.
+    camera.SetAspect(static_cast<float>(width) / static_cast<float>(height));
 }
 
 void Graphics::Clear(float r, float g, float b, float a)
@@ -172,6 +242,13 @@ void Graphics::RenderFrame()
         object->Draw(camera,currentRenderMode);
     }
     envcube.Draw(context, camera);
-    
+
+    // ImGui overlay
+    ui.BeginFrame();
+    ui.DrawTestPanel();
+    if (ui.RequestedRenderModeChange())
+        changeRenderMode();
+    ui.EndFrame();
+
     swapChain->Present(1, 0); // vsync on
 }

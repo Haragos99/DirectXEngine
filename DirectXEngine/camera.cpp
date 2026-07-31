@@ -91,6 +91,12 @@ void Camera::Zoom(float wheelDelta)
 
 }
 
+void Camera::SetAspect(float aspectRatio)
+{
+	if (aspectRatio > 0.0f)
+		aspect = aspectRatio;
+}
+
 XMMATRIX Camera::GetViewMatrix() const
 {
 	return XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&lookAt), XMLoadFloat3(&up));

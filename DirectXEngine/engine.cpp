@@ -22,7 +22,8 @@ int Engine::Run()
 		}
 		else
 		{
-			graphics.Clear(0.0f, 0.2f, 0.4f, 1.0f);
+			const float* clearColor = graphics.ui.GetClearColor();
+			graphics.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
 			float speed = 0.05f;
 			if (keyboardEvent->IsKeyDown('W')) 
 			{ 
@@ -90,4 +91,9 @@ float Engine::calculateDeltaTime()
 	previousTime = currentTime;
 
 	return elapsed.count(); // seconds
+}
+
+void Engine::OnResize(int width, int height)
+{
+	graphics.Resize(static_cast<UINT>(width), static_cast<UINT>(height));
 }

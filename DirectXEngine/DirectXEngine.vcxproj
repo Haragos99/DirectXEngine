@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,6 +92,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>FILE_DIR="$(ProjectDir)";SHADER_DIR="$(ShaderDir)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -119,10 +121,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -144,7 +148,15 @@
     <ClCompile Include="raytraceshader.cpp" />
     <ClCompile Include="shaders.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="ui.cpp" />
     <ClCompile Include="windowapp.cpp" />
+    <ClCompile Include="..\External\imgui\imgui.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\External\imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\External\imgui\backends\imgui_impl_dx11.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\External\DDSTextureLoader.h" />
@@ -164,8 +176,14 @@
     <ClInclude Include="raytraceshader.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="ui.h" />
     <ClInclude Include="vertex.h" />
     <ClInclude Include="windowapp.h" />
+    <ClInclude Include="..\External\imgui\imgui.h" />
+    <ClInclude Include="..\External\imgui\imgui_internal.h" />
+    <ClInclude Include="..\External\imgui\imconfig.h" />
+    <ClInclude Include="..\External\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="..\External\imgui\backends\imgui_impl_dx11.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\BlackPixelShader.hlsl">

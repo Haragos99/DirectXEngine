@@ -9,6 +9,7 @@ public:
 
 	~Engine() = default;
 	int Run();
+	void OnResize(int width, int height) override;
 private:
 	Graphics graphics;
 	float calculateDeltaTime();
