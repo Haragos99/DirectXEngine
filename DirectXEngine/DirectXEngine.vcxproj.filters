@@ -24,29 +24,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\main.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="engine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\engine.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="windowapp.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\windowapp.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="mouse.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\mouse.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="keyboard.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\keyboard.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="object3D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Core\camera.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\External\DDSTextureLoader.cpp">
       <Filter>External</Filter>
@@ -54,35 +48,41 @@
     <ClCompile Include="..\External\WICTextureLoader.cpp">
       <Filter>External</Filter>
     </ClCompile>
-    <ClCompile Include="envcube.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\envcube.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\texture.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="shaders.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\shaders.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="cube.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\graphics.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="plane.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\raytracer.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="raytracer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Rendering\raytraceshader.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="raytraceshader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Scene\cube.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="mesh.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Scene\plane.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="meshmodel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Scene\mesh.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ui.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Scene\meshmodel.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\object3D.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\ui.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
@@ -107,29 +107,29 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Core\engine.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="windowapp.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Core\windowapp.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="keyboard.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Core\keyboard.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="mouse.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Core\mouse.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="graphics.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\graphics.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Core\camera.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="object3d.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\object3d.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="envcube.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\envcube.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\External\DDSTextureLoader.h">
       <Filter>External</Filter>
@@ -137,35 +137,35 @@
     <ClInclude Include="..\External\WICTextureLoader.h">
       <Filter>External</Filter>
     </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\texture.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="shaders.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\shaders.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="vertex.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\vertex.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="cube.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\cube.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="plane.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\plane.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="raytracer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\raytracer.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="raytraceshader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Rendering\raytraceshader.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="mesh.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\mesh.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="meshmodel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Scene\meshmodel.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\UI\ui.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imgui.h">
       <Filter>External\imgui</Filter>

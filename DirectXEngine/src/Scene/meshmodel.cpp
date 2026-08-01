@@ -26,8 +26,6 @@ MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,
 	name = stem;
 }
 
-
-
 void MeshModel::createIndeces()
 {
 	indices = mesh.indices;
@@ -38,8 +36,6 @@ void MeshModel::createTexturedVertex()
 
 	vertices = mesh.vertices;
 }
-
-
 
 void MeshModel::Update(float time)
 {
