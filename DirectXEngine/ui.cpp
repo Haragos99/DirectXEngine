@@ -1,18 +1,24 @@
 #include "ui.h"
 
+#include <commdlg.h>
+
 #include "imgui.h"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
 
-UI::~UI()
+#pragma comment(lib, "comdlg32.lib")
+
+UIPanel::~UIPanel()
 {
     Shutdown();
 }
 
-void UI::Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
+void UIPanel::Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
 {
     if (initialized)
         return;
+
+    this->hwnd = hwnd;
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -27,7 +33,7 @@ void UI::Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
     initialized = true;
 }
 
-void UI::Shutdown()
+void UIPanel::Shutdown()
 {
     if (!initialized)
         return;
@@ -38,7 +44,7 @@ void UI::Shutdown()
     initialized = false;
 }
 
-void UI::BeginFrame()
+void UIPanel::BeginFrame()
 {
     if (!initialized)
         return;
@@ -48,7 +54,7 @@ void UI::BeginFrame()
     ImGui::NewFrame();
 }
 
-void UI::DrawTestPanel()
+void UIPanel::DrawTestPanel()
 {
     if (!initialized)
         return;
@@ -74,6 +80,22 @@ void UI::DrawTestPanel()
         renderModeChangeRequested = true;
 
     ImGui::Spacing();
+    if (ImGui::Button("Import OBJ model"))
+        OpenModelDialog();
+
+    if (!selectedModelPath.empty())
+    {
+        ImGui::SameLine();
+        ImGui::TextDisabled("Loaded");
+        ImGui::TextWrapped("Path: %ls", selectedModelPath.c_str());
+    }
+    else
+    {
+        ImGui::SameLine();
+        ImGui::TextDisabled("No file selected");
+    }
+
+    ImGui::Spacing();
     ImGui::ColorEdit3("Clear color", clearColor);
 
     ImGui::Spacing();
@@ -85,7 +107,31 @@ void UI::DrawTestPanel()
         ImGui::ShowDemoWindow(&showDemoWindow);
 }
 
-void UI::EndFrame()
+void UIPanel::OpenModelDialog()
+{
+    if (!hwnd)
+        return;
+
+    OPENFILENAMEW ofn = {};
+    wchar_t fileBuffer[MAX_PATH] = L"";
+
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = hwnd;
+    ofn.lpstrFile = fileBuffer;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFilter = L"Wavefront OBJ (*.obj)\0*.obj\0All Files\0*.*\0";
+    ofn.nFilterIndex = 1;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+    if (GetOpenFileNameW(&ofn))
+    {
+        selectedModelPath = fileBuffer;
+        if (importModelCallback)
+            importModelCallback(selectedModelPath);
+    }
+}
+
+void UIPanel::EndFrame()
 {
     if (!initialized)
         return;

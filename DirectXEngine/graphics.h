@@ -9,6 +9,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
+#include <string>
 #include "raytracer.h"
 #include "ui.h"
 class Graphics
@@ -21,14 +22,15 @@ public:
     void RenderFrame();
 	void Update(float time);
     void Resize(UINT width, UINT height);
+    void ImportModel(const std::wstring& path);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();
+	void swapChainPresent() { swapChain->Present(1, 0); }
     std::vector< std::shared_ptr<Object3D>> sceenObjects;
     EnvCube envcube;
     std::shared_ptr<Raytracer> raytracer;
 	Camera camera;
-    UI ui;
 private:
     RenderMode currentRenderMode;
     Microsoft::WRL::ComPtr<ID3D11Device> device;

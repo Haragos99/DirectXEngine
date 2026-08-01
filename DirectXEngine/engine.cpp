@@ -3,11 +3,11 @@
 
 Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"DirectX Engine Window", L"DirectX Engine Class", 1280, 720, nCmdShow), graphics(GetHWND(), 1280, 720)
 {
-
+	ui.Init(GetHWND(), graphics.GetDevice(), graphics.GetContext());
+	ui.SetImportModelCallback([this](const std::wstring& path) {
+		Import(path);
+	});
 }
-
-
-
 
 int Engine::Run()
 {
@@ -22,7 +22,7 @@ int Engine::Run()
 		}
 		else
 		{
-			const float* clearColor = graphics.ui.GetClearColor();
+			const float* clearColor = ui.GetClearColor();
 			graphics.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
 			float speed = 0.05f;
 			if (keyboardEvent->IsKeyDown('W')) 
@@ -61,8 +61,8 @@ int Engine::Run()
 			{
 				int deltax = mouseEvent->GetDeltaX();
 				int deltay = mouseEvent->GetDeltaY();
-				float x = (2.0f * deltax) / 1280 - 1.0f;
-				float y = 1.0f - (2.0f * deltay) / 720;
+				float x = (2.0f * deltax) / windowHeight - 1.0f;
+				float y = 1.0f - (2.0f * deltay) / windowWidth;
 				graphics.camera.Rotate(deltay * 0.005, deltax * 0.005);
 			}
 
@@ -71,15 +71,36 @@ int Engine::Run()
 			{
 				graphics.camera.Move(0, 0, wheelDelta);
 			}
+			
+			
 
 			float dt = calculateDeltaTime();
 			graphics.Update(dt);
-			graphics.RenderFrame();
+			Render();
 		}
 	}
 	return static_cast<int>(msg.wParam);
 }
 
+void Engine::Render()
+{
+	graphics.RenderFrame();
+	RenderUI();
+	graphics.swapChainPresent();
+}
+
+
+void Engine::RenderUI()
+{
+	// ImGui overlay
+	ui.BeginFrame();
+	ui.DrawTestPanel();
+	if (ui.RequestedRenderModeChange())
+	{
+		graphics.changeRenderMode();
+	}
+	ui.EndFrame();
+}
 
 float Engine::calculateDeltaTime()
 {
@@ -95,5 +116,12 @@ float Engine::calculateDeltaTime()
 
 void Engine::OnResize(int width, int height)
 {
+	windowHeight = height;
+	windowWidth = width;
 	graphics.Resize(static_cast<UINT>(width), static_cast<UINT>(height));
+}
+
+void Engine::Import(const std::wstring& path)
+{
+	graphics.ImportModel(path);
 }

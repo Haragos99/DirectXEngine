@@ -120,8 +120,6 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
 	sceenObjects.push_back(plane);
     envcube = EnvCube(device,context);
 	currentRenderMode = RenderMode::Solid;
-
-    ui.Init(hwnd, device.Get(), context.Get());
 }
 
 void Graphics::Resize(UINT width, UINT height)
@@ -209,6 +207,16 @@ void Graphics::Update(float time)
     }
 }
 
+void Graphics::ImportModel(const std::wstring& path)
+{
+    if (path.empty())
+        return;
+
+    std::string modelPath(path.begin(), path.end());
+    auto importedModel = std::make_shared<MeshModel>(modelPath, L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl", device, context);
+    importedModel->SetPosition(0.0f, -1.0f, 0.0f);
+    sceenObjects.push_back(importedModel);
+}
 
 void Graphics::changeRenderMode()
 {
@@ -242,13 +250,5 @@ void Graphics::RenderFrame()
         object->Draw(camera,currentRenderMode);
     }
     envcube.Draw(context, camera);
-
-    // ImGui overlay
-    ui.BeginFrame();
-    ui.DrawTestPanel();
-    if (ui.RequestedRenderModeChange())
-        changeRenderMode();
-    ui.EndFrame();
-
-    swapChain->Present(1, 0); // vsync on
 }
+

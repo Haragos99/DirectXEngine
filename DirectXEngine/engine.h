@@ -12,6 +12,9 @@ public:
 	void OnResize(int width, int height) override;
 private:
 	Graphics graphics;
+	UIPanel ui;
+	void Render();
 	float calculateDeltaTime();
-	
+	void RenderUI();
+	void Import(const std::wstring& path);
 };

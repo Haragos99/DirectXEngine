@@ -1,14 +1,18 @@
 #pragma once
 #include <windows.h>
 #include <d3d11.h>
+#include <functional>
+#include <string>
 
 // Lightweight wrapper around Dear ImGui (Win32 + DX11 backends).
 // Owns nothing renderer-side; borrows the device/context from Graphics.
-class UI
+class UIPanel
 {
 public:
-    UI() = default;
-    ~UI();
+    UIPanel() = default;
+    ~UIPanel();
+
+    using ImportModelCallback = std::function<void(const std::wstring&)>;
 
     void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context);
     void Shutdown();
@@ -24,11 +28,17 @@ public:
     // Panel state (read from Graphics/Engine).
     bool  RequestedRenderModeChange() { bool v = renderModeChangeRequested; renderModeChangeRequested = false; return v; }
     const float* GetClearColor() const { return clearColor; }
+    void SetImportModelCallback(ImportModelCallback callback) { importModelCallback = std::move(callback); }
 
 private:
+    void OpenModelDialog();
+
     bool  initialized = false;
+    HWND hwnd = nullptr;
     float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
     int   buttonClicks = 0;
     bool  showDemoWindow = false;
     bool  renderModeChangeRequested = false;
+    std::wstring selectedModelPath;
+    ImportModelCallback importModelCallback;
 };
