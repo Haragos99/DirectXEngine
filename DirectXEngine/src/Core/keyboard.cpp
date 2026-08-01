@@ -1,4 +1,4 @@
-#include "Keyboard.h"
+#include "keyboard.h"
 
 void Keyboard::OnKeyDown(unsigned char key) { keyStates[key] = true; }
 void Keyboard::OnKeyUp(unsigned char key) { keyStates[key] = false; }

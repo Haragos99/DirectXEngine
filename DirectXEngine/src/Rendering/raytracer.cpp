@@ -1,7 +1,7 @@
 #include "raytracer.h"
 #include <d3dcompiler.h>
 #include <stdexcept>
-#include "../External/DDSTextureLoader.h"
+#include "../../External/DDSTextureLoader.h"
 
 using namespace DirectX;
 

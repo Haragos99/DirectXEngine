@@ -1,7 +1,7 @@
 #include "envcube.h"
 #include <d3dcompiler.h>
 #include <stdexcept>
-#include "../External/DDSTextureLoader.h"
+#include "../../External/DDSTextureLoader.h"
 EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> fx) 
 {
 

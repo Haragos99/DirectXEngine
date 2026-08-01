@@ -1,4 +1,4 @@
-#include "Graphics.h"
+#include "graphics.h"
 #include <stdexcept>
 #include "meshmodel.h"
 
