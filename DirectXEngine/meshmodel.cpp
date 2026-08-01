@@ -1,5 +1,6 @@
 #include "meshmodel.h"
-
+#include <iostream>
+#include <filesystem>
 MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
 	mesh = Mesh();
@@ -16,6 +17,13 @@ MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,
 	shader->LoadShaders(VSPath, PSPath);
 	wireframeEnabled = false;
 	Scale(0.5f, 0.5f, 0.5f);
+	std::filesystem::path p(path);
+	auto filename = p.filename().string();
+	size_t dot = filename.find_last_of('.');
+	std::string stem = (dot == std::string::npos)
+		? filename
+		: filename.substr(0, dot);
+	name = stem;
 }
 
 

@@ -94,7 +94,7 @@ void Engine::RenderUI()
 {
 	// ImGui overlay
 	ui.BeginFrame();
-	ui.DrawTestPanel();
+	ui.DrawTestPanel(graphics.sceenObjects);
 	if (ui.RequestedRenderModeChange())
 	{
 		graphics.changeRenderMode();

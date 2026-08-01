@@ -54,10 +54,23 @@ void UIPanel::BeginFrame()
     ImGui::NewFrame();
 }
 
-void UIPanel::DrawTestPanel()
+static std::string GetSceneObjectLabel(const std::shared_ptr<Object3D>& object)
+{
+    if (!object)
+    {
+        return "<null>";
+    }
+
+    return object->GetName();
+}
+
+void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneObjects)
 {
     if (!initialized)
         return;
+
+    if (selectedSceneObjectIndex >= sceneObjects.size())
+        selectedSceneObjectIndex = sceneObjects.empty() ? 0 : sceneObjects.size() - 1;
 
     ImGui::Begin("Control Panel");
 
@@ -93,6 +106,31 @@ void UIPanel::DrawTestPanel()
     {
         ImGui::SameLine();
         ImGui::TextDisabled("No file selected");
+    }
+
+    ImGui::Spacing();
+    ImGui::Text("Scene objects");
+    if (ImGui::BeginChild("SceneObjectList", ImVec2(0.0f, 140.0f), true))
+    {
+        if (sceneObjects.empty())
+        {
+            ImGui::TextDisabled("No scene objects yet");
+        }
+        else
+        {
+            for (size_t i = 0; i < sceneObjects.size(); ++i)
+            {
+                const std::string label = GetSceneObjectLabel(sceneObjects[i]) + " #" + std::to_string(i);
+                if (ImGui::Selectable(label.c_str(), selectedSceneObjectIndex == i))
+                    selectedSceneObjectIndex = i;
+            }
+        }
+        ImGui::EndChild();
+    }
+
+    if (!sceneObjects.empty() && selectedSceneObjectIndex < sceneObjects.size())
+    {
+        ImGui::Text("Selected: %s", GetSceneObjectLabel(sceneObjects[selectedSceneObjectIndex]).c_str());
     }
 
     ImGui::Spacing();

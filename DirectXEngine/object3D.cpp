@@ -7,6 +7,7 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL:
 {
 	shader = std::make_unique<Shader>(device, context);
 	texture = std::make_unique<Texture>(device, context);
+	name = "Unnamed Object";
 }
 
 void Object3D::SetPosition(float x, float y, float z)

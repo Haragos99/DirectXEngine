@@ -31,6 +31,7 @@ public:
 	void SetPosition(float x, float y, float z);
 	void Rotate(float pitch, float yaw, float roll);
 	void Scale(float sx, float sy, float sz);
+	std::string GetName() const { return name; }
 protected:
 	DirectX::XMVECTOR position;
 	virtual void createTexturedVertex() = 0;
@@ -44,4 +45,5 @@ protected:
 	std::vector<UINT>   indices;
 	std::unique_ptr<Texture> texture;
 	DirectX::XMMATRIX world;
+	std::string name;
 };

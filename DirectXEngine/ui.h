@@ -2,7 +2,10 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <functional>
+#include <memory>
 #include <string>
+#include <vector>
+#include "object3d.h"
 
 // Lightweight wrapper around Dear ImGui (Win32 + DX11 backends).
 // Owns nothing renderer-side; borrows the device/context from Graphics.
@@ -20,7 +23,7 @@ public:
     // Call once per frame BEFORE any ImGui::* calls.
     void BeginFrame();
     // Builds the demo/test control panel.
-    void DrawTestPanel();
+    void DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneObjects);
     // Renders ImGui draw data to the currently bound render target.
     // Call AFTER the scene has been drawn, BEFORE SwapChain->Present().
     void EndFrame();
@@ -39,6 +42,7 @@ private:
     int   buttonClicks = 0;
     bool  showDemoWindow = false;
     bool  renderModeChangeRequested = false;
+    size_t selectedSceneObjectIndex = 0;
     std::wstring selectedModelPath;
     ImportModelCallback importModelCallback;
 };

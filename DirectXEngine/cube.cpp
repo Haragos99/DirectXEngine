@@ -12,6 +12,7 @@ Cube::Cube(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<
 	shader->createRasterize();
 	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PixelShader.hlsl");
 	wireframeEnabled = false;
+	name = "Cube";
 }
 
 void Cube::createIndeces()
