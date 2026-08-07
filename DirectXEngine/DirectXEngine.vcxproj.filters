@@ -81,6 +81,9 @@
     <ClCompile Include="src\Scene\object3D.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\gizmoarrow.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\UI\ui.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
@@ -152,6 +155,9 @@
     <ClInclude Include="src\Scene\plane.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\gizmoarrow.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Rendering\raytracer.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
@@ -212,6 +218,12 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PlaneVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoPixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

@@ -145,6 +145,7 @@
     <ClCompile Include="src\Core\mouse.cpp" />
     <ClCompile Include="src\Scene\object3D.cpp" />
     <ClCompile Include="src\Scene\plane.cpp" />
+    <ClCompile Include="src\Scene\gizmoarrow.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\Core\mouse.h" />
     <ClInclude Include="src\Scene\object3d.h" />
     <ClInclude Include="src\Scene\plane.h" />
+    <ClInclude Include="src\Scene\gizmoarrow.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />
@@ -231,6 +233,14 @@
     <FxCompile Include="shaders\VertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoVertexShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoPixelShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@
 #include "envcube.h"
 #include "cube.h"
 #include "plane.h"
+#include "gizmoarrow.h"
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #include <memory>
@@ -30,6 +31,7 @@ public:
     std::vector< std::shared_ptr<Object3D>> sceenObjects;
     EnvCube envcube;
     std::shared_ptr<Raytracer> raytracer;
+    std::shared_ptr<GizmoArrow> gizmo;
 	Camera camera;
 private:
     RenderMode currentRenderMode;

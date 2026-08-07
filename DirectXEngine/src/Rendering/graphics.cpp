@@ -119,6 +119,13 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     auto plane = std::make_shared<Plane>(device, context);
 	sceenObjects.push_back(plane);
     envcube = EnvCube(device,context);
+
+    // Editor-only translation gizmo (3 colored axis arrows). Not part of
+    // sceenObjects: it is a control widget drawn on top of the scene.
+    gizmo = std::make_shared<GizmoArrow>(device, context);
+    gizmo->SetGizmoScale(1.0f);
+    gizmo->SetTargetPosition(0.0f, 0.0f, 0.0f);
+
 	currentRenderMode = RenderMode::Solid;
 }
 
@@ -250,5 +257,11 @@ void Graphics::RenderFrame()
         object->Draw(camera,currentRenderMode);
     }
     envcube.Draw(context, camera);
+
+    // Draw the control gizmo last so it appears on top of the scene.
+    if (gizmo)
+    {
+        gizmo->Draw(camera, currentRenderMode);
+    }
 }
 
