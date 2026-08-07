@@ -1,4 +1,5 @@
 #include "gizmoarrow.h"
+#include <cfloat>
 
 using namespace DirectX;
 
@@ -51,6 +52,126 @@ void GizmoArrow::Detach()
 bool GizmoArrow::IsVisible() const
 {
     return !target.expired();
+}
+
+// ---------------------------------------------------------------------------
+// Axis picking and dragging
+// ---------------------------------------------------------------------------
+
+// Total local length of an arrow (shaft + head), matching createTexturedVertex.
+static constexpr float kArrowLength = 0.8f + 0.25f;
+
+XMVECTOR GizmoArrow::AxisVector(Axis axis)
+{
+    switch (axis)
+    {
+    case Axis::X: return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+    case Axis::Y: return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    case Axis::Z: return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+    default:      return XMVectorZero();
+    }
+}
+
+float GizmoArrow::AxisParamForRay(Axis axis, const XMFLOAT3& anchor,
+                                  const Ray& ray) const
+{
+    // Closest point between the axis line (O + s*A) and the pick ray
+    // (R + u*D). Returns s.
+    const XMVECTOR A = AxisVector(axis);
+    const XMVECTOR O = XMLoadFloat3(&anchor);
+    const XMVECTOR R = XMLoadFloat3(&ray.origin);
+    const XMVECTOR D = XMVector3Normalize(XMLoadFloat3(&ray.direction));
+
+    const XMVECTOR w0 = XMVectorSubtract(O, R);
+    const float b = XMVectorGetX(XMVector3Dot(A, D));
+    const float d = XMVectorGetX(XMVector3Dot(A, w0));
+    const float e = XMVectorGetX(XMVector3Dot(D, w0));
+    const float denom = 1.0f - b * b;
+    if (fabsf(denom) < 1e-6f)
+        return 0.0f; // ray parallel to axis
+    return (b * e - d) / denom;
+}
+
+GizmoArrow::Axis GizmoArrow::PickAxis(const Ray& ray) const
+{
+    auto liveTarget = target.lock();
+    if (!liveTarget)
+        return Axis::None;
+
+    const XMFLOAT3 posF = liveTarget->GetPosition();
+    const XMVECTOR O = XMLoadFloat3(&posF);
+    const XMVECTOR R = XMLoadFloat3(&ray.origin);
+    const XMVECTOR D = XMVector3Normalize(XMLoadFloat3(&ray.direction));
+
+    const float length    = kArrowLength * gizmoScale;
+    const float threshold = 0.12f * gizmoScale; // grab radius around the shaft
+
+    Axis  best      = Axis::None;
+    float bestRayT  = FLT_MAX;
+
+    const Axis axes[3] = { Axis::X, Axis::Y, Axis::Z };
+    for (Axis axis : axes)
+    {
+        const XMVECTOR A = AxisVector(axis);
+
+        // Point on the axis segment closest to the ray, clamped to [0, length].
+        float s = AxisParamForRay(axis, posF, ray);
+        if (s < 0.0f)     s = 0.0f;
+        if (s > length)   s = length;
+
+        const XMVECTOR axisPoint = XMVectorAdd(O, XMVectorScale(A, s));
+
+        // Parameter along the ray for that point (must be in front of camera).
+        const float u = XMVectorGetX(XMVector3Dot(XMVectorSubtract(axisPoint, R), D));
+        if (u < 0.0f)
+            continue;
+
+        const XMVECTOR rayPoint = XMVectorAdd(R, XMVectorScale(D, u));
+        const float dist = XMVectorGetX(XMVector3Length(XMVectorSubtract(axisPoint, rayPoint)));
+
+        if (dist <= threshold && u < bestRayT)
+        {
+            bestRayT = u;
+            best     = axis;
+        }
+    }
+    return best;
+}
+
+void GizmoArrow::BeginDrag(Axis axis, const Ray& ray)
+{
+    auto liveTarget = target.lock();
+    if (!liveTarget || axis == Axis::None)
+        return;
+
+    dragging   = true;
+    activeAxis = axis;
+    dragAnchor = liveTarget->GetPosition();
+    lastParam  = AxisParamForRay(axis, dragAnchor, ray);
+}
+
+void GizmoArrow::UpdateDrag(const Ray& ray)
+{
+    auto liveTarget = target.lock();
+    if (!dragging || !liveTarget)
+        return;
+
+    const float param = AxisParamForRay(activeAxis, dragAnchor, ray);
+    const float delta = param - lastParam;
+    lastParam = param;
+
+    // SetPosition applies an incremental world-space translation, so move by
+    // the per-frame delta along the locked axis only.
+    const XMVECTOR step = XMVectorScale(AxisVector(activeAxis), delta);
+    XMFLOAT3 s;
+    XMStoreFloat3(&s, step);
+    liveTarget->SetPosition(s.x, s.y, s.z);
+}
+
+void GizmoArrow::EndDrag()
+{
+    dragging   = false;
+    activeAxis = Axis::None;
 }
 
 // ---------------------------------------------------------------------------

@@ -27,6 +27,7 @@ int Engine::Run()
 			graphics.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
 
 			const float dt = calculateDeltaTime();
+			HandleGizmoDrag();
 			ProcessInput();
 			UpdateSelection();
 			graphics.Update(dt);
@@ -51,8 +52,9 @@ void Engine::ProcessInput()
 		graphics.changeRenderMode();
 	rKeyLatch = rDown;
 
-	// Drag with the left button to orbit the camera.
-	if (mouseEvent->IsButtonDown(VK_LBUTTON))
+	// Drag with the left button to orbit the camera (unless a gizmo axis is
+	// being dragged, which takes priority over camera movement).
+	if (!gizmoDragging && mouseEvent->IsButtonDown(VK_LBUTTON))
 	{
 		const int deltax = mouseEvent->GetDeltaX();
 		const int deltay = mouseEvent->GetDeltaY();
@@ -151,6 +153,46 @@ void Engine::UpdateSelection()
 
 	// Keep the gizmo attached to whatever is selected (via double-click or the UI panel).
 	graphics.SetSelectedObject(ui.GetSelectedIndex());
+}
+
+void Engine::HandleGizmoDrag()
+{
+	const bool leftDown = mouseEvent->IsButtonDown(VK_LBUTTON);
+
+	if (!graphics.gizmo || !graphics.gizmo->IsVisible())
+	{
+		if (gizmoDragging)
+			graphics.gizmo->EndDrag();
+		gizmoDragging = false;
+		leftWasDown = leftDown;
+		return;
+	}
+
+	const Ray ray = graphics.camera.ScreenPointToRay(
+		static_cast<float>(mouseEvent->GetX()), static_cast<float>(mouseEvent->GetY()),
+		static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+
+	if (leftDown && !leftWasDown)
+	{
+		// Button just pressed: grab the axis handle under the cursor, if any.
+		const GizmoArrow::Axis axis = graphics.gizmo->PickAxis(ray);
+		if (axis != GizmoArrow::Axis::None)
+		{
+			graphics.gizmo->BeginDrag(axis, ray);
+			gizmoDragging = true;
+		}
+	}
+	else if (leftDown && gizmoDragging)
+	{
+		graphics.gizmo->UpdateDrag(ray);
+	}
+	else if (!leftDown && gizmoDragging)
+	{
+		graphics.gizmo->EndDrag();
+		gizmoDragging = false;
+	}
+
+	leftWasDown = leftDown;
 }
 
 void Engine::Import(const std::wstring& path)
