@@ -25,6 +25,51 @@ void Object3D::Scale(float sx, float sy, float sz)
 	world *= DirectX::XMMatrixScaling(sx, sy, sz);
 }
 
+DirectX::XMFLOAT3 Object3D::GetPosition() const
+{
+	// Translation lives in the 4th row of a row-major world matrix.
+	DirectX::XMFLOAT4X4 m;
+	DirectX::XMStoreFloat4x4(&m, world);
+	return DirectX::XMFLOAT3(m._41, m._42, m._43);
+}
+
+
+void Object3D::createWorldBoundingBox()
+{
+	if (vertices.empty())
+	{
+		return;
+	}
+	// Local-space axis-aligned bounds built once from the mesh vertices.
+	BoundingBox aabb;
+	BoundingBox::CreateFromPoints(aabb, vertices.size(), &vertices[0].position, sizeof(VertexData));
+	// Keep an oriented box in object space so rotation/scale is respected when transformed.
+	BoundingOrientedBox::CreateFromBoundingBox(localBox, aabb);
+	updateWorldBoundingBox();
+}
+
+void Object3D::updateWorldBoundingBox()
+{
+	localBox.Transform(worldBox, world);
+}
+
+bool Object3D::Intersect(const Ray& ray, float& outDistance)
+{
+	// Keep the world bounding box in sync with the current world matrix before testing.
+	updateWorldBoundingBox();
+
+	const XMVECTOR origin = XMLoadFloat3(&ray.origin);
+	const XMVECTOR direction = XMLoadFloat3(&ray.direction);
+
+	float dist = 0.0f;
+	if (worldBox.Intersects(origin, direction, dist))
+	{
+		outDistance = dist;
+		return true;
+	}
+	return false;
+}
+
 
 void Object3D::wireframeOverlay()
 {

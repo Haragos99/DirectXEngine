@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include <stdexcept>
+#include <cfloat>
 #include "meshmodel.h"
 
 
@@ -124,7 +125,6 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
     // sceenObjects: it is a control widget drawn on top of the scene.
     gizmo = std::make_shared<GizmoArrow>(device, context);
     gizmo->SetGizmoScale(1.0f);
-    gizmo->SetTargetPosition(0.0f, 0.0f, 0.0f);
 
 	currentRenderMode = RenderMode::Solid;
 }
@@ -225,6 +225,46 @@ void Graphics::ImportModel(const std::wstring& path)
     sceenObjects.push_back(importedModel);
 }
 
+void Graphics::SetSelectedObject(int index)
+{
+    if (!gizmo)
+        return;
+    if (index < 0 || index >= static_cast<int>(sceenObjects.size()))
+    {
+        gizmo->Detach();
+        return;
+    }
+    gizmo->AttachTo(sceenObjects[index]);
+}
+
+int Graphics::PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint) const
+{
+    int nearestIndex = -1;
+    float nearestDistance = FLT_MAX;
+
+    for (size_t i = 0; i < sceenObjects.size(); ++i)
+    {
+        if (!sceenObjects[i])
+            continue;
+
+        float distance = 0.0f;
+        if (sceenObjects[i]->Intersect(ray, distance) && distance < nearestDistance)
+        {
+            nearestDistance = distance;
+            nearestIndex = static_cast<int>(i);
+        }
+    }
+
+    if (nearestIndex >= 0 && outHitPoint)
+    {
+        const DirectX::XMVECTOR origin = DirectX::XMLoadFloat3(&ray.origin);
+        const DirectX::XMVECTOR direction = DirectX::XMLoadFloat3(&ray.direction);
+        DirectX::XMStoreFloat3(outHitPoint, DirectX::XMVectorAdd(origin, DirectX::XMVectorScale(direction, nearestDistance)));
+    }
+
+    return nearestIndex;
+}
+
 void Graphics::changeRenderMode()
 {
     if (currentRenderMode == RenderMode::Solid)
@@ -259,7 +299,7 @@ void Graphics::RenderFrame()
     envcube.Draw(context, camera);
 
     // Draw the control gizmo last so it appears on top of the scene.
-    if (gizmo)
+    if (gizmo && gizmo->IsVisible())
     {
         gizmo->Draw(camera, currentRenderMode);
     }

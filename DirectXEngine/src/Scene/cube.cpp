@@ -11,6 +11,7 @@ Cube::Cube(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<
 	shader->creaetLightBuffer();
 	shader->createRasterize();
 	shader->LoadShaders(L"shaders\\VertexShader.hlsl", L"shaders\\PixelShader.hlsl");
+	createWorldBoundingBox();
 	wireframeEnabled = false;
 	name = "Cube";
 }

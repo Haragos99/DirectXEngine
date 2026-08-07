@@ -2,8 +2,9 @@
 #include "object3d.h"
 
 // 3-axis translation gizmo: red = +X, green = +Y, blue = +Z.
-// Not a scene object — owned separately by Graphics and drawn on top of the
-// scene at a configurable target position (e.g. the selected object's origin).
+// Not a scene object: it is a control widget owned by Graphics and drawn on
+// top of the scene at the position of an attached target Object3D.
+// The gizmo is hidden unless a live target is attached.
 class GizmoArrow : public Object3D
 {
 public:
@@ -14,13 +15,15 @@ public:
 
     void Update(float time) override;
 
-    // Move the gizmo to a world-space point (typically the selected object).
-    void SetTargetPosition(float x, float y, float z);
+    // Selection binding. The gizmo tracks the target's world position each
+    // frame and hides itself when no live target is attached.
+    void AttachTo(std::shared_ptr<Object3D> target);
+    void Detach();
+    bool IsVisible() const;
 
-    // Uniform scale in world units so the gizmo stays a fixed visual size.
+    // Uniform world-space size of the gizmo.
     void SetGizmoScale(float scale) { gizmoScale = scale; }
 
-    // Draws all 3 arrows on top of the scene (depth test disabled).
     void Draw(Camera camera, RenderMode mode) override;
 
 protected:
@@ -34,7 +37,7 @@ private:
                      float shaftLength, float shaftRadius,
                      float headLength,  float headRadius);
 
-    DirectX::XMFLOAT3 targetPosition{ 0.0f, 0.0f, 0.0f };
+    std::weak_ptr<Object3D> target;
     float gizmoScale = 1.0f;
 
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthAlwaysOn;

@@ -106,3 +106,25 @@ XMMATRIX Camera::GetProjectionMatrix() const
 {
 	return XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ);
 }
+
+Ray Camera::ScreenPointToRay(float screenX, float screenY, float screenWidth, float screenHeight) const
+{
+	// 1) Pixel -> Normalized Device Coordinates ([-1, 1], y up).
+	const float ndcX = (2.0f * screenX) / screenWidth - 1.0f;
+	const float ndcY = 1.0f - (2.0f * screenY) / screenHeight;
+
+	// 2) Unproject through the inverse view-projection to reach world space.
+	const XMMATRIX invViewProj = XMMatrixInverse(nullptr, GetViewMatrix() * GetProjectionMatrix());
+
+	// Near plane (z = 0) and far plane (z = 1) points in clip space.
+	const XMVECTOR nearPoint = XMVector3TransformCoord(XMVectorSet(ndcX, ndcY, 0.0f, 1.0f), invViewProj);
+	const XMVECTOR farPoint  = XMVector3TransformCoord(XMVectorSet(ndcX, ndcY, 1.0f, 1.0f), invViewProj);
+
+	// 3) The ray goes from the near point towards the far point.
+	const XMVECTOR direction = XMVector3Normalize(XMVectorSubtract(farPoint, nearPoint));
+
+	Ray ray;
+	XMStoreFloat3(&ray.origin, nearPoint);
+	XMStoreFloat3(&ray.direction, direction);
+	return ray;
+}

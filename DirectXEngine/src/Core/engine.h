@@ -13,8 +13,11 @@ public:
 private:
 	Graphics graphics;
 	UIPanel ui;
+	bool rKeyLatch = false;
 	void Render();
 	float calculateDeltaTime();
 	void RenderUI();
+	void ProcessInput();
+	void UpdateSelection();
 	void Import(const std::wstring& path);
 };

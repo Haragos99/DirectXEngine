@@ -16,6 +16,7 @@ Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPt
 	wireframeEnabled = false;
 	SetPosition(0.0f, -1.0f, 0.0f);
 	Scale(5.0f, 1.0f, 5.0f);
+	createWorldBoundingBox();
 	name = "Plane";
 }
 

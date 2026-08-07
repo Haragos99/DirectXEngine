@@ -69,8 +69,9 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
     if (!initialized)
         return;
 
-    if (selectedSceneObjectIndex >= sceneObjects.size())
-        selectedSceneObjectIndex = sceneObjects.empty() ? 0 : sceneObjects.size() - 1;
+    // Drop stale selection if the scene shrank.
+    if (selectedSceneObjectIndex >= static_cast<int>(sceneObjects.size()))
+        selectedSceneObjectIndex = -1;
 
     ImGui::Begin("Control Panel");
 
@@ -121,16 +122,24 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
             for (size_t i = 0; i < sceneObjects.size(); ++i)
             {
                 const std::string label = GetSceneObjectLabel(sceneObjects[i]) + " #" + std::to_string(i);
-                if (ImGui::Selectable(label.c_str(), selectedSceneObjectIndex == i))
-                    selectedSceneObjectIndex = i;
+                const bool isSelected = (selectedSceneObjectIndex == static_cast<int>(i));
+                if (ImGui::Selectable(label.c_str(), isSelected))
+                    selectedSceneObjectIndex = static_cast<int>(i);
             }
         }
         ImGui::EndChild();
     }
 
-    if (!sceneObjects.empty() && selectedSceneObjectIndex < sceneObjects.size())
+    if (HasSelection() && selectedSceneObjectIndex < static_cast<int>(sceneObjects.size()))
     {
         ImGui::Text("Selected: %s", GetSceneObjectLabel(sceneObjects[selectedSceneObjectIndex]).c_str());
+        ImGui::SameLine();
+        if (ImGui::SmallButton("Clear selection"))
+            selectedSceneObjectIndex = -1;
+    }
+    else
+    {
+        ImGui::TextDisabled("No object selected");
     }
 
     ImGui::Spacing();

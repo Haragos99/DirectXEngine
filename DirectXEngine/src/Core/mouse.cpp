@@ -16,6 +16,9 @@ void Mouse::OnButtonDown(int button)
     if (button == VK_LBUTTON)
     {
         leftDown = true;
+        leftClicked = true;
+        clickX = x;
+        clickY = y;
     }
     if (button == VK_RBUTTON)
     {
@@ -58,4 +61,31 @@ bool Mouse::IsButtonDown(int button) const
         return rightDown;
     }
     return false;
+}
+
+void Mouse::OnLeftDoubleClick(int newX, int newY)
+{
+    leftDoubleClicked = true;
+    doubleClickX = newX;
+    doubleClickY = newY;
+}
+
+bool Mouse::ConsumeLeftClick(int& outX, int& outY)
+{
+    if (!leftClicked)
+        return false;
+    leftClicked = false;
+    outX = clickX;
+    outY = clickY;
+    return true;
+}
+
+bool Mouse::ConsumeLeftDoubleClick(int& outX, int& outY)
+{
+    if (!leftDoubleClicked)
+        return false;
+    leftDoubleClicked = false;
+    outX = doubleClickX;
+    outY = doubleClickY;
+    return true;
 }

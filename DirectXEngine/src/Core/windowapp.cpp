@@ -21,6 +21,7 @@ WindowApp::WindowApp(HINSTANCE hInstance, LPCWSTR window_title, LPCWSTR window_c
     wc.hInstance = hInstance;
     wc.lpszClassName = window_class;
     wc.lpszMenuName = window_title;
+    wc.style = CS_DBLCLKS; // deliver WM_LBUTTONDBLCLK for double-click selection
     RegisterClass(&wc);
 
     keyboardEvent = std::make_unique<Keyboard>();
@@ -81,6 +82,10 @@ LRESULT CALLBACK WindowApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
     case WM_LBUTTONDOWN:
         if (imguiWantsMouse) return 0;
         mouseEvent->OnButtonDown(VK_LBUTTON);
+        return 0;
+    case WM_LBUTTONDBLCLK:
+        if (imguiWantsMouse) return 0;
+        mouseEvent->OnLeftDoubleClick(LOWORD(lParam), HIWORD(lParam));
         return 0;
     case WM_LBUTTONUP:
         mouseEvent->OnButtonUp(VK_LBUTTON);

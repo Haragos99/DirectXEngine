@@ -24,6 +24,12 @@ public:
 	void Update(float time);
     void Resize(UINT width, UINT height);
     void ImportModel(const std::wstring& path);
+    // Attach the gizmo to sceenObjects[index], or hide it when index < 0.
+    void SetSelectedObject(int index);
+    // Ray-cast against every scene object and return the index of the nearest hit
+    // (-1 when nothing is hit). When provided, outHitPoint receives the world-space
+    // position of the hit.
+    int PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint = nullptr) const;
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();

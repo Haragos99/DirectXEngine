@@ -1,4 +1,6 @@
 #include "engine.h"
+#include <cstdio>
+#include <cmath>
 
 
 Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"DirectX Engine Window", L"DirectX Engine Class", 1280, 720, nCmdShow), graphics(GetHWND(), 1280, 720)
@@ -12,7 +14,6 @@ Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"Direc
 int Engine::Run()
 {
 	MSG msg = {};
-	bool rKeyLatch = false;
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -24,62 +25,43 @@ int Engine::Run()
 		{
 			const float* clearColor = ui.GetClearColor();
 			graphics.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
-			float speed = 0.05f;
-			if (keyboardEvent->IsKeyDown('W')) 
-			{ 
-				graphics.camera.Move(0, speed, 0);
-			}
-			if (keyboardEvent->IsKeyDown('S')) 
-			{ 
-				graphics.camera.Move(0, -speed, 0);
-			}
-			if (keyboardEvent->IsKeyDown('A')) 
-			{ 
-				graphics.camera.Move(-speed, 0, 0);
-			}
-			if (keyboardEvent->IsKeyDown('D'))
-			{
-				graphics.camera.Move(speed, 0, 0);
-			}
-			if (keyboardEvent->IsKeyDown(VK_SPACE))
-			{
-				graphics.camera.Move(0, speed, 0);
-			}
-			if (keyboardEvent->IsKeyDown(VK_SHIFT))
-			{
-				graphics.camera.Move(0, -speed, 0);
-			}
 
-			const bool rDown = keyboardEvent->IsKeyDown('R');
-			if (rDown && !rKeyLatch)
-			{
-				graphics.changeRenderMode();
-			}
-			rKeyLatch = rDown;
-
-			if (mouseEvent->IsButtonDown(VK_LBUTTON))
-			{
-				int deltax = mouseEvent->GetDeltaX();
-				int deltay = mouseEvent->GetDeltaY();
-				float x = (2.0f * deltax) / windowHeight - 1.0f;
-				float y = 1.0f - (2.0f * deltay) / windowWidth;
-				graphics.camera.Rotate(deltay * 0.005, deltax * 0.005);
-			}
-
-			int wheelDelta = mouseEvent->GetWheelDelta();
-			if (wheelDelta != 0)
-			{
-				graphics.camera.Move(0, 0, wheelDelta);
-			}
-			
-			
-
-			float dt = calculateDeltaTime();
+			const float dt = calculateDeltaTime();
+			ProcessInput();
+			UpdateSelection();
 			graphics.Update(dt);
 			Render();
 		}
 	}
 	return static_cast<int>(msg.wParam);
+}
+
+void Engine::ProcessInput()
+{
+	const float speed = 0.05f;
+	if (keyboardEvent->IsKeyDown('W'))     graphics.camera.Move(0, speed, 0);
+	if (keyboardEvent->IsKeyDown('S'))     graphics.camera.Move(0, -speed, 0);
+	if (keyboardEvent->IsKeyDown('A'))     graphics.camera.Move(-speed, 0, 0);
+	if (keyboardEvent->IsKeyDown('D'))     graphics.camera.Move(speed, 0, 0);
+	if (keyboardEvent->IsKeyDown(VK_SPACE)) graphics.camera.Move(0, speed, 0);
+	if (keyboardEvent->IsKeyDown(VK_SHIFT)) graphics.camera.Move(0, -speed, 0);
+
+	const bool rDown = keyboardEvent->IsKeyDown('R');
+	if (rDown && !rKeyLatch)
+		graphics.changeRenderMode();
+	rKeyLatch = rDown;
+
+	// Drag with the left button to orbit the camera.
+	if (mouseEvent->IsButtonDown(VK_LBUTTON))
+	{
+		const int deltax = mouseEvent->GetDeltaX();
+		const int deltay = mouseEvent->GetDeltaY();
+		graphics.camera.Rotate(deltay * 0.005f, deltax * 0.005f);
+	}
+
+	const int wheelDelta = mouseEvent->GetWheelDelta();
+	if (wheelDelta != 0)
+		graphics.camera.Move(0, 0, static_cast<float>(wheelDelta));
 }
 
 void Engine::Render()
@@ -119,6 +101,57 @@ void Engine::OnResize(int width, int height)
 	windowHeight = height;
 	windowWidth = width;
 	graphics.Resize(static_cast<UINT>(width), static_cast<UINT>(height));
+}
+
+void Engine::UpdateSelection()
+{
+	int clickX = 0;
+	int clickY = 0;
+
+	// Single left click: report the click position in screen and world space.
+	if (mouseEvent->ConsumeLeftClick(clickX, clickY))
+	{
+		const Ray ray = graphics.camera.ScreenPointToRay(
+			static_cast<float>(clickX), static_cast<float>(clickY),
+			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+
+		DirectX::XMFLOAT3 world{};
+		const bool onObject = graphics.PickObject(ray, &world) >= 0;
+
+		if (!onObject)
+		{
+			// Nothing hit: fall back to where the ray meets the ground plane (y = 0).
+			if (fabsf(ray.direction.y) > 1e-6f)
+			{
+				const float t = -ray.origin.y / ray.direction.y;
+				world.x = ray.origin.x + ray.direction.x * t;
+				world.y = 0.0f;
+				world.z = ray.origin.z + ray.direction.z * t;
+			}
+			else
+			{
+				world = ray.origin;
+			}
+		}
+
+		char buffer[256];
+		sprintf_s(buffer, "[Click] screen=(%d, %d)  world=(%.3f, %.3f, %.3f)%s\n",
+			clickX, clickY, world.x, world.y, world.z, onObject ? "  (on object)" : "");
+		OutputDebugStringA(buffer);
+	}
+
+	// Double left click: pick the object under the cursor and make it the selection.
+	if (mouseEvent->ConsumeLeftDoubleClick(clickX, clickY))
+	{
+		const Ray ray = graphics.camera.ScreenPointToRay(
+			static_cast<float>(clickX), static_cast<float>(clickY),
+			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
+
+		ui.SetSelectedIndex(graphics.PickObject(ray, nullptr));
+	}
+
+	// Keep the gizmo attached to whatever is selected (via double-click or the UI panel).
+	graphics.SetSelectedObject(ui.GetSelectedIndex());
 }
 
 void Engine::Import(const std::wstring& path)

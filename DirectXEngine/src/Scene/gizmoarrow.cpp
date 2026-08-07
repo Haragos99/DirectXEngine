@@ -38,9 +38,19 @@ void GizmoArrow::Update(float /*time*/)
     // Gizmo does not animate on its own; its world matrix is composed in Draw.
 }
 
-void GizmoArrow::SetTargetPosition(float x, float y, float z)
+void GizmoArrow::AttachTo(std::shared_ptr<Object3D> newTarget)
 {
-    targetPosition = XMFLOAT3(x, y, z);
+    target = newTarget;
+}
+
+void GizmoArrow::Detach()
+{
+    target.reset();
+}
+
+bool GizmoArrow::IsVisible() const
+{
+    return !target.expired();
 }
 
 // ---------------------------------------------------------------------------
@@ -194,21 +204,23 @@ void GizmoArrow::appendArrow(const XMFLOAT3& axis,
 
 void GizmoArrow::Draw(Camera camera, RenderMode /*mode*/)
 {
-    // Compose world matrix: scale then translate to target.
-    world = XMMatrixScaling(gizmoScale, gizmoScale, gizmoScale)
-          * XMMatrixTranslation(targetPosition.x, targetPosition.y, targetPosition.z);
+    auto liveTarget = target.lock();
+    if (!liveTarget)
+        return;
 
-    // Force always-on-top by switching to depth-off state.
+    const XMFLOAT3 pos = liveTarget->GetPosition();
+    world = XMMatrixScaling(gizmoScale, gizmoScale, gizmoScale)
+          * XMMatrixTranslation(pos.x, pos.y, pos.z);
+
+    // Save the current depth state, swap in the always-on-top one, restore after.
     ID3D11DepthStencilState* previousDS = nullptr;
     UINT previousStencilRef = 0;
     context->OMGetDepthStencilState(&previousDS, &previousStencilRef);
     context->OMSetDepthStencilState(depthAlwaysOn.Get(), 0);
 
-    // Use the standard solid overlay path, then draw once.
     solidOverlay(camera);
     context->DrawIndexed(static_cast<UINT>(indices.size()), 0, 0);
 
-    // Restore prior depth-stencil state.
     context->OMSetDepthStencilState(previousDS, previousStencilRef);
     if (previousDS) previousDS->Release();
 }

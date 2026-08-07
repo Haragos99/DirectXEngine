@@ -33,6 +33,12 @@ public:
     const float* GetClearColor() const { return clearColor; }
     void SetImportModelCallback(ImportModelCallback callback) { importModelCallback = std::move(callback); }
 
+    // Selection query. Returns -1 when no scene object is selected.
+    int  GetSelectedIndex() const { return selectedSceneObjectIndex; }
+    bool HasSelection() const { return selectedSceneObjectIndex >= 0; }
+    // Set the selected object (e.g. from viewport picking). Pass -1 to clear.
+    void SetSelectedIndex(int index) { selectedSceneObjectIndex = index; }
+
 private:
     void OpenModelDialog();
 
@@ -42,7 +48,7 @@ private:
     int   buttonClicks = 0;
     bool  showDemoWindow = false;
     bool  renderModeChangeRequested = false;
-    size_t selectedSceneObjectIndex = 0;
+    int   selectedSceneObjectIndex = -1;
     std::wstring selectedModelPath;
     ImportModelCallback importModelCallback;
 };

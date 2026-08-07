@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <DirectXMath.h>
+#include <DirectXCollision.h>
 #include "camera.h"
 #include <vector>
 #include <memory>
@@ -31,13 +32,21 @@ public:
 	void SetPosition(float x, float y, float z);
 	void Rotate(float pitch, float yaw, float roll);
 	void Scale(float sx, float sy, float sz);
+	DirectX::XMFLOAT3 GetPosition() const;
 	std::string GetName() const { return name; }
+
+	// Ray/object intersection test in world space (broad-phase, oriented bounding box).
+	// Returns true on a hit and writes the distance from the ray origin to outDistance.
+	bool Intersect(const Ray& ray, float& outDistance);
 protected:
 	DirectX::XMVECTOR position;
 	virtual void createTexturedVertex() = 0;
 	virtual void createIndeces() = 0;
 	void wireframeOverlay();
 	void solidOverlay(Camera camera);
+	void createWorldBoundingBox();
+	// Refresh worldBox from the local bounds using the current world matrix.
+	void updateWorldBoundingBox();
 	std::unique_ptr <Shader> shader;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>  context;
@@ -46,4 +55,6 @@ protected:
 	std::unique_ptr<Texture> texture;
 	DirectX::XMMATRIX world;
 	std::string name;
+	DirectX::BoundingOrientedBox localBox; // object space, built once from vertices
+	DirectX::BoundingOrientedBox worldBox; // localBox transformed by the world matrix
 };

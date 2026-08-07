@@ -17,6 +17,7 @@ MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,
 	shader->LoadShaders(VSPath, PSPath);
 	wireframeEnabled = false;
 	Scale(0.5f, 0.5f, 0.5f);
+	createWorldBoundingBox();
 	std::filesystem::path p(path);
 	auto filename = p.filename().string();
 	size_t dot = filename.find_last_of('.');

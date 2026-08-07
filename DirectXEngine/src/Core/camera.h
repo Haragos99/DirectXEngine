@@ -1,6 +1,13 @@
 #pragma once
 #include <DirectXMath.h>
 
+// A world-space ray, used for mouse picking / object selection.
+struct Ray
+{
+    DirectX::XMFLOAT3 origin;
+    DirectX::XMFLOAT3 direction; // normalized
+};
+
 class Camera
 {
 public:
@@ -14,6 +21,10 @@ public:
     DirectX::XMFLOAT3 getPos() { return eye; }
     DirectX::XMMATRIX GetViewMatrix() const;
     DirectX::XMMATRIX GetProjectionMatrix() const;
+
+    // Build a world-space picking ray from a pixel position in the viewport.
+    // (screenX, screenY) are in pixels with the origin at the top-left corner.
+    Ray ScreenPointToRay(float screenX, float screenY, float screenWidth, float screenHeight) const;
 
 private:
     DirectX::XMVECTOR position;
