@@ -39,12 +39,12 @@ int Engine::Run()
 void Engine::ProcessInput()
 {
 	const float speed = 0.05f;
-	if (keyboardEvent->IsKeyDown('W'))     graphics.camera.Move(0, speed, 0);
-	if (keyboardEvent->IsKeyDown('S'))     graphics.camera.Move(0, -speed, 0);
-	if (keyboardEvent->IsKeyDown('A'))     graphics.camera.Move(-speed, 0, 0);
-	if (keyboardEvent->IsKeyDown('D'))     graphics.camera.Move(speed, 0, 0);
-	if (keyboardEvent->IsKeyDown(VK_SPACE)) graphics.camera.Move(0, speed, 0);
-	if (keyboardEvent->IsKeyDown(VK_SHIFT)) graphics.camera.Move(0, -speed, 0);
+	if (keyboardEvent->IsKeyDown('W'))     graphics.camera.Move(0, 0, speed);   // forward
+	if (keyboardEvent->IsKeyDown('S'))     graphics.camera.Move(0, 0, -speed);  // back
+	if (keyboardEvent->IsKeyDown('A'))     graphics.camera.Move(-speed, 0, 0);  // strafe left
+	if (keyboardEvent->IsKeyDown('D'))     graphics.camera.Move(speed, 0, 0);   // strafe right
+	if (keyboardEvent->IsKeyDown(VK_SPACE)) graphics.camera.Move(0, speed, 0);  // up
+	if (keyboardEvent->IsKeyDown(VK_SHIFT)) { graphics.camera.Move(0, -speed, 0); } // down
 
 	const bool rDown = keyboardEvent->IsKeyDown('R');
 	if (rDown && !rKeyLatch)
@@ -61,7 +61,7 @@ void Engine::ProcessInput()
 
 	const int wheelDelta = mouseEvent->GetWheelDelta();
 	if (wheelDelta != 0)
-		graphics.camera.Move(0, 0, static_cast<float>(wheelDelta));
+		graphics.camera.Zoom(static_cast<float>(wheelDelta));
 }
 
 void Engine::Render()
@@ -70,7 +70,6 @@ void Engine::Render()
 	RenderUI();
 	graphics.swapChainPresent();
 }
-
 
 void Engine::RenderUI()
 {
