@@ -39,6 +39,9 @@ public:
     // Set the selected object (e.g. from viewport picking). Pass -1 to clear.
     void SetSelectedIndex(int index) { selectedSceneObjectIndex = index; }
 
+    // Gizmo interaction mode chosen in the panel (Move or Scale).
+    GizmoMode GetGizmoMode() const { return gizmoMode; }
+
 private:
     void OpenModelDialog();
 
@@ -49,6 +52,7 @@ private:
     bool  showDemoWindow = false;
     bool  renderModeChangeRequested = false;
     int   selectedSceneObjectIndex = -1;
+    GizmoMode gizmoMode = GizmoMode::Move;
     std::wstring selectedModelPath;
     ImportModelCallback importModelCallback;
 };

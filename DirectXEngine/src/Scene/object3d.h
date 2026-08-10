@@ -20,6 +20,13 @@ enum class RenderMode
 	SolidWireframe
 };
 
+// How the translation gizmo interprets an axis drag.
+enum class GizmoMode
+{
+	Move,
+	Scale
+};
+
 
 class Object3D
 {

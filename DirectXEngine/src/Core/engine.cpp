@@ -172,6 +172,9 @@ void Engine::HandleGizmoDrag()
 		static_cast<float>(mouseEvent->GetX()), static_cast<float>(mouseEvent->GetY()),
 		static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
+	// Apply the interaction mode (Move/Scale) chosen in the UI panel.
+	graphics.gizmo->SetMode(ui.GetGizmoMode());
+
 	if (leftDown && !leftWasDown)
 	{
 		// Button just pressed: grab the axis handle under the cursor, if any.

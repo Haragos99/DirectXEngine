@@ -160,12 +160,33 @@ void GizmoArrow::UpdateDrag(const Ray& ray)
     const float delta = param - lastParam;
     lastParam = param;
 
-    // SetPosition applies an incremental world-space translation, so move by
-    // the per-frame delta along the locked axis only.
-    const XMVECTOR step = XMVectorScale(AxisVector(activeAxis), delta);
-    XMFLOAT3 s;
-    XMStoreFloat3(&s, step);
-    liveTarget->SetPosition(s.x, s.y, s.z);
+    if (mode == GizmoMode::Move)
+    {
+        // SetPosition applies an incremental world-space translation, so move by
+        // the per-frame delta along the locked axis only.
+        const XMVECTOR step = XMVectorScale(AxisVector(activeAxis), delta);
+        XMFLOAT3 s;
+        XMStoreFloat3(&s, step);
+        liveTarget->SetPosition(s.x, s.y, s.z);
+    }
+    else // GizmoMode::Scale
+    {
+        // Scale along the locked axis about the object's own centre. Dragging the
+        // arrow outward grows the object, inward shrinks it.
+        float factor = 1.0f + delta;
+        if (factor < 0.01f)
+            factor = 0.01f;
+
+        const float sx = (activeAxis == Axis::X) ? factor : 1.0f;
+        const float sy = (activeAxis == Axis::Y) ? factor : 1.0f;
+        const float sz = (activeAxis == Axis::Z) ? factor : 1.0f;
+
+        // Scale about the centre: translate to origin, scale, translate back.
+        const XMFLOAT3 c = liveTarget->GetPosition();
+        liveTarget->SetPosition(-c.x, -c.y, -c.z);
+        liveTarget->Scale(sx, sy, sz);
+        liveTarget->SetPosition(c.x, c.y, c.z);
+    }
 }
 
 void GizmoArrow::EndDrag()

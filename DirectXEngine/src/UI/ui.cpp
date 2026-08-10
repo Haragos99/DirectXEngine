@@ -136,6 +136,14 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
         ImGui::SameLine();
         if (ImGui::SmallButton("Clear selection"))
             selectedSceneObjectIndex = -1;
+
+        // Gizmo interaction mode: drag the axis arrows to move or to scale.
+        ImGui::Text("Gizmo mode");
+        int mode = static_cast<int>(gizmoMode);
+        ImGui::RadioButton("Move", &mode, static_cast<int>(GizmoMode::Move));
+        ImGui::SameLine();
+        ImGui::RadioButton("Scale", &mode, static_cast<int>(GizmoMode::Scale));
+        gizmoMode = static_cast<GizmoMode>(mode);
     }
     else
     {

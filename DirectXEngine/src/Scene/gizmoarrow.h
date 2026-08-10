@@ -27,6 +27,10 @@ public:
     // Uniform world-space size of the gizmo.
     void SetGizmoScale(float scale) { gizmoScale = scale; }
 
+    // Selects whether an axis drag translates or scales the target.
+    void SetMode(GizmoMode m) { mode = m; }
+    GizmoMode GetMode() const { return mode; }
+
     // Return the axis arrow under the given world-space ray, or Axis::None.
     Axis PickAxis(const Ray& ray) const;
 
@@ -60,6 +64,9 @@ private:
 
     std::weak_ptr<Object3D> target;
     float gizmoScale = 1.0f;
+
+    // Interaction mode applied while dragging an axis handle.
+    GizmoMode mode = GizmoMode::Move;
 
     // Active drag state.
     bool dragging = false;
