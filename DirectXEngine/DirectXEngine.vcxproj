@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -142,10 +142,16 @@
     <ClCompile Include="src\Core\main.cpp" />
     <ClCompile Include="src\Scene\mesh.cpp" />
     <ClCompile Include="src\Scene\meshmodel.cpp" />
+    <ClCompile Include="src\Scene\Loaders\imodelloader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\objmodelloader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\modelloaderregistry.cpp" />
     <ClCompile Include="src\Core\mouse.cpp" />
     <ClCompile Include="src\Scene\object3D.cpp" />
     <ClCompile Include="src\Scene\plane.cpp" />
-    <ClCompile Include="src\Scene\gizmoarrow.cpp" />
+    <ClCompile Include="src\Scene\Gizmos\gizmo.cpp" />
+    <ClCompile Include="src\Scene\Gizmos\movegizmo.cpp" />
+    <ClCompile Include="src\Scene\Gizmos\scalegizmo.cpp" />
+    <ClCompile Include="src\Scene\Gizmos\gizmocontroller.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
@@ -171,10 +177,17 @@
     <ClInclude Include="src\Core\keyboard.h" />
     <ClInclude Include="src\Scene\mesh.h" />
     <ClInclude Include="src\Scene\meshmodel.h" />
+    <ClInclude Include="src\Scene\Loaders\imodelloader.h" />
+    <ClInclude Include="src\Scene\Loaders\objmodelloader.h" />
+    <ClInclude Include="src\Scene\Loaders\modelloaderregistry.h" />
     <ClInclude Include="src\Core\mouse.h" />
     <ClInclude Include="src\Scene\object3d.h" />
     <ClInclude Include="src\Scene\plane.h" />
-    <ClInclude Include="src\Scene\gizmoarrow.h" />
+    <ClInclude Include="src\Scene\Gizmos\gizmo.h" />
+    <ClInclude Include="src\Scene\Gizmos\gizmomode.h" />
+    <ClInclude Include="src\Scene\Gizmos\movegizmo.h" />
+    <ClInclude Include="src\Scene\Gizmos\scalegizmo.h" />
+    <ClInclude Include="src\Scene\Gizmos\gizmocontroller.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />

@@ -121,9 +121,9 @@ Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>
 	sceenObjects.push_back(plane);
     envcube = EnvCube(device,context);
 
-    // Editor-only translation gizmo (3 colored axis arrows). Not part of
-    // sceenObjects: it is a control widget drawn on top of the scene.
-    gizmo = std::make_shared<GizmoArrow>(device, context);
+    // Editor-only transform gizmos (3 colored axis handles). Not part of
+    // sceenObjects: they are control widgets drawn on top of the scene.
+    gizmo = std::make_shared<GizmoController>(device, context);
     gizmo->SetGizmoScale(1.0f);
 
 	currentRenderMode = RenderMode::Solid;
@@ -235,6 +235,12 @@ void Graphics::SetSelectedObject(int index)
         return;
     }
     gizmo->AttachTo(sceenObjects[index]);
+}
+
+void Graphics::SetGizmoMode(GizmoMode mode)
+{
+    if (gizmo)
+        gizmo->SetMode(mode);
 }
 
 int Graphics::PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint) const

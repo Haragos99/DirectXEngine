@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "object3d.h"
+#include "gizmomode.h"
 
 // Lightweight wrapper around Dear ImGui (Win32 + DX11 backends).
 // Owns nothing renderer-side; borrows the device/context from Graphics.
@@ -39,11 +40,13 @@ public:
     // Set the selected object (e.g. from viewport picking). Pass -1 to clear.
     void SetSelectedIndex(int index) { selectedSceneObjectIndex = index; }
 
-    // Gizmo interaction mode chosen in the panel (Move or Scale).
+    // Transform mode chosen in the main panel (Move or Scale). It is always
+    // available, independently of whether an object is currently selected.
     GizmoMode GetGizmoMode() const { return gizmoMode; }
 
 private:
     void OpenModelDialog();
+    void DrawTransformModeSelector();
 
     bool  initialized = false;
     HWND hwnd = nullptr;

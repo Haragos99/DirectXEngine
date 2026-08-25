@@ -20,19 +20,14 @@ enum class RenderMode
 	SolidWireframe
 };
 
-// How the translation gizmo interprets an axis drag.
-enum class GizmoMode
-{
-	Move,
-	Scale
-};
-
 
 class Object3D
 {
 public:
 	Object3D() = default;
 	Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device , Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex);
+	// Scene objects are owned and destroyed through Object3D pointers.
+	virtual ~Object3D() = default;
 	virtual void Update(float time) = 0;
 	virtual void Draw(Camera camera, RenderMode mode);
 	bool wireframeEnabled;

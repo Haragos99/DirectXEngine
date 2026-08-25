@@ -1,14 +1,25 @@
 #include "meshmodel.h"
 #include <iostream>
 #include <filesystem>
+
+namespace
+{
+	// File name without directory or extension, used as the scene object name.
+	std::string StemOf(const std::string& path)
+	{
+		return std::filesystem::path(path).stem().string();
+	}
+}
+
 MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
-	mesh = Mesh();
-	mesh.loadMesh(path);
+	if (!mesh.loadMesh(path))
+	{
+		std::cerr << "No model loader could handle: " << path << '\n';
+	}
 	createTexturedVertex();
 	createIndeces();
 	texture->CreateSolidColorTexture({ 1, 0, 0, 1 });
-	indices = mesh.indices;
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();
@@ -18,24 +29,17 @@ MeshModel::MeshModel(std::string path, std::wstring VSPath, std::wstring PSPath,
 	wireframeEnabled = false;
 	Scale(0.5f, 0.5f, 0.5f);
 	createWorldBoundingBox();
-	std::filesystem::path p(path);
-	auto filename = p.filename().string();
-	size_t dot = filename.find_last_of('.');
-	std::string stem = (dot == std::string::npos)
-		? filename
-		: filename.substr(0, dot);
-	name = stem;
+	name = StemOf(path);
 }
 
 void MeshModel::createIndeces()
 {
-	indices = mesh.indices;
+	indices = mesh.GetIndices();
 }
 
 void MeshModel::createTexturedVertex()
 {
-
-	vertices = mesh.vertices;
+	vertices = mesh.GetVertices();
 }
 
 void MeshModel::Update(float time)

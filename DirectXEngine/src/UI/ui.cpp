@@ -2,6 +2,7 @@
 
 #include <commdlg.h>
 
+#include "modelloaderregistry.h"
 #include "imgui.h"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
@@ -94,7 +95,7 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
         renderModeChangeRequested = true;
 
     ImGui::Spacing();
-    if (ImGui::Button("Import OBJ model"))
+    if (ImGui::Button("Import model"))
         OpenModelDialog();
 
     if (!selectedModelPath.empty())
@@ -108,6 +109,9 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
         ImGui::SameLine();
         ImGui::TextDisabled("No file selected");
     }
+
+    ImGui::Spacing();
+    DrawTransformModeSelector();
 
     ImGui::Spacing();
     ImGui::Text("Scene objects");
@@ -136,14 +140,6 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
         ImGui::SameLine();
         if (ImGui::SmallButton("Clear selection"))
             selectedSceneObjectIndex = -1;
-
-        // Gizmo interaction mode: drag the axis arrows to move or to scale.
-        ImGui::Text("Gizmo mode");
-        int mode = static_cast<int>(gizmoMode);
-        ImGui::RadioButton("Move", &mode, static_cast<int>(GizmoMode::Move));
-        ImGui::SameLine();
-        ImGui::RadioButton("Scale", &mode, static_cast<int>(GizmoMode::Scale));
-        gizmoMode = static_cast<GizmoMode>(mode);
     }
     else
     {
@@ -162,6 +158,21 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
         ImGui::ShowDemoWindow(&showDemoWindow);
 }
 
+void UIPanel::DrawTransformModeSelector()
+{
+    // Main-panel control: it decides which gizmo is shown and what an axis drag
+    // does, regardless of whether anything is selected right now.
+    ImGui::SeparatorText("Transform mode");
+    int mode = static_cast<int>(gizmoMode);
+    ImGui::RadioButton("Move", &mode, static_cast<int>(GizmoMode::Move));
+    ImGui::SameLine();
+    ImGui::RadioButton("Scale", &mode, static_cast<int>(GizmoMode::Scale));
+    gizmoMode = static_cast<GizmoMode>(mode);
+    ImGui::TextDisabled(gizmoMode == GizmoMode::Move
+        ? "Arrows: move on one axis - centre cube: move freely"
+        : "Cubes: scale on one axis - centre cube: scale uniformly");
+}
+
 void UIPanel::OpenModelDialog()
 {
     if (!hwnd)
@@ -170,11 +181,15 @@ void UIPanel::OpenModelDialog()
     OPENFILENAMEW ofn = {};
     wchar_t fileBuffer[MAX_PATH] = L"";
 
+    // The filter is derived from the registered model loaders, so it lists every
+    // supported format without the UI knowing about any of them.
+    const std::wstring filter = ModelLoaderRegistry::Instance().BuildFileDialogFilter();
+
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = hwnd;
     ofn.lpstrFile = fileBuffer;
     ofn.nMaxFile = MAX_PATH;
-    ofn.lpstrFilter = L"Wavefront OBJ (*.obj)\0*.obj\0All Files\0*.*\0";
+    ofn.lpstrFilter = filter.c_str();
     ofn.nFilterIndex = 1;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 

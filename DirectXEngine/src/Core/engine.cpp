@@ -159,6 +159,9 @@ void Engine::HandleGizmoDrag()
 {
 	const bool leftDown = mouseEvent->IsButtonDown(VK_LBUTTON);
 
+	// Apply the transform mode (Move/Scale) chosen in the UI panel.
+	graphics.SetGizmoMode(ui.GetGizmoMode());
+
 	if (!graphics.gizmo || !graphics.gizmo->IsVisible())
 	{
 		if (gizmoDragging)
@@ -172,14 +175,11 @@ void Engine::HandleGizmoDrag()
 		static_cast<float>(mouseEvent->GetX()), static_cast<float>(mouseEvent->GetY()),
 		static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
-	// Apply the interaction mode (Move/Scale) chosen in the UI panel.
-	graphics.gizmo->SetMode(ui.GetGizmoMode());
-
 	if (leftDown && !leftWasDown)
 	{
 		// Button just pressed: grab the axis handle under the cursor, if any.
-		const GizmoArrow::Axis axis = graphics.gizmo->PickAxis(ray);
-		if (axis != GizmoArrow::Axis::None)
+		const GizmoController::Axis axis = graphics.gizmo->PickAxis(ray);
+		if (axis != GizmoController::Axis::None)
 		{
 			graphics.gizmo->BeginDrag(axis, ray);
 			gizmoDragging = true;
