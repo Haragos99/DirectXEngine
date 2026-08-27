@@ -46,6 +46,9 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI\Sections">
+      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a09}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b01}</UniqueIdentifier>
     </Filter>
@@ -69,6 +72,9 @@
     </Filter>
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Sections">
+      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +212,27 @@
     </ClCompile>
     <ClCompile Include="src\UI\ui.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\uistate.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\modelfiledialog.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\importsection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\transformmodesection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\splatsettingssection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\viewportsection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui.cpp">
       <Filter>External\imgui</Filter>
@@ -376,6 +403,30 @@
     </ClInclude>
     <ClInclude Include="src\UI\ui.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\uistate.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\ipanelsection.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\modelfiledialog.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\importsection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\transformmodesection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\sceneoutlinersection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\splatsettingssection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\viewportsection.h">
+      <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imgui.h">
       <Filter>External\imgui</Filter>

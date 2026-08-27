@@ -20,6 +20,7 @@ public:
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context);
 
 	size_t GetPointCount() const { return GetSplatCount(); }
+	const char* GetPrimitiveName() const override { return "points"; }
 
 private:
 	static std::vector<SplatInstance> BuildInstances(const PointCloud& cloud);

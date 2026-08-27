@@ -5,15 +5,19 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "object3d.h"
-#include "gizmomode.h"
 
-// Lightweight wrapper around Dear ImGui (Win32 + DX11 backends).
-// Owns nothing renderer-side; borrows the device/context from Graphics.
+#include "ipanelsection.h"
+#include "uistate.h"
+
+class ImportSection;
+
+// Owns the Dear ImGui lifecycle (Win32 + DX11 backends) and composes the control
+// panel out of IPanelSections. It holds no renderer resources and draws no
+// widgets itself: the sections do that, and UIState carries what they share.
 class UIPanel
 {
 public:
-    UIPanel() = default;
+    UIPanel();
     ~UIPanel();
 
     using ImportModelCallback = std::function<void(const std::wstring&)>;
@@ -23,39 +27,33 @@ public:
 
     // Call once per frame BEFORE any ImGui::* calls.
     void BeginFrame();
-    // Builds the demo/test control panel.
+    // Draws every visible section of the control panel.
     void DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneObjects);
     // Renders ImGui draw data to the currently bound render target.
     // Call AFTER the scene has been drawn, BEFORE SwapChain->Present().
     void EndFrame();
 
     // Panel state (read from Graphics/Engine).
-    bool  RequestedRenderModeChange() { bool v = renderModeChangeRequested; renderModeChangeRequested = false; return v; }
-    const float* GetClearColor() const { return clearColor; }
-    void SetImportModelCallback(ImportModelCallback callback) { importModelCallback = std::move(callback); }
+    bool  RequestedRenderModeChange() { bool v = state.renderModeChangeRequested; state.renderModeChangeRequested = false; return v; }
+    const float* GetClearColor() const { return state.clearColor; }
+    void SetImportModelCallback(ImportModelCallback callback);
 
     // Selection query. Returns -1 when no scene object is selected.
-    int  GetSelectedIndex() const { return selectedSceneObjectIndex; }
-    bool HasSelection() const { return selectedSceneObjectIndex >= 0; }
+    int  GetSelectedIndex() const { return state.selectedIndex; }
+    bool HasSelection() const { return state.selectedIndex >= 0; }
     // Set the selected object (e.g. from viewport picking). Pass -1 to clear.
-    void SetSelectedIndex(int index) { selectedSceneObjectIndex = index; }
+    void SetSelectedIndex(int index) { state.selectedIndex = index; }
 
     // Transform mode chosen in the main panel (Move or Scale). It is always
     // available, independently of whether an object is currently selected.
-    GizmoMode GetGizmoMode() const { return gizmoMode; }
+    GizmoMode GetGizmoMode() const { return state.gizmoMode; }
 
 private:
-    void OpenModelDialog();
-    void DrawTransformModeSelector();
+    void BuildSections();
 
-    bool  initialized = false;
+    bool initialized = false;
     HWND hwnd = nullptr;
-    float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
-    int   buttonClicks = 0;
-    bool  showDemoWindow = false;
-    bool  renderModeChangeRequested = false;
-    int   selectedSceneObjectIndex = -1;
-    GizmoMode gizmoMode = GizmoMode::Move;
-    std::wstring selectedModelPath;
-    ImportModelCallback importModelCallback;
+    UIState state;
+    std::vector<std::unique_ptr<IPanelSection>> sections;
+    ImportSection* importSection = nullptr; // owned by `sections`
 };

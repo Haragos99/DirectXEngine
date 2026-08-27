@@ -19,7 +19,10 @@ public:
 
 	bool IsLoaded() const { return splatCount > 0; }
 	size_t GetSplatCount() const { return splatCount; }
+	float GetSplatScale() const { return splatScale; }
 	void SetSplatScale(float scale) { splatScale = scale; }
+	// What one instance represents, used for UI labels.
+	virtual const char* GetPrimitiveName() const { return "splats"; }
 
 	// Clouds larger than this are uniformly subsampled so the GPU buffers stay
 	// within a sane amount of video memory.
