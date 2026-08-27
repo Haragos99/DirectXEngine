@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cfloat>
 #include "meshmodel.h"
+#include "modelimportservice.h"
 
 
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
@@ -216,13 +217,10 @@ void Graphics::Update(float time)
 
 void Graphics::ImportModel(const std::wstring& path)
 {
-    if (path.empty())
-        return;
-
-    std::string modelPath(path.begin(), path.end());
-    auto importedModel = std::make_shared<MeshModel>(modelPath, L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl", device, context);
-    importedModel->SetPosition(0.0f, -1.0f, 0.0f);
-    sceenObjects.push_back(importedModel);
+    // The service decides which loader runs and which scene object comes back,
+    // so a new file format never touches this code.
+    if (auto imported = ModelImportService::Instance().Import(path, device, context))
+        sceenObjects.push_back(imported);
 }
 
 void Graphics::SetSelectedObject(int index)
@@ -297,12 +295,19 @@ void Graphics::RenderFrame()
     
 	//raytracer->Draw(camera);
 
+    // Background first: Gaussian splats blend without writing depth, so anything
+    // drawn after them would cover them wherever the depth buffer is still empty.
+    envcube.Draw(context, camera);
+
+    // The env cube binds a depth state without depth writes; restore the scene
+    // one so solid objects occlude each other instead of showing their interior.
+    context->OMSetDepthStencilState(depthStencilState.Get(), 1);
+
     for (auto& object : sceenObjects)
     {
        
         object->Draw(camera,currentRenderMode);
     }
-    envcube.Draw(context, camera);
 
     // Draw the control gizmo last so it appears on top of the scene.
     if (gizmo && gizmo->IsVisible())
@@ -311,3 +316,10 @@ void Graphics::RenderFrame()
     }
 }
 
+void Graphics::removeSelectedObject(int index)
+{
+    if(index < static_cast<int>(sceenObjects.size()))
+    {
+        sceenObjects.erase(sceenObjects.begin() + index);
+    }
+}

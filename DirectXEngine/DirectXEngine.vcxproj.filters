@@ -34,6 +34,12 @@
     <Filter Include="Source Files\Scene\Loaders">
       <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene\Loaders\Ply">
+      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene\Loaders\Importers">
+      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a08}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Scene\Gizmos">
       <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a05}</UniqueIdentifier>
     </Filter>
@@ -51,6 +57,12 @@
     </Filter>
     <Filter Include="Header Files\Scene\Loaders">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene\Loaders\Ply">
+      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene\Loaders\Importers">
+      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b08}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Scene\Gizmos">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b05}</UniqueIdentifier>
@@ -137,6 +149,60 @@
     </ClCompile>
     <ClCompile Include="src\Scene\Loaders\modelloaderregistry.cpp">
       <Filter>Source Files\Scene\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\plymodelloader.cpp">
+      <Filter>Source Files\Scene\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\gaussiansplatting.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\splatcloudobject.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\pointcloudmodel.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\modelimportservice.cpp">
+      <Filter>Source Files\Scene\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Importers\meshobjectimporter.cpp">
+      <Filter>Source Files\Scene\Loaders\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Importers\gaussiansplatimporter.cpp">
+      <Filter>Source Files\Scene\Loaders\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Importers\pointcloudimporter.cpp">
+      <Filter>Source Files\Scene\Loaders\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\pointcloud.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\pointcloudplyloader.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\gaussiansplatshader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\splatdepthsorter.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\plyheaderparser.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\plyelementreader.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplat.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\standardsplatdecoder.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Loaders\Ply\supersplatdecoder.cpp">
+      <Filter>Source Files\Scene\Loaders\Ply</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\ui.cpp">
       <Filter>Source Files\UI</Filter>
@@ -233,6 +299,69 @@
     <ClInclude Include="src\Scene\Loaders\modelloaderregistry.h">
       <Filter>Header Files\Scene\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\plymodelloader.h">
+      <Filter>Header Files\Scene\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\gaussiansplatting.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\splatcloudobject.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\pointcloudmodel.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\modelimportservice.h">
+      <Filter>Header Files\Scene\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Importers\iobjectimporter.h">
+      <Filter>Header Files\Scene\Loaders\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Importers\meshobjectimporter.h">
+      <Filter>Header Files\Scene\Loaders\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Importers\gaussiansplatimporter.h">
+      <Filter>Header Files\Scene\Loaders\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Importers\pointcloudimporter.h">
+      <Filter>Header Files\Scene\Loaders\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\pointcloud.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\pointcloudplyloader.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\gaussiansplatshader.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\splatdepthsorter.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\plytypes.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\plyheaderparser.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\plyelementreader.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplat.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\isplatdecoder.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\standardsplatdecoder.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Loaders\Ply\supersplatdecoder.h">
+      <Filter>Header Files\Scene\Loaders\Ply</Filter>
+    </ClInclude>
     <ClInclude Include="src\Rendering\raytracer.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
@@ -299,6 +428,12 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GizmoPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

@@ -32,6 +32,7 @@ public:
     // (-1 when nothing is hit). When provided, outHitPoint receives the world-space
     // position of the hit.
     int PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint = nullptr) const;
+	void removeSelectedObject(int index);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();

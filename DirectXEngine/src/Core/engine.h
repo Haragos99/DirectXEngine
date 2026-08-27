@@ -19,6 +19,7 @@ private:
 	void Render();
 	float calculateDeltaTime();
 	void RenderUI();
+	void RemoveSelectedObject();
 	void ProcessInput();
 	void UpdateSelection();
 	void HandleGizmoDrag();

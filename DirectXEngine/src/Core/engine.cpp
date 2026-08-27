@@ -40,12 +40,34 @@ int Engine::Run()
 void Engine::ProcessInput()
 {
 	const float speed = 0.05f;
-	if (keyboardEvent->IsKeyDown('W'))     graphics.camera.Move(0, 0, speed);   // forward
-	if (keyboardEvent->IsKeyDown('S'))     graphics.camera.Move(0, 0, -speed);  // back
-	if (keyboardEvent->IsKeyDown('A'))     graphics.camera.Move(-speed, 0, 0);  // strafe left
-	if (keyboardEvent->IsKeyDown('D'))     graphics.camera.Move(speed, 0, 0);   // strafe right
-	if (keyboardEvent->IsKeyDown(VK_SPACE)) graphics.camera.Move(0, speed, 0);  // up
-	if (keyboardEvent->IsKeyDown(VK_SHIFT)) { graphics.camera.Move(0, -speed, 0); } // down
+	if (keyboardEvent->IsKeyDown('W'))     
+	{ 
+		graphics.camera.Move(0, 0, speed); // forward
+	}   
+	if (keyboardEvent->IsKeyDown('S'))     
+	{ 
+		graphics.camera.Move(0, 0, -speed); // back
+	}  
+	if (keyboardEvent->IsKeyDown('A'))     
+	{ 
+		graphics.camera.Move(-speed, 0, 0); // strafe left
+	}  
+	if (keyboardEvent->IsKeyDown('D'))    
+	{ 
+		graphics.camera.Move(speed, 0, 0); // strafe right
+	}  
+	if (keyboardEvent->IsKeyDown(VK_SPACE)) 
+	{ 
+		graphics.camera.Move(0, speed, 0); // up
+	}  
+	if (keyboardEvent->IsKeyDown(VK_SHIFT)) 
+	{ 
+		graphics.camera.Move(0, -speed, 0); // down
+	}
+	if(keyboardEvent->IsKeyDown(VK_DELETE))
+	{
+		RemoveSelectedObject();
+	}
 
 	const bool rDown = keyboardEvent->IsKeyDown('R');
 	if (rDown && !rKeyLatch)
@@ -54,7 +76,7 @@ void Engine::ProcessInput()
 
 	// Drag with the left button to orbit the camera (unless a gizmo axis is
 	// being dragged, which takes priority over camera movement).
-	if (!gizmoDragging && mouseEvent->IsButtonDown(VK_LBUTTON))
+	if (!gizmoDragging && (mouseEvent->IsButtonDown(VK_LBUTTON) && keyboardEvent->IsKeyDown(VK_CONTROL)))
 	{
 		const int deltax = mouseEvent->GetDeltaX();
 		const int deltay = mouseEvent->GetDeltaY();
@@ -201,4 +223,14 @@ void Engine::HandleGizmoDrag()
 void Engine::Import(const std::wstring& path)
 {
 	graphics.ImportModel(path);
+}
+
+void Engine::RemoveSelectedObject()
+{
+	int selectedIndex = ui.GetSelectedIndex();
+	if (selectedIndex >= 0)
+	{
+		graphics.removeSelectedObject(selectedIndex);
+		ui.SetSelectedIndex(-1); // Clear selection after removal
+	}
 }

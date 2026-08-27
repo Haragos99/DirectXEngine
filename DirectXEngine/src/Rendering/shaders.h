@@ -12,7 +12,8 @@ class Shader
 public:
 	Shader() = default;
 	Shader(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext>  _context);
-	~Shader() = default;
+	// Shaders are owned and destroyed through Shader pointers.
+	virtual ~Shader() = default;
 	virtual void LoadShaders(const std::wstring& vertexShaderPath, const std::wstring& pixelShaderPath);
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> GetVertexShader() const { return vertexShader; }
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetPixelShader() const { return pixelShader; }

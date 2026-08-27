@@ -142,9 +142,25 @@
     <ClCompile Include="src\Core\main.cpp" />
     <ClCompile Include="src\Scene\mesh.cpp" />
     <ClCompile Include="src\Scene\meshmodel.cpp" />
+    <ClCompile Include="src\Scene\gaussiansplatting.cpp" />
+    <ClCompile Include="src\Scene\splatcloudobject.cpp" />
+    <ClCompile Include="src\Scene\pointcloudmodel.cpp" />
     <ClCompile Include="src\Scene\Loaders\imodelloader.cpp" />
     <ClCompile Include="src\Scene\Loaders\objmodelloader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\plymodelloader.cpp" />
     <ClCompile Include="src\Scene\Loaders\modelloaderregistry.cpp" />
+    <ClCompile Include="src\Scene\Loaders\modelimportservice.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Importers\meshobjectimporter.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Importers\gaussiansplatimporter.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Importers\pointcloudimporter.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\plyheaderparser.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\plyelementreader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplat.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\pointcloud.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\pointcloudplyloader.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\standardsplatdecoder.cpp" />
+    <ClCompile Include="src\Scene\Loaders\Ply\supersplatdecoder.cpp" />
     <ClCompile Include="src\Core\mouse.cpp" />
     <ClCompile Include="src\Scene\object3D.cpp" />
     <ClCompile Include="src\Scene\plane.cpp" />
@@ -155,6 +171,8 @@
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
+    <ClCompile Include="src\Rendering\gaussiansplatshader.cpp" />
+    <ClCompile Include="src\Rendering\splatdepthsorter.cpp" />
     <ClCompile Include="src\Rendering\texture.cpp" />
     <ClCompile Include="src\UI\ui.cpp" />
     <ClCompile Include="src\Core\windowapp.cpp" />
@@ -177,9 +195,28 @@
     <ClInclude Include="src\Core\keyboard.h" />
     <ClInclude Include="src\Scene\mesh.h" />
     <ClInclude Include="src\Scene\meshmodel.h" />
+    <ClInclude Include="src\Scene\gaussiansplatting.h" />
+    <ClInclude Include="src\Scene\splatcloudobject.h" />
+    <ClInclude Include="src\Scene\pointcloudmodel.h" />
     <ClInclude Include="src\Scene\Loaders\imodelloader.h" />
     <ClInclude Include="src\Scene\Loaders\objmodelloader.h" />
+    <ClInclude Include="src\Scene\Loaders\plymodelloader.h" />
     <ClInclude Include="src\Scene\Loaders\modelloaderregistry.h" />
+    <ClInclude Include="src\Scene\Loaders\modelimportservice.h" />
+    <ClInclude Include="src\Scene\Loaders\Importers\iobjectimporter.h" />
+    <ClInclude Include="src\Scene\Loaders\Importers\meshobjectimporter.h" />
+    <ClInclude Include="src\Scene\Loaders\Importers\gaussiansplatimporter.h" />
+    <ClInclude Include="src\Scene\Loaders\Importers\pointcloudimporter.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\plytypes.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\plyheaderparser.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\plyelementreader.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplat.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\isplatdecoder.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\pointcloud.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\pointcloudplyloader.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\standardsplatdecoder.h" />
+    <ClInclude Include="src\Scene\Loaders\Ply\supersplatdecoder.h" />
     <ClInclude Include="src\Core\mouse.h" />
     <ClInclude Include="src\Scene\object3d.h" />
     <ClInclude Include="src\Scene\plane.h" />
@@ -191,6 +228,8 @@
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />
+    <ClInclude Include="src\Rendering\gaussiansplatshader.h" />
+    <ClInclude Include="src\Rendering\splatdepthsorter.h" />
     <ClInclude Include="src\Rendering\texture.h" />
     <ClInclude Include="src\UI\ui.h" />
     <ClInclude Include="src\Scene\vertex.h" />
@@ -254,6 +293,16 @@
     <FxCompile Include="shaders\GizmoPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

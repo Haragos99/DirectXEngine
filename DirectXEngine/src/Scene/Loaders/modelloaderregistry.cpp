@@ -1,5 +1,6 @@
 #include "modelloaderregistry.h"
 #include "objmodelloader.h"
+#include "plymodelloader.h"
 
 #include <algorithm>
 #include <cctype>
@@ -11,6 +12,7 @@ ModelLoaderRegistry& ModelLoaderRegistry::Instance()
 	{
 		ModelLoaderRegistry created;
 		created.Register(std::make_shared<ObjModelLoader>());
+		created.Register(std::make_shared<PlyModelLoader>());
 		return created;
 	}();
 	return registry;
