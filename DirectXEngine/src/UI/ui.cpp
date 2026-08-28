@@ -1,6 +1,7 @@
 #include "ui.h"
 
 #include "Sections/importsection.h"
+#include "Sections/objectpropertiessection.h"
 #include "Sections/sceneoutlinersection.h"
 #include "Sections/splatsettingssection.h"
 #include "Sections/transformmodesection.h"
@@ -30,6 +31,8 @@ void UIPanel::BuildSections()
     sections.push_back(std::make_unique<SceneOutlinerSection>());
     sections.push_back(std::make_unique<SplatSettingsSection>());
     sections.push_back(std::make_unique<ViewportSection>());
+
+    propertiesSection = std::make_unique<ObjectPropertiesSection>();
 }
 
 void UIPanel::SetImportModelCallback(ImportModelCallback callback)
@@ -102,7 +105,19 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
 
     ImGui::End();
 
+    DrawPropertiesPanel();
+
     state.sceneObjects = nullptr;
+}
+
+void UIPanel::DrawPropertiesPanel()
+{
+    if (!propertiesSection->IsVisible(state))
+        return;
+
+    ImGui::Begin(propertiesSection->GetTitle());
+    propertiesSection->Draw(state);
+    ImGui::End();
 }
 
 void UIPanel::EndFrame()

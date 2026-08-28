@@ -163,6 +163,7 @@
     <ClCompile Include="src\Scene\Loaders\Ply\supersplatdecoder.cpp" />
     <ClCompile Include="src\Core\mouse.cpp" />
     <ClCompile Include="src\Scene\object3D.cpp" />
+    <ClCompile Include="src\Scene\transform.cpp" />
     <ClCompile Include="src\Scene\plane.cpp" />
     <ClCompile Include="src\Scene\Gizmos\gizmo.cpp" />
     <ClCompile Include="src\Scene\Gizmos\movegizmo.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="src\UI\Sections\importsection.cpp" />
     <ClCompile Include="src\UI\Sections\transformmodesection.cpp" />
     <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp" />
+    <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp" />
     <ClCompile Include="src\UI\Sections\splatsettingssection.cpp" />
     <ClCompile Include="src\UI\Sections\viewportsection.cpp" />
     <ClCompile Include="src\Core\windowapp.cpp" />
@@ -226,6 +228,7 @@
     <ClInclude Include="src\Scene\Loaders\Ply\supersplatdecoder.h" />
     <ClInclude Include="src\Core\mouse.h" />
     <ClInclude Include="src\Scene\object3d.h" />
+    <ClInclude Include="src\Scene\transform.h" />
     <ClInclude Include="src\Scene\plane.h" />
     <ClInclude Include="src\Scene\Gizmos\gizmo.h" />
     <ClInclude Include="src\Scene\Gizmos\gizmomode.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="src\UI\Sections\importsection.h" />
     <ClInclude Include="src\UI\Sections\transformmodesection.h" />
     <ClInclude Include="src\UI\Sections\sceneoutlinersection.h" />
+    <ClInclude Include="src\UI\Sections\objectpropertiessection.h" />
     <ClInclude Include="src\UI\Sections\splatsettingssection.h" />
     <ClInclude Include="src\UI\Sections\viewportsection.h" />
     <ClInclude Include="src\Scene\vertex.h" />

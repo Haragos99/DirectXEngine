@@ -135,6 +135,9 @@
     <ClCompile Include="src\Scene\object3D.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\transform.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene\Gizmos\gizmo.cpp">
       <Filter>Source Files\Scene\Gizmos</Filter>
     </ClCompile>
@@ -228,6 +231,9 @@
     <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
     <ClCompile Include="src\UI\Sections\splatsettingssection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
@@ -276,6 +282,9 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\object3d.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\transform.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\envcube.h">
@@ -426,6 +435,9 @@
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\Sections\viewportsection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\objectpropertiessection.h">
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imgui.h">

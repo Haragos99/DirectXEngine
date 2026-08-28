@@ -31,9 +31,7 @@ void ScaleGizmo::applyDrag(Object3D& target, const Drag& drag)
     const float sy = (uniform || drag.axis == Axis::Y) ? factor : 1.0f;
     const float sz = (uniform || drag.axis == Axis::Z) ? factor : 1.0f;
 
-    // Scale about the object centre: translate to the origin, scale, translate back.
-    const XMFLOAT3 centre = target.GetPosition();
-    target.SetPosition(-centre.x, -centre.y, -centre.z);
+    // The transform composes scale before translation, so this already scales
+    // around the object centre.
     target.Scale(sx, sy, sz);
-    target.SetPosition(centre.x, centre.y, centre.z);
 }

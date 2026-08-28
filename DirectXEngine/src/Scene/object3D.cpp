@@ -12,25 +12,71 @@ Object3D::Object3D(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL:
 
 void Object3D::SetPosition(float x, float y, float z)
 {
-	world *= DirectX::XMMatrixTranslation(x, y, z);
+	transform.translation = XMFLOAT3(x, y, z);
+	rebuildWorld();
+}
+
+void Object3D::SetRotation(float pitch, float yaw, float roll)
+{
+	transform.rotation = XMFLOAT3(pitch, yaw, roll);
+	rebuildWorld();
+}
+
+void Object3D::SetScale(float sx, float sy, float sz)
+{
+	transform.scale = XMFLOAT3(sx, sy, sz);
+	rebuildWorld();
+}
+
+void Object3D::SetTransform(const Transform& newTransform)
+{
+	transform = newTransform;
+	rebuildWorld();
+}
+
+void Object3D::AdjustPosition(float dx, float dy, float dz)
+{
+	transform.translation.x += dx;
+	transform.translation.y += dy;
+	transform.translation.z += dz;
+	rebuildWorld();
 }
 
 void Object3D::Rotate(float pitch, float yaw, float roll)
 {
-	world *= DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+	transform.rotation.x += pitch;
+	transform.rotation.y += yaw;
+	transform.rotation.z += roll;
+	rebuildWorld();
 }
 
 void Object3D::Scale(float sx, float sy, float sz)
 {
-	world *= DirectX::XMMatrixScaling(sx, sy, sz);
+	transform.scale.x *= sx;
+	transform.scale.y *= sy;
+	transform.scale.z *= sz;
+	rebuildWorld();
 }
 
 DirectX::XMFLOAT3 Object3D::GetPosition() const
 {
-	// Translation lives in the 4th row of a row-major world matrix.
-	DirectX::XMFLOAT4X4 m;
-	DirectX::XMStoreFloat4x4(&m, world);
-	return DirectX::XMFLOAT3(m._41, m._42, m._43);
+	return transform.translation;
+}
+
+DirectX::XMFLOAT3 Object3D::GetRotation() const
+{
+	return transform.rotation;
+}
+
+DirectX::XMFLOAT3 Object3D::GetScale() const
+{
+	return transform.scale;
+}
+
+void Object3D::rebuildWorld()
+{
+	world = transform.ToMatrix();
+	updateWorldBoundingBox();
 }
 
 

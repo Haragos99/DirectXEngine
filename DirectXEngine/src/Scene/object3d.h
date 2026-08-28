@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "texture.h"
+#include "transform.h"
 #include "vertex.h"
 #include "shaders.h"
 #pragma comment(lib, "d3d11.lib")
@@ -31,10 +32,22 @@ public:
 	virtual void Update(float time) = 0;
 	virtual void Draw(Camera camera, RenderMode mode);
 	bool wireframeEnabled;
+
+	// Absolute transform edited by the properties panel.
 	void SetPosition(float x, float y, float z);
+	void SetRotation(float pitch, float yaw, float roll);
+	void SetScale(float sx, float sy, float sz);
+	void SetTransform(const Transform& newTransform);
+
+	// Relative transform used by the gizmos while dragging.
+	void AdjustPosition(float dx, float dy, float dz);
 	void Rotate(float pitch, float yaw, float roll);
 	void Scale(float sx, float sy, float sz);
+
+	const Transform& GetTransform() const { return transform; }
 	DirectX::XMFLOAT3 GetPosition() const;
+	DirectX::XMFLOAT3 GetRotation() const;
+	DirectX::XMFLOAT3 GetScale() const;
 	std::string GetName() const { return name; }
 
 	// Ray/object intersection test in world space (broad-phase, oriented bounding box).
@@ -49,6 +62,9 @@ protected:
 	void createWorldBoundingBox();
 	// Refresh worldBox from the local bounds using the current world matrix.
 	void updateWorldBoundingBox();
+	// Recomposes the world matrix after the transform components changed.
+	void rebuildWorld();
+	Transform transform;
 	std::unique_ptr <Shader> shader;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>  context;

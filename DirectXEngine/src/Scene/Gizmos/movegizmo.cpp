@@ -51,8 +51,7 @@ void MoveGizmo::appendHead(const AxisFrame& frame, const XMFLOAT3& color)
 
 void MoveGizmo::applyDrag(Object3D& target, const Drag& drag)
 {
-    // SetPosition applies an incremental world-space translation. The base class
-    // already constrained the movement to the locked axis, or left it free for
-    // the centre handle.
-    target.SetPosition(drag.translation.x, drag.translation.y, drag.translation.z);
+    // The base class already constrained the movement to the locked axis, or
+    // left it free for the centre handle.
+    target.AdjustPosition(drag.translation.x, drag.translation.y, drag.translation.z);
 }

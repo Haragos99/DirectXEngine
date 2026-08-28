@@ -50,10 +50,13 @@ public:
 
 private:
     void BuildSections();
+    // Inspector for the selected object, shown next to the control panel.
+    void DrawPropertiesPanel();
 
     bool initialized = false;
     HWND hwnd = nullptr;
     UIState state;
     std::vector<std::unique_ptr<IPanelSection>> sections;
+    std::unique_ptr<IPanelSection> propertiesSection; // own window, not part of `sections`
     ImportSection* importSection = nullptr; // owned by `sections`
 };
