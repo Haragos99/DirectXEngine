@@ -3,6 +3,7 @@
 #include "Sections/importsection.h"
 #include "Sections/objectpropertiessection.h"
 #include "Sections/sceneoutlinersection.h"
+#include "Sections/skeletonsection.h"
 #include "Sections/splatsettingssection.h"
 #include "Sections/transformmodesection.h"
 #include "Sections/viewportsection.h"
@@ -26,9 +27,16 @@ void UIPanel::BuildSections()
     auto import = std::make_unique<ImportSection>();
     importSection = import.get();
 
+    auto skeleton = std::make_unique<SkeletonSection>();
+    skeletonSection = skeleton.get();
+
+    auto outliner = std::make_unique<SceneOutlinerSection>();
+    outlinerSection = outliner.get();
+
     sections.push_back(std::move(import));
     sections.push_back(std::make_unique<TransformModeSection>());
-    sections.push_back(std::make_unique<SceneOutlinerSection>());
+    sections.push_back(std::move(outliner));
+    sections.push_back(std::move(skeleton));
     sections.push_back(std::make_unique<SplatSettingsSection>());
     sections.push_back(std::make_unique<ViewportSection>());
 
@@ -38,6 +46,16 @@ void UIPanel::BuildSections()
 void UIPanel::SetImportModelCallback(ImportModelCallback callback)
 {
     importSection->SetCallback(std::move(callback));
+}
+
+void UIPanel::SetCreateSkeletonCallback(CreateSkeletonCallback callback)
+{
+    skeletonSection->SetCreateCallback(std::move(callback));
+}
+
+void UIPanel::SetReparentCallback(SceneOutlinerSection::ReparentCallback callback)
+{
+    outlinerSection->SetReparentCallback(std::move(callback));
 }
 
 void UIPanel::Init(HWND _hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
@@ -89,7 +107,6 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
 
     // Borrowed for this frame only, so sections never outlive the scene list.
     state.sceneObjects = &sceneObjects;
-    state.ValidateSelection();
 
     ImGui::Begin("Control Panel");
 

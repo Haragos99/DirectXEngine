@@ -76,7 +76,72 @@ DirectX::XMFLOAT3 Object3D::GetScale() const
 void Object3D::rebuildWorld()
 {
 	world = transform.ToMatrix();
+	if (const std::shared_ptr<Object3D> owner = parent.lock())
+		world = world * owner->world;
+
 	updateWorldBoundingBox();
+
+	for (const std::shared_ptr<Object3D>& child : children)
+		child->rebuildWorld();
+}
+
+void Object3D::setWorld(DirectX::FXMMATRIX newWorld)
+{
+	world = newWorld;
+	updateWorldBoundingBox();
+
+	for (const std::shared_ptr<Object3D>& child : children)
+		child->rebuildWorld();
+}
+
+void Object3D::AttachChild(std::shared_ptr<Object3D> child)
+{
+	if (!child || child.get() == this || IsDescendantOf(child.get()))
+		return;
+
+	child->parent = weak_from_this();
+	children.push_back(child);
+	child->rebuildWorld();
+}
+
+std::shared_ptr<Object3D> Object3D::DetachChild(const Object3D* child)
+{
+	for (auto it = children.begin(); it != children.end(); ++it)
+	{
+		if (it->get() != child)
+			continue;
+
+		std::shared_ptr<Object3D> detached = *it;
+		children.erase(it);
+		detached->parent.reset();
+		detached->rebuildWorld();
+		return detached;
+	}
+	return nullptr;
+}
+
+bool Object3D::IsDescendantOf(const Object3D* candidate) const
+{
+	for (std::shared_ptr<Object3D> owner = parent.lock(); owner; owner = owner->parent.lock())
+	{
+		if (owner.get() == candidate)
+			return true;
+	}
+	return false;
+}
+
+void Object3D::UpdateHierarchy(float time)
+{
+	Update(time);
+	for (const std::shared_ptr<Object3D>& child : children)
+		child->UpdateHierarchy(time);
+}
+
+void Object3D::DrawHierarchy(Camera camera, RenderMode mode)
+{
+	Draw(camera, mode);
+	for (const std::shared_ptr<Object3D>& child : children)
+		child->DrawHierarchy(camera, mode);
 }
 
 

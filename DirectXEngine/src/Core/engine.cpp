@@ -9,6 +9,12 @@ Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"Direc
 	ui.SetImportModelCallback([this](const std::wstring& path) {
 		Import(path);
 	});
+	ui.SetCreateSkeletonCallback([this]() {
+		graphics.AddSkeleton();
+	});
+	ui.SetReparentCallback([this](std::shared_ptr<Object3D> child, std::shared_ptr<Object3D> newParent) {
+		graphics.Reparent(child, newParent);
+	});
 }
 
 int Engine::Run()
@@ -139,7 +145,7 @@ void Engine::UpdateSelection()
 			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
 		DirectX::XMFLOAT3 world{};
-		const bool onObject = graphics.PickObject(ray, &world) >= 0;
+		const bool onObject = graphics.PickObject(ray, &world) != nullptr;
 
 		if (!onObject)
 		{
@@ -170,11 +176,11 @@ void Engine::UpdateSelection()
 			static_cast<float>(clickX), static_cast<float>(clickY),
 			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
-		ui.SetSelectedIndex(graphics.PickObject(ray, nullptr));
+		ui.SetSelectedObject(graphics.PickObject(ray, nullptr));
 	}
 
 	// Keep the gizmo attached to whatever is selected (via double-click or the UI panel).
-	graphics.SetSelectedObject(ui.GetSelectedIndex());
+	graphics.SetSelectedObject(ui.GetSelectedObject());
 }
 
 void Engine::HandleGizmoDrag()
@@ -227,10 +233,9 @@ void Engine::Import(const std::wstring& path)
 
 void Engine::RemoveSelectedObject()
 {
-	int selectedIndex = ui.GetSelectedIndex();
-	if (selectedIndex >= 0)
+	if (const std::shared_ptr<Object3D> selected = ui.GetSelectedObject())
 	{
-		graphics.removeSelectedObject(selectedIndex);
-		ui.SetSelectedIndex(-1); // Clear selection after removal
+		ui.SetSelectedObject(nullptr); // clear before the object goes away
+		graphics.RemoveObject(selected);
 	}
 }

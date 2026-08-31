@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Scene\Gizmos">
       <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene\Skeleton">
+      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene\Skinning">
+      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a0b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a06}</UniqueIdentifier>
     </Filter>
@@ -69,6 +75,12 @@
     </Filter>
     <Filter Include="Header Files\Scene\Gizmos">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene\Skeleton">
+      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene\Skinning">
+      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b0b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b06}</UniqueIdentifier>
@@ -149,6 +161,30 @@
     </ClCompile>
     <ClCompile Include="src\Scene\Gizmos\gizmocontroller.cpp">
       <Filter>Source Files\Scene\Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\joint.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\jointhandle.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\bone.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\skeletonpose.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\skeletongeometry.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skeleton\skeleton.cpp">
+      <Filter>Source Files\Scene\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp">
+      <Filter>Source Files\Scene\Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp">
+      <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Loaders\imodelloader.cpp">
       <Filter>Source Files\Scene\Loaders</Filter>
@@ -232,6 +268,9 @@
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\skeletonsection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Sections\splatsettingssection.cpp">
@@ -325,6 +364,33 @@
     </ClInclude>
     <ClInclude Include="src\Scene\Gizmos\gizmocontroller.h">
       <Filter>Header Files\Scene\Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\joint.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\jointhandle.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\bone.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\linearblendskinning.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\skeletonpose.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\skeletongeometry.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skeleton\skeleton.h">
+      <Filter>Header Files\Scene\Skeleton</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Loaders\imodelloader.h">
       <Filter>Header Files\Scene\Loaders</Filter>
@@ -438,6 +504,9 @@
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\Sections\objectpropertiessection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\skeletonsection.h">
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="..\External\imgui\imgui.h">

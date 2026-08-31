@@ -3,6 +3,7 @@
 #include <cfloat>
 #include "meshmodel.h"
 #include "modelimportservice.h"
+#include "skeleton.h"
 
 
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
@@ -211,7 +212,7 @@ void Graphics::Update(float time)
 	raytracer->Update(time);
     for (auto& object : sceenObjects)
     {
-        object->Update(time);
+        object->UpdateHierarchy(time);
     }
 }
 
@@ -223,16 +224,57 @@ void Graphics::ImportModel(const std::wstring& path)
         sceenObjects.push_back(imported);
 }
 
-void Graphics::SetSelectedObject(int index)
+void Graphics::AddSkeleton()
+{
+    sceenObjects.push_back(std::make_shared<Skeleton>(device, context));
+}
+
+void Graphics::SetSelectedObject(const std::shared_ptr<Object3D>& object)
 {
     if (!gizmo)
         return;
-    if (index < 0 || index >= static_cast<int>(sceenObjects.size()))
-    {
+
+    if (object)
+        gizmo->AttachTo(object);
+    else
         gizmo->Detach();
+}
+
+void Graphics::Reparent(const std::shared_ptr<Object3D>& child, const std::shared_ptr<Object3D>& newParent)
+{
+    // Dropping an object on itself or on one of its own descendants would cut
+    // the branch off the scene.
+    if (!child || child == newParent || (newParent && newParent->IsDescendantOf(child.get())))
         return;
+
+    std::shared_ptr<Object3D> detached;
+    if (const std::shared_ptr<Object3D> currentParent = child->GetParent())
+        detached = currentParent->DetachChild(child.get());
+    else
+        detached = detachRoot(child.get());
+
+    if (!detached)
+        return;
+
+    if (newParent)
+        newParent->AttachChild(detached);
+    else
+        sceenObjects.push_back(detached);
+}
+
+// Unlinks a top level object from the scene and hands its ownership over.
+std::shared_ptr<Object3D> Graphics::detachRoot(const Object3D* object)
+{
+    for (auto it = sceenObjects.begin(); it != sceenObjects.end(); ++it)
+    {
+        if (it->get() != object)
+            continue;
+
+        std::shared_ptr<Object3D> detached = *it;
+        sceenObjects.erase(it);
+        return detached;
     }
-    gizmo->AttachTo(sceenObjects[index]);
+    return nullptr;
 }
 
 void Graphics::SetGizmoMode(GizmoMode mode)
@@ -241,34 +283,44 @@ void Graphics::SetGizmoMode(GizmoMode mode)
         gizmo->SetMode(mode);
 }
 
-int Graphics::PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint) const
+namespace
 {
-    int nearestIndex = -1;
-    float nearestDistance = FLT_MAX;
-
-    for (size_t i = 0; i < sceenObjects.size(); ++i)
+    // Nearest hit among `object` and everything parented to it.
+    void PickInHierarchy(const std::shared_ptr<Object3D>& object, const Ray& ray,
+                         std::shared_ptr<Object3D>& nearest, float& nearestDistance)
     {
-        if (!sceenObjects[i])
-            continue;
+        if (!object)
+            return;
 
         float distance = 0.0f;
-        if (sceenObjects[i]->Intersect(ray, distance) && distance < nearestDistance)
+        if (object->Intersect(ray, distance) && distance < nearestDistance)
         {
             nearestDistance = distance;
-            nearestIndex = static_cast<int>(i);
+            nearest = object;
         }
-    }
 
-    if (nearestIndex >= 0 && outHitPoint)
+        for (const std::shared_ptr<Object3D>& child : object->GetChildren())
+            PickInHierarchy(child, ray, nearest, nearestDistance);
+    }
+}
+
+std::shared_ptr<Object3D> Graphics::PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint) const
+{
+    std::shared_ptr<Object3D> nearest;
+    float nearestDistance = FLT_MAX;
+
+    for (const std::shared_ptr<Object3D>& object : sceenObjects)
+        PickInHierarchy(object, ray, nearest, nearestDistance);
+
+    if (nearest && outHitPoint)
     {
         const DirectX::XMVECTOR origin = DirectX::XMLoadFloat3(&ray.origin);
         const DirectX::XMVECTOR direction = DirectX::XMLoadFloat3(&ray.direction);
         DirectX::XMStoreFloat3(outHitPoint, DirectX::XMVectorAdd(origin, DirectX::XMVectorScale(direction, nearestDistance)));
     }
 
-    return nearestIndex;
+    return nearest;
 }
-
 void Graphics::changeRenderMode()
 {
     if (currentRenderMode == RenderMode::Solid)
@@ -306,7 +358,7 @@ void Graphics::RenderFrame()
     for (auto& object : sceenObjects)
     {
        
-        object->Draw(camera,currentRenderMode);
+        object->DrawHierarchy(camera, currentRenderMode);
     }
 
     // Draw the control gizmo last so it appears on top of the scene.
@@ -316,10 +368,13 @@ void Graphics::RenderFrame()
     }
 }
 
-void Graphics::removeSelectedObject(int index)
+void Graphics::RemoveObject(const std::shared_ptr<Object3D>& object)
 {
-    if(index < static_cast<int>(sceenObjects.size()))
-    {
-        sceenObjects.erase(sceenObjects.begin() + index);
-    }
+    if (!object)
+        return;
+
+    if (const std::shared_ptr<Object3D> owner = object->GetParent())
+        owner->DetachChild(object.get());
+    else
+        detachRoot(object.get());
 }

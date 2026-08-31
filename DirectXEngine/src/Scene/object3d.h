@@ -22,7 +22,7 @@ enum class RenderMode
 };
 
 
-class Object3D
+class Object3D : public std::enable_shared_from_this<Object3D>
 {
 public:
 	Object3D() = default;
@@ -33,26 +33,44 @@ public:
 	virtual void Draw(Camera camera, RenderMode mode);
 	bool wireframeEnabled;
 
-	// Absolute transform edited by the properties panel.
+	// Absolute transform edited by the properties panel. Get/SetTransform are
+	// virtual so a proxy object can present something else as its transform.
 	void SetPosition(float x, float y, float z);
 	void SetRotation(float pitch, float yaw, float roll);
 	void SetScale(float sx, float sy, float sz);
-	void SetTransform(const Transform& newTransform);
+	virtual void SetTransform(const Transform& newTransform);
 
-	// Relative transform used by the gizmos while dragging.
-	void AdjustPosition(float dx, float dy, float dz);
+	// Relative transform used by the gizmos while dragging. AdjustPosition is
+	// virtual so a proxy object can redirect a drag somewhere else.
+	virtual void AdjustPosition(float dx, float dy, float dz);
 	void Rotate(float pitch, float yaw, float roll);
 	void Scale(float sx, float sy, float sz);
 
-	const Transform& GetTransform() const { return transform; }
-	DirectX::XMFLOAT3 GetPosition() const;
+	virtual Transform GetTransform() const { return transform; }
+	virtual DirectX::XMFLOAT3 GetPosition() const;
 	DirectX::XMFLOAT3 GetRotation() const;
 	DirectX::XMFLOAT3 GetScale() const;
 	std::string GetName() const { return name; }
 
+	// Scene hierarchy. A child inherits its parent's world transform and is
+	// updated, drawn and destroyed through it.
+	void AttachChild(std::shared_ptr<Object3D> child);
+	// Unlinks `child` and hands its ownership back to the caller.
+	std::shared_ptr<Object3D> DetachChild(const Object3D* child);
+	const std::vector<std::shared_ptr<Object3D>>& GetChildren() const { return children; }
+	std::shared_ptr<Object3D> GetParent() const { return parent.lock(); }
+	bool IsDescendantOf(const Object3D* candidate) const;
+
+	// Updates/draws this object and everything parented to it.
+	void UpdateHierarchy(float time);
+	void DrawHierarchy(Camera camera, RenderMode mode);
+
+	// Called when this object becomes, or stops being, the editor selection.
+	virtual void OnSelected(bool /*selected*/) {}
+
 	// Ray/object intersection test in world space (broad-phase, oriented bounding box).
 	// Returns true on a hit and writes the distance from the ray origin to outDistance.
-	bool Intersect(const Ray& ray, float& outDistance);
+	virtual bool Intersect(const Ray& ray, float& outDistance);
 protected:
 	DirectX::XMVECTOR position;
 	virtual void createTexturedVertex() = 0;
@@ -64,7 +82,11 @@ protected:
 	void updateWorldBoundingBox();
 	// Recomposes the world matrix after the transform components changed.
 	void rebuildWorld();
+	// Overrides the composed world matrix, for objects that derive it elsewhere.
+	void setWorld(DirectX::FXMMATRIX newWorld);
 	Transform transform;
+	std::weak_ptr<Object3D> parent;
+	std::vector<std::shared_ptr<Object3D>> children;
 	std::unique_ptr <Shader> shader;
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>  context;

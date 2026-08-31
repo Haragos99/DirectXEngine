@@ -7,16 +7,25 @@ size_t UIState::SceneObjectCount() const
 
 bool UIState::HasSelection() const
 {
-	return selectedIndex >= 0 && selectedIndex < static_cast<int>(SceneObjectCount());
+	return !selection.expired();
 }
 
-std::shared_ptr<Object3D> UIState::SelectedObject() const
+bool UIState::IsSelected(const std::shared_ptr<Object3D>& object) const
 {
-	return HasSelection() ? (*sceneObjects)[static_cast<size_t>(selectedIndex)] : nullptr;
+	return object != nullptr && object == selection.lock();
 }
 
-void UIState::ValidateSelection()
+void UIState::Select(const std::shared_ptr<Object3D>& object)
 {
-	if (selectedIndex >= static_cast<int>(SceneObjectCount()))
-		selectedIndex = -1;
+	const std::shared_ptr<Object3D> previous = selection.lock();
+	if (previous == object)
+		return;
+
+	if (previous)
+		previous->OnSelected(false);
+
+	selection = object;
+
+	if (object)
+		object->OnSelected(true);
 }

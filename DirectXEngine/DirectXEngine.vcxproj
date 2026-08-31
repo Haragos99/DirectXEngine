@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\Scene\Skeleton;$(SolutionDir)DirectXEngine\src\Scene\Skinning;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -169,6 +169,14 @@
     <ClCompile Include="src\Scene\Gizmos\movegizmo.cpp" />
     <ClCompile Include="src\Scene\Gizmos\scalegizmo.cpp" />
     <ClCompile Include="src\Scene\Gizmos\gizmocontroller.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\joint.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\jointhandle.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\bone.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\skeletonpose.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\skeletongeometry.cpp" />
+    <ClCompile Include="src\Scene\Skeleton\skeleton.cpp" />
+    <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
+    <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
@@ -182,6 +190,7 @@
     <ClCompile Include="src\UI\Sections\transformmodesection.cpp" />
     <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp" />
     <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp" />
+    <ClCompile Include="src\UI\Sections\skeletonsection.cpp" />
     <ClCompile Include="src\UI\Sections\splatsettingssection.cpp" />
     <ClCompile Include="src\UI\Sections\viewportsection.cpp" />
     <ClCompile Include="src\Core\windowapp.cpp" />
@@ -235,6 +244,15 @@
     <ClInclude Include="src\Scene\Gizmos\movegizmo.h" />
     <ClInclude Include="src\Scene\Gizmos\scalegizmo.h" />
     <ClInclude Include="src\Scene\Gizmos\gizmocontroller.h" />
+    <ClInclude Include="src\Scene\Skeleton\joint.h" />
+    <ClInclude Include="src\Scene\Skeleton\jointhandle.h" />
+    <ClInclude Include="src\Scene\Skeleton\bone.h" />
+    <ClInclude Include="src\Scene\Skeleton\skeletonpose.h" />
+    <ClInclude Include="src\Scene\Skeleton\skeletongeometry.h" />
+    <ClInclude Include="src\Scene\Skeleton\skeleton.h" />
+    <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h" />
+    <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
+    <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />
@@ -249,6 +267,7 @@
     <ClInclude Include="src\UI\Sections\transformmodesection.h" />
     <ClInclude Include="src\UI\Sections\sceneoutlinersection.h" />
     <ClInclude Include="src\UI\Sections\objectpropertiessection.h" />
+    <ClInclude Include="src\UI\Sections\skeletonsection.h" />
     <ClInclude Include="src\UI\Sections\splatsettingssection.h" />
     <ClInclude Include="src\UI\Sections\viewportsection.h" />
     <ClInclude Include="src\Scene\vertex.h" />
@@ -310,6 +329,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="shaders\GizmoPixelShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     </FxCompile>

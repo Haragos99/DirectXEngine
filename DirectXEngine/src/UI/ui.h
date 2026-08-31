@@ -8,8 +8,10 @@
 
 #include "ipanelsection.h"
 #include "uistate.h"
+#include "Sections/sceneoutlinersection.h"
 
 class ImportSection;
+class SkeletonSection;
 
 // Owns the Dear ImGui lifecycle (Win32 + DX11 backends) and composes the control
 // panel out of IPanelSections. It holds no renderer resources and draws no
@@ -21,6 +23,7 @@ public:
     ~UIPanel();
 
     using ImportModelCallback = std::function<void(const std::wstring&)>;
+    using CreateSkeletonCallback = std::function<void()>;
 
     void Init(HWND hwnd, ID3D11Device* device, ID3D11DeviceContext* context);
     void Shutdown();
@@ -37,12 +40,14 @@ public:
     bool  RequestedRenderModeChange() { bool v = state.renderModeChangeRequested; state.renderModeChangeRequested = false; return v; }
     const float* GetClearColor() const { return state.clearColor; }
     void SetImportModelCallback(ImportModelCallback callback);
+    void SetCreateSkeletonCallback(CreateSkeletonCallback callback);
+    void SetReparentCallback(SceneOutlinerSection::ReparentCallback callback);
 
-    // Selection query. Returns -1 when no scene object is selected.
-    int  GetSelectedIndex() const { return state.selectedIndex; }
-    bool HasSelection() const { return state.selectedIndex >= 0; }
-    // Set the selected object (e.g. from viewport picking). Pass -1 to clear.
-    void SetSelectedIndex(int index) { state.selectedIndex = index; }
+    // Selection query. Returns nullptr when nothing is selected.
+    std::shared_ptr<Object3D> GetSelectedObject() const { return state.SelectedObject(); }
+    bool HasSelection() const { return state.HasSelection(); }
+    // Set the selection (e.g. from viewport picking). Pass nullptr to clear.
+    void SetSelectedObject(const std::shared_ptr<Object3D>& object) { state.Select(object); }
 
     // Transform mode chosen in the main panel (Move or Scale). It is always
     // available, independently of whether an object is currently selected.
@@ -59,4 +64,6 @@ private:
     std::vector<std::unique_ptr<IPanelSection>> sections;
     std::unique_ptr<IPanelSection> propertiesSection; // own window, not part of `sections`
     ImportSection* importSection = nullptr; // owned by `sections`
+    SkeletonSection* skeletonSection = nullptr; // owned by `sections`
+    SceneOutlinerSection* outlinerSection = nullptr; // owned by `sections`
 };

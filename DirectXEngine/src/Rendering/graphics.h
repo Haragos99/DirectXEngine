@@ -24,15 +24,19 @@ public:
 	void Update(float time);
     void Resize(UINT width, UINT height);
     void ImportModel(const std::wstring& path);
-    // Attach the gizmo to sceenObjects[index], or hide it when index < 0.
-    void SetSelectedObject(int index);
+    // Drop a new skeleton, a bare root joint, into the scene.
+    void AddSkeleton();
+    // Attach the gizmo to an object, or hide it when the object is null.
+    void SetSelectedObject(const std::shared_ptr<Object3D>& object);
+    // Move `child` under `newParent`, or back to the scene root when it is null.
+    void Reparent(const std::shared_ptr<Object3D>& child, const std::shared_ptr<Object3D>& newParent);
     // Select which gizmo (translate or scale) the viewport manipulates with.
     void SetGizmoMode(GizmoMode mode);
-    // Ray-cast against every scene object and return the index of the nearest hit
-    // (-1 when nothing is hit). When provided, outHitPoint receives the world-space
-    // position of the hit.
-    int PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint = nullptr) const;
-	void removeSelectedObject(int index);
+    // Ray-cast against every scene object and return the nearest one hit
+    // (nullptr when nothing is hit). When provided, outHitPoint receives the
+    // world-space position of the hit.
+    std::shared_ptr<Object3D> PickObject(const Ray& ray, DirectX::XMFLOAT3* outHitPoint = nullptr) const;
+    void RemoveObject(const std::shared_ptr<Object3D>& object);
     ID3D11Device* GetDevice() const { return device.Get(); }
     ID3D11DeviceContext* GetContext() const { return context.Get(); }
     void changeRenderMode();
@@ -43,6 +47,8 @@ public:
     std::shared_ptr<GizmoController> gizmo;
 	Camera camera;
 private:
+    // Unlinks a top level object from the scene and hands its ownership over.
+    std::shared_ptr<Object3D> detachRoot(const Object3D* object);
     RenderMode currentRenderMode;
     Microsoft::WRL::ComPtr<ID3D11Device> device;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
