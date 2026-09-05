@@ -13,6 +13,7 @@
 #include <string>
 #include "raytracer.h"
 #include "ui.h"
+#include "isosurfacejob.h"
 class Graphics
 {
 public:
@@ -26,6 +27,13 @@ public:
     void ImportModel(const std::wstring& path);
     // Drop a new skeleton, a bare root joint, into the scene.
     void AddSkeleton();
+    // Mesh `volume` with marching cubes and add the extracted surface to the
+    // scene. `resolution` is the sample count along the volume's longest axis.
+    // The work runs in the background; the mesh appears once it finishes.
+    void AddIsoSurface(const std::shared_ptr<IVoxelSource>& volume, int resolution, float isoLevel);
+    bool IsMeshing() const { return meshingJob != nullptr; }
+    float GetMeshingProgress() const { return meshingJob ? meshingJob->GetProgress() : 0.0f; }
+    std::string GetMeshingLabel() const { return meshingJob ? meshingJob->GetLabel() : std::string(); }
     // Attach the gizmo to an object, or hide it when the object is null.
     void SetSelectedObject(const std::shared_ptr<Object3D>& object);
     // Move `child` under `newParent`, or back to the scene root when it is null.
@@ -49,6 +57,10 @@ public:
 private:
     // Unlinks a top level object from the scene and hands its ownership over.
     std::shared_ptr<Object3D> detachRoot(const Object3D* object);
+    // Turns a finished meshing job into a scene object, on the thread that owns
+    // the device context.
+    void collectIsoSurface();
+    std::unique_ptr<IsoSurfaceJob> meshingJob;
     RenderMode currentRenderMode;
     Microsoft::WRL::ComPtr<ID3D11Device> device;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;

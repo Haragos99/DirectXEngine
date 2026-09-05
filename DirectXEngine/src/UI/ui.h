@@ -8,7 +8,9 @@
 
 #include "ipanelsection.h"
 #include "uistate.h"
+#include "Sections/marchingcubessection.h"
 #include "Sections/sceneoutlinersection.h"
+#include "Sections/splatmeshingsection.h"
 
 class ImportSection;
 class SkeletonSection;
@@ -41,7 +43,11 @@ public:
     const float* GetClearColor() const { return state.clearColor; }
     void SetImportModelCallback(ImportModelCallback callback);
     void SetCreateSkeletonCallback(CreateSkeletonCallback callback);
+    void SetCreateIsoSurfaceCallback(CreateIsoSurfaceCallback callback);
     void SetReparentCallback(SceneOutlinerSection::ReparentCallback callback);
+
+    // Drives the meshing progress popup. Pushed in every frame by the engine.
+    void SetMeshingStatus(bool active, float progress, const std::string& label);
 
     // Selection query. Returns nullptr when nothing is selected.
     std::shared_ptr<Object3D> GetSelectedObject() const { return state.SelectedObject(); }
@@ -57,6 +63,8 @@ private:
     void BuildSections();
     // Inspector for the selected object, shown next to the control panel.
     void DrawPropertiesPanel();
+    // Modal shown while a mesh is being built in the background.
+    void DrawMeshingProgress();
 
     bool initialized = false;
     HWND hwnd = nullptr;
@@ -65,5 +73,7 @@ private:
     std::unique_ptr<IPanelSection> propertiesSection; // own window, not part of `sections`
     ImportSection* importSection = nullptr; // owned by `sections`
     SkeletonSection* skeletonSection = nullptr; // owned by `sections`
+    MarchingCubesSection* marchingCubesSection = nullptr; // owned by `sections`
+    SplatMeshingSection* splatMeshingSection = nullptr; // owned by `sections`
     SceneOutlinerSection* outlinerSection = nullptr; // owned by `sections`
 };

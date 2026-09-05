@@ -3,6 +3,7 @@
 #include "gizmomode.h"
 
 #include <memory>
+#include <string>
 #include <vector>
 
 // Everything the control panel sections read and write. UIPanel owns it and
@@ -14,6 +15,12 @@ struct UIState
 	GizmoMode gizmoMode = GizmoMode::Move;
 	float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	bool renderModeChangeRequested = false;
+
+	// Refreshed every frame from the background meshing job. Sections read it to
+	// disable the buttons that would queue a second one.
+	bool meshingActive = false;
+	float meshingProgress = 0.0f;
+	std::string meshingLabel;
 
 	size_t SceneObjectCount() const;
 	bool HasSelection() const;

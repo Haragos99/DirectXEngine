@@ -21,6 +21,10 @@ public:
 	size_t GetSplatCount() const { return splatCount; }
 	float GetSplatScale() const { return splatScale; }
 	void SetSplatScale(float scale) { splatScale = scale; }
+	// The uploaded cloud, kept on the CPU so it can be voxelised and meshed.
+	const std::vector<SplatInstance>& GetSplats() const { return splats; }
+	const DirectX::XMFLOAT3& GetBoundsMin() const { return cloudMin; }
+	const DirectX::XMFLOAT3& GetBoundsMax() const { return cloudMax; }
 	// What one instance represents, used for UI labels.
 	virtual const char* GetPrimitiveName() const { return "splats"; }
 
@@ -54,10 +58,14 @@ private:
 	SplatFrameBuffer BuildFrameConstants(const Camera& camera) const;
 
 	GaussianSplatShader* splatShader = nullptr; // owned by Object3D::shader
-	// Splat centres kept on the CPU purely to feed the per-frame depth sort.
+	// The cloud as uploaded, plus the centres pulled out contiguously for the
+	// per-frame depth sort.
+	std::vector<SplatInstance> splats;
 	std::vector<DirectX::XMFLOAT3> sortCenters;
 	std::vector<std::uint32_t> drawOrder;
 	SplatDepthSorter sorter;
+	DirectX::XMFLOAT3 cloudMin = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 cloudMax = { 0.0f, 0.0f, 0.0f };
 	float sceneExtent = 1.0f;
 	size_t splatCount = 0;
 	float splatScale = 1.0f;

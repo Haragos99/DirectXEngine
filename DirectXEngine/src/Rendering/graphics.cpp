@@ -4,6 +4,9 @@
 #include "meshmodel.h"
 #include "modelimportservice.h"
 #include "skeleton.h"
+#include "isosurfacemodel.h"
+#include "ivoxelsource.h"
+#include "marchingcubes.h"
 
 
 Graphics::Graphics(HWND hwnd, int width, int height) : camera(static_cast<float>(width) / static_cast<float>(height))
@@ -210,6 +213,7 @@ void Graphics::Clear(float r, float g, float b, float a)
 void Graphics::Update(float time)
 {
 	raytracer->Update(time);
+    collectIsoSurface();
     for (auto& object : sceenObjects)
     {
         object->UpdateHierarchy(time);
@@ -227,6 +231,36 @@ void Graphics::ImportModel(const std::wstring& path)
 void Graphics::AddSkeleton()
 {
     sceenObjects.push_back(std::make_shared<Skeleton>(device, context));
+}
+
+void Graphics::AddIsoSurface(const std::shared_ptr<IVoxelSource>& volume, int resolution, float isoLevel)
+{
+    // One job at a time; the panel disables its buttons while one is running.
+    if (!volume || meshingJob)
+        return;
+
+    meshingJob = std::make_unique<IsoSurfaceJob>(volume, resolution, isoLevel);
+}
+
+void Graphics::collectIsoSurface()
+{
+    if (!meshingJob || !meshingJob->IsFinished())
+        return;
+
+    MeshData surface = meshingJob->TakeMesh();
+    if (!surface.indices.empty())
+    {
+        auto mesh = std::make_shared<IsoSurfaceModel>(
+            std::move(surface),
+            meshingJob->GetMeshName(),
+            L"shaders\\VertexShader.hlsl",
+            L"shaders\\MeshPixelShader.hlsl",
+            device, context);
+        mesh->SetTransform(meshingJob->GetPlacement());
+        sceenObjects.push_back(std::move(mesh));
+    }
+
+    meshingJob.reset();
 }
 
 void Graphics::SetSelectedObject(const std::shared_ptr<Object3D>& object)

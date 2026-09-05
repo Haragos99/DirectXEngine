@@ -47,6 +47,7 @@ bool SplatCloudObject::Upload(
 	for (const SplatInstance& instance : instances)
 		sortCenters.push_back(instance.center);
 
+	splats = instances;
 	splatCount = instances.size();
 	CreateBounds(boundsMin, boundsMax);
 	return true;
@@ -54,6 +55,9 @@ bool SplatCloudObject::Upload(
 
 void SplatCloudObject::CreateBounds(const XMFLOAT3& boundsMin, const XMFLOAT3& boundsMax)
 {
+	cloudMin = boundsMin;
+	cloudMax = boundsMax;
+
 	// Parenthesised to dodge the windows.h max macro.
 	sceneExtent = (std::max)({ boundsMax.x - boundsMin.x, boundsMax.y - boundsMin.y, boundsMax.z - boundsMin.z, 1e-3f });
 

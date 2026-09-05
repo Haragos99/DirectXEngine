@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\Scene\Skeleton;$(SolutionDir)DirectXEngine\src\Scene\Skinning;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\Scene\Skeleton;$(SolutionDir)DirectXEngine\src\Scene\Skinning;$(SolutionDir)DirectXEngine\src\Scene\Voxel;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -175,6 +175,14 @@
     <ClCompile Include="src\Scene\Skeleton\skeletonpose.cpp" />
     <ClCompile Include="src\Scene\Skeleton\skeletongeometry.cpp" />
     <ClCompile Include="src\Scene\Skeleton\skeleton.cpp" />
+    <ClCompile Include="src\Scene\Voxel\spherefield.cpp" />
+    <ClCompile Include="src\Scene\Voxel\voxelgrid.cpp" />
+    <ClCompile Include="src\Scene\Voxel\scalarfieldsampler.cpp" />
+    <ClCompile Include="src\Scene\Voxel\marchingcubestables.cpp" />
+    <ClCompile Include="src\Scene\Voxel\marchingcubes.cpp" />
+    <ClCompile Include="src\Scene\Voxel\splatdensityvolume.cpp" />
+    <ClCompile Include="src\Scene\Voxel\isosurfacejob.cpp" />
+    <ClCompile Include="src\Scene\Voxel\isosurfacemodel.cpp" />
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
@@ -191,6 +199,8 @@
     <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp" />
     <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp" />
     <ClCompile Include="src\UI\Sections\skeletonsection.cpp" />
+    <ClCompile Include="src\UI\Sections\marchingcubessection.cpp" />
+    <ClCompile Include="src\UI\Sections\splatmeshingsection.cpp" />
     <ClCompile Include="src\UI\Sections\splatsettingssection.cpp" />
     <ClCompile Include="src\UI\Sections\viewportsection.cpp" />
     <ClCompile Include="src\Core\windowapp.cpp" />
@@ -250,6 +260,18 @@
     <ClInclude Include="src\Scene\Skeleton\skeletonpose.h" />
     <ClInclude Include="src\Scene\Skeleton\skeletongeometry.h" />
     <ClInclude Include="src\Scene\Skeleton\skeleton.h" />
+    <ClInclude Include="src\Scene\Voxel\iscalarfield.h" />
+    <ClInclude Include="src\Scene\Voxel\ivoxelsource.h" />
+    <ClInclude Include="src\Scene\Voxel\progressreporter.h" />
+    <ClInclude Include="src\Scene\Voxel\isosurfacejob.h" />
+    <ClInclude Include="src\Scene\Voxel\scalarfieldvolume.h" />
+    <ClInclude Include="src\Scene\Voxel\splatdensityvolume.h" />
+    <ClInclude Include="src\Scene\Voxel\spherefield.h" />
+    <ClInclude Include="src\Scene\Voxel\voxelgrid.h" />
+    <ClInclude Include="src\Scene\Voxel\scalarfieldsampler.h" />
+    <ClInclude Include="src\Scene\Voxel\marchingcubestables.h" />
+    <ClInclude Include="src\Scene\Voxel\marchingcubes.h" />
+    <ClInclude Include="src\Scene\Voxel\isosurfacemodel.h" />
     <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h" />
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
@@ -268,6 +290,8 @@
     <ClInclude Include="src\UI\Sections\sceneoutlinersection.h" />
     <ClInclude Include="src\UI\Sections\objectpropertiessection.h" />
     <ClInclude Include="src\UI\Sections\skeletonsection.h" />
+    <ClInclude Include="src\UI\Sections\marchingcubessection.h" />
+    <ClInclude Include="src\UI\Sections\splatmeshingsection.h" />
     <ClInclude Include="src\UI\Sections\splatsettingssection.h" />
     <ClInclude Include="src\UI\Sections\viewportsection.h" />
     <ClInclude Include="src\Scene\vertex.h" />

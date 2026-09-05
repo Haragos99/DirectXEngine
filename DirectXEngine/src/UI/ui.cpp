@@ -1,10 +1,12 @@
 #include "ui.h"
 
 #include "Sections/importsection.h"
+#include "Sections/marchingcubessection.h"
 #include "Sections/objectpropertiessection.h"
 #include "Sections/sceneoutlinersection.h"
 #include "Sections/skeletonsection.h"
 #include "Sections/splatsettingssection.h"
+#include "Sections/splatmeshingsection.h"
 #include "Sections/transformmodesection.h"
 #include "Sections/viewportsection.h"
 
@@ -33,11 +35,19 @@ void UIPanel::BuildSections()
     auto outliner = std::make_unique<SceneOutlinerSection>();
     outlinerSection = outliner.get();
 
+    auto marchingCubes = std::make_unique<MarchingCubesSection>();
+    marchingCubesSection = marchingCubes.get();
+
+    auto splatMeshing = std::make_unique<SplatMeshingSection>();
+    splatMeshingSection = splatMeshing.get();
+
     sections.push_back(std::move(import));
     sections.push_back(std::make_unique<TransformModeSection>());
     sections.push_back(std::move(outliner));
     sections.push_back(std::move(skeleton));
+    sections.push_back(std::move(marchingCubes));
     sections.push_back(std::make_unique<SplatSettingsSection>());
+    sections.push_back(std::move(splatMeshing));
     sections.push_back(std::make_unique<ViewportSection>());
 
     propertiesSection = std::make_unique<ObjectPropertiesSection>();
@@ -53,9 +63,22 @@ void UIPanel::SetCreateSkeletonCallback(CreateSkeletonCallback callback)
     skeletonSection->SetCreateCallback(std::move(callback));
 }
 
+void UIPanel::SetCreateIsoSurfaceCallback(CreateIsoSurfaceCallback callback)
+{
+    marchingCubesSection->SetCreateCallback(callback);
+    splatMeshingSection->SetCreateCallback(std::move(callback));
+}
+
 void UIPanel::SetReparentCallback(SceneOutlinerSection::ReparentCallback callback)
 {
     outlinerSection->SetReparentCallback(std::move(callback));
+}
+
+void UIPanel::SetMeshingStatus(bool active, float progress, const std::string& label)
+{
+    state.meshingActive = active;
+    state.meshingProgress = progress;
+    state.meshingLabel = label;
 }
 
 void UIPanel::Init(HWND _hwnd, ID3D11Device* device, ID3D11DeviceContext* context)
@@ -123,6 +146,7 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
     ImGui::End();
 
     DrawPropertiesPanel();
+    DrawMeshingProgress();
 
     state.sceneObjects = nullptr;
 }
@@ -135,6 +159,29 @@ void UIPanel::DrawPropertiesPanel()
     ImGui::Begin(propertiesSection->GetTitle());
     propertiesSection->Draw(state);
     ImGui::End();
+}
+
+void UIPanel::DrawMeshingProgress()
+{
+    static constexpr const char* kPopupId = "Building mesh";
+
+    if (state.meshingActive && !ImGui::IsPopupOpen(kPopupId))
+        ImGui::OpenPopup(kPopupId);
+
+    const ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+
+    if (!ImGui::BeginPopupModal(kPopupId, nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings))
+        return;
+
+    ImGui::TextUnformatted(state.meshingLabel.c_str());
+    ImGui::ProgressBar(state.meshingProgress, ImVec2(280.0f, 0.0f));
+
+    // The job is collected by the renderer, so the popup just waits it out.
+    if (!state.meshingActive)
+        ImGui::CloseCurrentPopup();
+
+    ImGui::EndPopup();
 }
 
 void UIPanel::EndFrame()

@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "ivoxelsource.h"
 #include <cstdio>
 #include <cmath>
 
@@ -11,6 +12,9 @@ Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"Direc
 	});
 	ui.SetCreateSkeletonCallback([this]() {
 		graphics.AddSkeleton();
+	});
+	ui.SetCreateIsoSurfaceCallback([this](std::shared_ptr<IVoxelSource> volume, int resolution, float isoLevel) {
+		graphics.AddIsoSurface(volume, resolution, isoLevel);
 	});
 	ui.SetReparentCallback([this](std::shared_ptr<Object3D> child, std::shared_ptr<Object3D> newParent) {
 		graphics.Reparent(child, newParent);
@@ -105,6 +109,7 @@ void Engine::RenderUI()
 {
 	// ImGui overlay
 	ui.BeginFrame();
+	ui.SetMeshingStatus(graphics.IsMeshing(), graphics.GetMeshingProgress(), graphics.GetMeshingLabel());
 	ui.DrawTestPanel(graphics.sceenObjects);
 	if (ui.RequestedRenderModeChange())
 	{
