@@ -68,6 +68,15 @@ public:
 	// Called when this object becomes, or stops being, the editor selection.
 	virtual void OnSelected(bool /*selected*/) {}
 
+	DirectX::XMMATRIX GetWorldMatrix() const { return world; }
+	// Pixel shader this object is drawn with; swapped for debug views.
+	const std::wstring& GetPixelShaderPath() const;
+	void SetPixelShader(const std::wstring& path);
+	// Rest vertices a skeleton may deform, or null for objects that cannot be skinned.
+	virtual const std::vector<VertexData>* GetSkinVertices() const { return nullptr; }
+	// Draws from `buffer` instead of this object's own vertices; null restores them.
+	void SetDeformedVertices(ID3D11Buffer* buffer);
+
 	// Ray/object intersection test in world space (broad-phase, oriented bounding box).
 	// Returns true on a hit and writes the distance from the ray origin to outDistance.
 	virtual bool Intersect(const Ray& ray, float& outDistance);

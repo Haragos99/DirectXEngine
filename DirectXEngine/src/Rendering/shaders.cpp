@@ -153,12 +153,19 @@ void Shader::createConstantBuffer()
 }
 
 
+void Shader::setPixelShader(const std::wstring& path)
+{
+	loadPixelShader(path);
+	pixelShaderName = path;
+}
+
 void Shader::renderDraw(MatrixBuffer& mb, LightBuffer& lightData)
 {
 	UINT stride = sizeof(VertexData);
 	UINT offset = 0;
+	ID3D11Buffer* const vertices = overriddenVertexBuffer ? overriddenVertexBuffer.Get() : vertexBuffer.Get();
 	// Bind the vertex buffer to the pipeline's Input Assembler stage
-	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	context->IASetVertexBuffers(0, 1, &vertices, &stride, &offset);
 	// Bind the index buffer to the pipeline's Input Assembler stage
 	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	// Bind the input layout to the pipeline's Input Assembler stage

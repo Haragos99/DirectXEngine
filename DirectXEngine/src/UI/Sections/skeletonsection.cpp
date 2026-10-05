@@ -1,7 +1,5 @@
 #include "skeletonsection.h"
-#include "dualquaternionskinning.h"
 #include "jointhandle.h"
-#include "linearblendskinning.h"
 #include "skeleton.h"
 
 #include "imgui.h"
@@ -33,32 +31,14 @@ void SkeletonSection::Draw(UIState& state)
 		return;
 	}
 
-	DrawSkinningTechnique(*skeleton);
+	// With the rig itself selected, the new joint grows from the root.
+	JointHandle* joint = SelectedJoint(state);
+	const int parentJoint = joint ? joint->GetJointId() : 0;
 
-	if (JointHandle* joint = SelectedJoint(state))
-	{
-		if (ImGui::Button("Add child joint"))
-			state.Select(skeleton->AddJoint(joint->GetJointId()));
-		ImGui::SameLine();
-	}
-	else
-	{
-		ImGui::TextDisabled("Pick a joint to grow the rig or to drag it with the gizmo.");
-	}
+	if (ImGui::Button("Add child joint"))
+		state.Select(skeleton->AddJoint(parentJoint));
+	ImGui::SameLine();
 
 	if (ImGui::Button("Reset pose"))
 		skeleton->ResetPose();
-}
-
-void SkeletonSection::DrawSkinningTechnique(Skeleton& skeleton)
-{
-	if (!ImGui::BeginCombo("Skinning", skeleton.GetSkinningTechnique()->GetName()))
-		return;
-
-	if (ImGui::Selectable("Linear Blend (LBS)"))
-		skeleton.SetSkinningTechnique(std::make_shared<LinearBlendSkinning>());
-	if (ImGui::Selectable("Dual Quaternion (DQS)"))
-		skeleton.SetSkinningTechnique(std::make_shared<DualQuaternionSkinning>());
-
-	ImGui::EndCombo();
 }

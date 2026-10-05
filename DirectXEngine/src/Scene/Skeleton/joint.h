@@ -27,7 +27,19 @@ public:
 	// Pose rotation around the joint origin, as pitch/yaw/roll in radians.
 	const DirectX::XMFLOAT3& GetRotation() const { return rotation; }
 	void SetRotation(const DirectX::XMFLOAT3& eulerRadians) { rotation = eulerRadians; }
-	void ResetPose() { rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); }
+
+	// Translation the pose adds on top of the rest offset. Kept apart from the
+	// offset so moving a joint deforms a bound mesh instead of re-rigging it.
+	const DirectX::XMFLOAT3& GetPoseTranslation() const { return poseTranslation; }
+	void SetPoseTranslation(const DirectX::XMFLOAT3& parentSpaceDelta) { poseTranslation = parentSpaceDelta; }
+	// Where the joint sits in its parent right now, rest plus pose.
+	DirectX::XMFLOAT3 GetTranslation() const;
+
+	void ResetPose()
+	{
+		rotation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		poseTranslation = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+	}
 
 	// Placement inside the parent: rotate around the joint, then move out to
 	// the bind offset, so a rotation carries every descendant with it.
@@ -41,5 +53,6 @@ private:
 	int parentId = kNoParent;
 	std::vector<int> children;
 	DirectX::XMFLOAT3 bindOffset{ 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 poseTranslation{ 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 rotation{ 0.0f, 0.0f, 0.0f };
 };

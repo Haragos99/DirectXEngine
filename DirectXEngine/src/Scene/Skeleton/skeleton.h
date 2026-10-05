@@ -2,11 +2,11 @@
 #include "object3d.h"
 
 #include "bone.h"
-#include "iskinningtechnique.h"
 #include "joint.h"
 #include "jointhandle.h"
 #include "skeletongeometry.h"
 #include "skeletonpose.h"
+#include "skinningcontroller.h"
 
 #include <memory>
 #include <vector>
@@ -32,19 +32,29 @@ public:
 	// Joint access used by the handles.
 	bool IsValidJoint(int jointId) const;
 	const Joint& GetJoint(int jointId) const;
+	size_t GetJointCount() const { return joints.size(); }
+	const std::vector<Bone>& GetBones() const { return bones; }
 	const DirectX::XMFLOAT4X4& GetJointGlobalMatrix(int jointId) const;
 	DirectX::XMFLOAT3 GetJointWorldPosition(int jointId) const;
 	void SetJointRotation(int jointId, const DirectX::XMFLOAT3& eulerRadians);
 	void SetJointOffset(int jointId, const DirectX::XMFLOAT3& parentSpaceOffset);
+	// Places a joint inside its parent. While the rig is still unbound this
+	// reshapes the rest pose; once a mesh is bound it poses the joint instead,
+	// which is what makes the mesh deform.
+	void SetJointTranslation(int jointId, const DirectX::XMFLOAT3& parentSpaceTranslation);
 	// Moves a joint by a world space delta, as dragged on the gizmo.
 	void MoveJoint(int jointId, const DirectX::XMFLOAT3& worldDelta);
 	// Joint drawn in the selection colour. -1 clears the highlight.
 	void SetSelectedJoint(int jointId);
+	// Selecting the rig is selecting its root joint.
+	void OnSelected(bool selected) override;
 
-	// How the rig will deform a bound mesh once skinning exists.
-	void SetSkinningTechnique(std::shared_ptr<ISkinningTechnique> technique);
-	const std::shared_ptr<ISkinningTechnique>& GetSkinningTechnique() const { return skinningTechnique; }
-	// One matrix per joint (global * inverse bind): the palette a skinning
+	// Meshes bound to this rig are deformed through here.
+	SkinningController& GetSkinning() { return skinning; }
+	int GetSkeletonNumber() const { return skeletonNumber; }
+	// Joint placement in the rest pose, which is what a mesh is bound against.
+	const std::vector<DirectX::XMFLOAT4X4>& GetBindGlobals() const { return pose.GetBindGlobals(); }
+	// One matrix per joint (inverse bind * global): the palette a skinning
 	// technique multiplies the bound vertices with.
 	const std::vector<DirectX::XMFLOAT4X4>& GetSkinningMatrices() const;
 
@@ -62,13 +72,15 @@ private:
 	// The rest pose is what the joint offsets describe with no rotation, so it
 	// has to be recaptured whenever the hierarchy or an offset changes.
 	void RecaptureBindPose();
+	bool HasBoundMesh() const;
 
 	std::vector<Joint> joints;
 	std::vector<Bone> bones;
 	std::vector<std::shared_ptr<JointHandle>> jointHandles;
 	SkeletonPose pose;
 	SkeletonGeometry geometry;
-	std::shared_ptr<ISkinningTechnique> skinningTechnique;
+	SkinningController skinning;
+	int skeletonNumber = 0;
 	int selectedJoint = -1;
 	bool poseDirty = false;
 };

@@ -37,6 +37,12 @@ public:
 		}
 	}
 	void createInexxBuffer(std::vector<UINT> indices);
+	// Swaps just the pixel shader, for debug views like skin weights.
+	const std::wstring& getPixelShaderPath() const { return pixelShaderName; }
+	void setPixelShader(const std::wstring& path);
+	// Draws from a buffer produced elsewhere, e.g. a skinning dispatch.
+	// Passing null goes back to this shader's own vertex buffer.
+	void overrideVertexBuffer(Microsoft::WRL::ComPtr<ID3D11Buffer> buffer) { overriddenVertexBuffer = buffer; }
 	void createRasterize();
 	void createConstantBuffer();
 	void creaetLightBuffer();
@@ -55,6 +61,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> lightBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> overriddenVertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> solidRS;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> wireframeRS;
 private:

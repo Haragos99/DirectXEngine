@@ -29,14 +29,14 @@ Transform JointHandle::GetTransform() const
 	const Joint& joint = skeleton.GetJoint(jointId);
 
 	Transform jointTransform;
-	jointTransform.translation = joint.GetBindOffset();
+	jointTransform.translation = joint.GetTranslation();
 	jointTransform.rotation = joint.GetRotation();
 	return jointTransform;
 }
 
 void JointHandle::SetTransform(const Transform& newTransform)
 {
-	skeleton.SetJointOffset(jointId, newTransform.translation);
+	skeleton.SetJointTranslation(jointId, newTransform.translation);
 	skeleton.SetJointRotation(jointId, newTransform.rotation);
 }
 

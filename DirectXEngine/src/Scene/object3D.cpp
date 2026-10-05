@@ -94,6 +94,24 @@ void Object3D::setWorld(DirectX::FXMMATRIX newWorld)
 		child->rebuildWorld();
 }
 
+void Object3D::SetDeformedVertices(ID3D11Buffer* buffer)
+{
+	if (shader)
+		shader->overrideVertexBuffer(buffer);
+}
+
+const std::wstring& Object3D::GetPixelShaderPath() const
+{
+	static const std::wstring none;
+	return shader ? shader->getPixelShaderPath() : none;
+}
+
+void Object3D::SetPixelShader(const std::wstring& path)
+{
+	if (shader && !path.empty())
+		shader->setPixelShader(path);
+}
+
 void Object3D::AttachChild(std::shared_ptr<Object3D> child)
 {
 	if (!child || child.get() == this || IsDescendantOf(child.get()))

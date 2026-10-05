@@ -5,6 +5,7 @@
 #include "Sections/objectpropertiessection.h"
 #include "Sections/sceneoutlinersection.h"
 #include "Sections/skeletonsection.h"
+#include "Sections/skinbindingsection.h"
 #include "Sections/splatsettingssection.h"
 #include "Sections/splatmeshingsection.h"
 #include "Sections/transformmodesection.h"
@@ -45,6 +46,7 @@ void UIPanel::BuildSections()
     sections.push_back(std::make_unique<TransformModeSection>());
     sections.push_back(std::move(outliner));
     sections.push_back(std::move(skeleton));
+    sections.push_back(std::make_unique<SkinBindingSection>());
     sections.push_back(std::move(marchingCubes));
     sections.push_back(std::make_unique<SplatSettingsSection>());
     sections.push_back(std::move(splatMeshing));

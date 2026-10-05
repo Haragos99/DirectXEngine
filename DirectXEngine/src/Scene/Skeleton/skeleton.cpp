@@ -1,5 +1,4 @@
 #include "skeleton.h"
-#include "linearblendskinning.h"
 
 using namespace DirectX;
 
@@ -7,18 +6,21 @@ namespace
 {
 	// Where a freshly added joint appears relative to its parent.
 	const XMFLOAT3 kNewJointOffset(0.0f, 0.4f, 0.0f);
+
+	// Numbers every rig apart, so the outliner and the bind list stay unambiguous.
+	int nextSkeletonNumber = 1;
 }
 
 Skeleton::Skeleton(Microsoft::WRL::ComPtr<ID3D11Device> _device,
                    Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context)
-	: Object3D(_device, _context)
+	: Object3D(_device, _context), skinning(*this, _device, _context)
 {
 	joints.emplace_back("Root", 0, Joint::kNoParent, XMFLOAT3(0.0f, 0.0f, 0.0f));
-	skinningTechnique = std::make_shared<LinearBlendSkinning>();
 
 	RecaptureBindPose();
 	CreateRenderResources();
-	name = "Skeleton";
+	skeletonNumber = nextSkeletonNumber++;
+	name = "Skeleton " + std::to_string(skeletonNumber);
 }
 
 void Skeleton::CreateRenderResources()
@@ -60,6 +62,8 @@ void Skeleton::Update(float /*time*/)
 	EnsureJointHandles();
 	RefreshIfDirty();
 	SyncJointHandles();
+	// After the handles, so a mesh parented to a joint has its world matrix up to date.
+	skinning.Update();
 }
 
 // A handle needs the skeleton to be owned by a shared_ptr already, so handles
@@ -68,21 +72,32 @@ void Skeleton::EnsureJointHandles()
 {
 	for (size_t id = jointHandles.size(); id < joints.size(); ++id)
 	{
+		// The skeleton object is the root joint, so joint 0 needs no proxy of its
+		// own. The slot is still filled to keep handles indexed by joint id.
+		if (joints[id].IsRoot())
+		{
+			jointHandles.push_back(nullptr);
+			continue;
+		}
+
 		auto handle = std::make_shared<JointHandle>(*this, static_cast<int>(id));
 		jointHandles.push_back(handle);
 
 		const int parentId = joints[id].GetParentId();
-		if (parentId == Joint::kNoParent)
-			AttachChild(handle);
-		else
+		if (jointHandles[parentId])
 			jointHandles[parentId]->AttachChild(handle);
+		else
+			AttachChild(handle);
 	}
 }
 
 void Skeleton::SyncJointHandles()
 {
 	for (const std::shared_ptr<JointHandle>& handle : jointHandles)
-		handle->SyncToJoint(world);
+	{
+		if (handle)
+			handle->SyncToJoint(world);
+	}
 }
 
 void Skeleton::RefreshIfDirty()
@@ -103,6 +118,8 @@ void Skeleton::RecaptureBindPose()
 	pose.CaptureBindPose(joints);
 	pose.Evaluate(joints);
 	poseDirty = true;
+	// A different rest pose means the bound weights no longer describe this rig.
+	skinning.RebindAll();
 }
 
 bool Skeleton::IsValidJoint(int jointId) const
@@ -153,8 +170,38 @@ void Skeleton::SetJointOffset(int jointId, const XMFLOAT3& parentSpaceOffset)
 	if (!IsValidJoint(jointId))
 		return;
 
+	const XMFLOAT3& current = joints[jointId].GetBindOffset();
+	if (current.x == parentSpaceOffset.x
+	 	&& current.y == parentSpaceOffset.y
+	 	&& current.z == parentSpaceOffset.z)
+		return; // unchanged rest pose, so the bound weights still describe this rig
+
 	joints[jointId].SetBindOffset(parentSpaceOffset);
 	RecaptureBindPose();
+}
+
+bool Skeleton::HasBoundMesh() const
+{
+	return skinning.GetBoundMeshCount() > 0;
+}
+
+void Skeleton::SetJointTranslation(int jointId, const XMFLOAT3& parentSpaceTranslation)
+{
+	if (!IsValidJoint(jointId))
+		return;
+
+	if (!HasBoundMesh())
+	{
+		// Still building the rig, so the drag decides where the joint rests.
+		SetJointOffset(jointId, parentSpaceTranslation);
+		return;
+	}
+
+	const XMFLOAT3& rest = joints[jointId].GetBindOffset();
+	joints[jointId].SetPoseTranslation(XMFLOAT3(parentSpaceTranslation.x - rest.x,
+	                                            parentSpaceTranslation.y - rest.y,
+	                                            parentSpaceTranslation.z - rest.z));
+	poseDirty = true;
 }
 
 void Skeleton::MoveJoint(int jointId, const XMFLOAT3& worldDelta)
@@ -173,9 +220,10 @@ void Skeleton::MoveJoint(int jointId, const XMFLOAT3& worldDelta)
 	const XMVECTOR localDelta = XMVector3TransformNormal(
 		XMLoadFloat3(&worldDelta), XMMatrixInverse(nullptr, parentToWorld));
 
-	XMFLOAT3 offset;
-	XMStoreFloat3(&offset, XMVectorAdd(XMLoadFloat3(&joint.GetBindOffset()), localDelta));
-	SetJointOffset(jointId, offset);
+	const XMFLOAT3 current = joint.GetTranslation();
+	XMFLOAT3 translation;
+	XMStoreFloat3(&translation, XMVectorAdd(XMLoadFloat3(&current), localDelta));
+	SetJointTranslation(jointId, translation);
 }
 
 void Skeleton::ResetPose()
@@ -196,6 +244,11 @@ void Skeleton::SetSelectedJoint(int jointId)
 	poseDirty = true; // the highlight colour is baked into the mesh
 }
 
+void Skeleton::OnSelected(bool selected)
+{
+	SetSelectedJoint(selected ? 0 : -1);
+}
+
 XMFLOAT3 Skeleton::GetJointWorldPosition(int jointId) const
 {
 	const XMFLOAT3 local = pose.GetJointPosition(jointId);
@@ -203,12 +256,6 @@ XMFLOAT3 Skeleton::GetJointWorldPosition(int jointId) const
 	XMFLOAT3 result;
 	XMStoreFloat3(&result, XMVector3Transform(XMLoadFloat3(&local), world));
 	return result;
-}
-
-void Skeleton::SetSkinningTechnique(std::shared_ptr<ISkinningTechnique> technique)
-{
-	if (technique)
-		skinningTechnique = std::move(technique);
 }
 
 const std::vector<XMFLOAT4X4>& Skeleton::GetSkinningMatrices() const

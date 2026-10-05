@@ -10,6 +10,7 @@ public:
 	void Update(float time) override;
 	void createTexturedVertex() override;
 	void createIndeces() override;
+	const std::vector<VertexData>* GetSkinVertices() const override { return &vertices; }
 	private:
 		Mesh mesh;
 };

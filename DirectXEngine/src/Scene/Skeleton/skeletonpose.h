@@ -25,12 +25,16 @@ public:
 	const DirectX::XMFLOAT4X4& GetGlobalMatrix(int jointId) const;
 	DirectX::XMFLOAT3 GetJointPosition(int jointId) const;
 
+	// Joint placement in the rest pose, which is where a mesh is bound.
+	const std::vector<DirectX::XMFLOAT4X4>& GetBindGlobals() const { return bind; }
+
 	// global * inverseBind per joint: exactly the palette a skinning pass
 	// uploads to the GPU.
 	const std::vector<DirectX::XMFLOAT4X4>& GetSkinningMatrices() const { return skinning; }
 
 private:
 	std::vector<DirectX::XMFLOAT4X4> globals;
+	std::vector<DirectX::XMFLOAT4X4> bind;
 	std::vector<DirectX::XMFLOAT4X4> inverseBind;
 	std::vector<DirectX::XMFLOAT4X4> skinning;
 };

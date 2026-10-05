@@ -213,7 +213,7 @@
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp">
+    <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Loaders\imodelloader.cpp">
@@ -301,6 +301,9 @@
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Sections\skeletonsection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\Sections\skinbindingsection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
     <ClCompile Include="src\UI\Sections\marchingcubessection.cpp">
@@ -413,10 +416,13 @@
     <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\skinweights.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h">
+    <ClInclude Include="src\Scene\Skinning\skinningcontroller.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skeleton\skeletonpose.h">
@@ -581,6 +587,9 @@
     <ClInclude Include="src\UI\Sections\skeletonsection.h">
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
+    <ClInclude Include="src\UI\Sections\skinbindingsection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
     <ClInclude Include="src\UI\Sections\marchingcubessection.h">
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
@@ -644,6 +653,18 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GaussianSplatPS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

@@ -184,7 +184,8 @@
     <ClCompile Include="src\Scene\Voxel\isosurfacejob.cpp" />
     <ClCompile Include="src\Scene\Voxel\isosurfacemodel.cpp" />
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
-    <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
+    <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp" />
+    <ClCompile Include="src\UI\Sections\skinbindingsection.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
@@ -273,8 +274,10 @@
     <ClInclude Include="src\Scene\Voxel\marchingcubes.h" />
     <ClInclude Include="src\Scene\Voxel\isosurfacemodel.h" />
     <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h" />
+    <ClInclude Include="src\Scene\Skinning\skinweights.h" />
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
-    <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
+    <ClInclude Include="src\Scene\Skinning\skinningcontroller.h" />
+    <ClInclude Include="src\UI\Sections\skinbindingsection.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />
@@ -373,6 +376,22 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -14,8 +14,8 @@ namespace
 void SkeletonPose::CaptureBindPose(const std::vector<Joint>& joints)
 {
 	inverseBind.assign(joints.size(), kIdentity);
+	bind.assign(joints.size(), kIdentity);
 
-	std::vector<XMFLOAT4X4> bind(joints.size(), kIdentity);
 	for (const Joint& joint : joints)
 	{
 		XMMATRIX global = joint.GetBindLocalMatrix();
