@@ -5,6 +5,17 @@
 
 #include "imgui.h"
 
+namespace
+{
+	const ImVec4 kActiveColor(0.45f, 0.90f, 0.45f, 1.0f);
+	const ImVec4 kPendingColor(0.90f, 0.78f, 0.35f, 1.0f);
+
+	constexpr SkinningController::Method kMethods[] = {
+		SkinningController::Method::LinearBlend,
+		SkinningController::Method::DualQuaternion,
+	};
+}
+
 bool SkinBindingSection::IsVisible(const UIState& state) const
 {
 	const std::shared_ptr<Object3D> selected = state.SelectedObject();
@@ -43,7 +54,22 @@ void SkinBindingSection::Draw(UIState& state)
 	if (selectedRig >= static_cast<int>(rigs.size()))
 		selectedRig = 0;
 
-	if (ImGui::BeginCombo("Skeleton", rigs[selectedRig]->GetName().c_str()))
+	// A mesh belongs to at most one rig, so the bound one is what we act on.
+	Skeleton* boundTo = nullptr;
+	for (const std::shared_ptr<Skeleton>& rig : rigs)
+	{
+		if (rig->GetSkinning().IsBound(*mesh))
+			boundTo = rig.get();
+	}
+
+	// Binding fixes the rig; until then it is whichever one is being picked.
+	Skeleton& target = boundTo ? *boundTo : *rigs[selectedRig];
+
+	if (boundTo != nullptr)
+	{
+		ImGui::Text("Skeleton: %s", boundTo->GetName().c_str());
+	}
+	else if (ImGui::BeginCombo("Skeleton", rigs[selectedRig]->GetName().c_str()))
 	{
 		for (int i = 0; i < static_cast<int>(rigs.size()); ++i)
 		{
@@ -53,28 +79,34 @@ void SkinBindingSection::Draw(UIState& state)
 		ImGui::EndCombo();
 	}
 
-	// A mesh belongs to at most one rig, so the bound one is what we act on.
-	Skeleton* boundTo = nullptr;
-	for (const std::shared_ptr<Skeleton>& rig : rigs)
+	SkinningController& skinning = target.GetSkinning();
+
+	// Offered before binding too, so the very first deform already uses the
+	// technique that was asked for.
+	if (ImGui::BeginCombo("Technique", skinning.GetMethodName()))
 	{
-		if (rig->GetSkinning().IsBound(*mesh))
-			boundTo = rig.get();
+		for (SkinningController::Method option : kMethods)
+		{
+			if (ImGui::Selectable(SkinningController::GetMethodName(option), skinning.GetMethod() == option))
+				skinning.SetMethod(option);
+		}
+		ImGui::EndCombo();
 	}
 
 	if (boundTo == nullptr)
 	{
+		ImGui::TextColored(kPendingColor, "Not bound - will animate with %s", skinning.GetMethodName());
 		if (ImGui::Button("Bind"))
-			rigs[selectedRig]->GetSkinning().BindMesh(mesh);
+			skinning.BindMesh(mesh);
 		return;
 	}
 
-	ImGui::Text("Bound to %s (%s)", boundTo->GetName().c_str(),
-	            boundTo->GetSkinning().GetMethodName());
+	ImGui::TextColored(kActiveColor, "Animating with %s", skinning.GetMethodName());
 
-	bool showWeights = boundTo->GetSkinning().GetShowWeights();
+	bool showWeights = skinning.GetShowWeights();
 	if (ImGui::Checkbox("Show weight influence", &showWeights))
-		boundTo->GetSkinning().SetShowWeights(showWeights);
+		skinning.SetShowWeights(showWeights);
 
 	if (ImGui::Button("Unbind"))
-		boundTo->GetSkinning().UnbindMesh(*mesh);
+		skinning.UnbindMesh(*mesh);
 }

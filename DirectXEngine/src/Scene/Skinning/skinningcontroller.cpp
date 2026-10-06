@@ -1,5 +1,6 @@
 #include "skinningcontroller.h"
 
+#include "dualquaternionskinning.h"
 #include "linearblendskinning.h"
 #include "object3d.h"
 #include "skeleton.h"
@@ -31,19 +32,23 @@ std::unique_ptr<ISkinningTechnique> SkinningController::CreateTechnique() const
 {
 	switch (method)
 	{
+	case Method::DualQuaternion:
+		return std::make_unique<DualQuaternionSkinning>(device, context);
 	case Method::LinearBlend:
 	default:
 		return std::make_unique<LinearBlendSkinning>(device, context);
 	}
 }
 
-const char* SkinningController::GetMethodName() const
+const char* SkinningController::GetMethodName(Method method)
 {
 	switch (method)
 	{
+	case Method::DualQuaternion:
+		return "Dual Quaternion (DQS)";
 	case Method::LinearBlend:
 	default:
-		return "Linear Blend";
+		return "Linear Blend (LBS)";
 	}
 }
 

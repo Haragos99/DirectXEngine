@@ -213,6 +213,9 @@
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp">
+      <Filter>Source Files\Scene\Skinning</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
@@ -420,6 +423,9 @@
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\skinningcontroller.h">
@@ -665,6 +671,9 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\DualQuaternionSkinningCS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

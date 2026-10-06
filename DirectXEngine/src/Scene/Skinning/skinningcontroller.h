@@ -15,6 +15,7 @@ public:
 	enum class Method
 	{
 		LinearBlend,
+		DualQuaternion,
 	};
 
 	SkinningController(Skeleton& _rig,
@@ -31,7 +32,9 @@ public:
 
 	void SetMethod(Method newMethod);
 	Method GetMethod() const { return method; }
-	const char* GetMethodName() const;
+	const char* GetMethodName() const { return GetMethodName(method); }
+	// Single source of the labels every panel shows.
+	static const char* GetMethodName(Method method);
 
 	// Draws every bound mesh coloured by the joint that drives it.
 	void SetShowWeights(bool show);
