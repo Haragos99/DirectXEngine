@@ -95,8 +95,7 @@ bool DualQuaternionSkinning::CreateOutput(const std::vector<VertexData>& restVer
 }
 
 bool DualQuaternionSkinning::Prepare(const std::vector<VertexData>& restVertices,
-                                     const std::vector<SkinWeights>& weights,
-                                     int joints)
+                                     const SkinWeightTable& weights)
 {
 	restBuffer.Reset();
 	restView.Reset();
@@ -111,18 +110,22 @@ bool DualQuaternionSkinning::Prepare(const std::vector<VertexData>& restVertices
 	vertexCount = 0;
 	jointCount = 0;
 
-	if (restVertices.empty() || restVertices.size() != weights.size() || joints <= 0)
+	if (restVertices.empty() || restVertices.size() != weights.VertexCount() || weights.JointCount() == 0)
 		return false;
 
 	if (!LoadShader())
 		return false;
 
 	const UINT count = static_cast<UINT>(restVertices.size());
+	const UINT joints = static_cast<UINT>(weights.JointCount());
+	// The table keeps readable per-vertex rows; the GPU needs one array.
+	const std::vector<float> flatWeights = weights.Flatten();
+
 	if (!CreateInput(restVertices.data(), sizeof(VertexData), count, restBuffer, restView))
 		return false;
-	if (!CreateInput(weights.data(), sizeof(SkinWeights), count, weightBuffer, weightView))
+	if (!CreateInput(flatWeights.data(), sizeof(float), count * joints, weightBuffer, weightView))
 		return false;
-	if (!CreateInput(nullptr, sizeof(DualQuaternion), static_cast<UINT>(joints), paletteBuffer, paletteView))
+	if (!CreateInput(nullptr, sizeof(DualQuaternion), joints, paletteBuffer, paletteView))
 		return false;
 	if (!CreateOutput(restVertices))
 		return false;
@@ -135,7 +138,7 @@ bool DualQuaternionSkinning::Prepare(const std::vector<VertexData>& restVertices
 		return false;
 
 	vertexCount = count;
-	jointCount = static_cast<UINT>(joints);
+	jointCount = joints;
 	dualQuaternions.resize(jointCount);
 
 	UpdateConstants();

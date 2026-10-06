@@ -12,8 +12,7 @@ public:
 	const char* GetName() const override { return "Linear Blend"; }
 
 	bool Prepare(const std::vector<VertexData>& restVertices,
-	             const std::vector<SkinWeights>& weights,
-	             int jointCount) override;
+	             const SkinWeightTable& weights) override;
 	void Deform(const std::vector<DirectX::XMFLOAT4X4>& palette) override;
 	void SetWeightDebug(bool enabled) override;
 	ID3D11Buffer* GetDeformedVertices() const override { return deformedVertices.Get(); }

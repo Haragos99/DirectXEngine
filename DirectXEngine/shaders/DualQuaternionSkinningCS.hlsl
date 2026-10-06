@@ -11,12 +11,6 @@ struct RestVertex
     float2 texcoord;
 };
 
-struct SkinWeight
-{
-    uint4 joints;
-    float4 weights;
-};
-
 // Rigid only: any scale in the palette was dropped on the CPU side.
 struct DualQuat
 {
@@ -25,7 +19,8 @@ struct DualQuat
 };
 
 StructuredBuffer<RestVertex> gRest : register(t0);
-StructuredBuffer<SkinWeight> gWeights : register(t1);
+// One weight per joint for every vertex, vertex major.
+StructuredBuffer<float> gWeights : register(t1);
 StructuredBuffer<DualQuat> gPalette : register(t2);
 RWByteAddressBuffer gOut : register(u0);
 
@@ -50,27 +45,33 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         return;
 
     const RestVertex rest = gRest[index];
-    const SkinWeight influence = gWeights[index];
-
-    // q and -q are the same rotation, so every quaternion has to be pulled into
-    // the same hemisphere as the first one or the blend takes the long way round.
-    const float4 pivot = gPalette[min(influence.joints[0], gJointCount - 1)].real;
+    const uint weightBase = index * gJointCount;
 
     float4 real = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 dual = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float total = 0.0f;
-    uint dominantJoint = influence.joints[0];
+    uint dominantJoint = 0;
     float dominantWeight = 0.0f;
 
-    [unroll]
-    for (uint i = 0; i < 4; ++i)
+    // q and -q are the same rotation, so every quaternion has to be pulled into
+    // the same hemisphere as the first contributing one or the blend takes the
+    // long way round.
+    float4 pivot = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    bool havePivot = false;
+
+    for (uint joint = 0; joint < gJointCount; ++joint)
     {
-        const float weight = influence.weights[i];
+        const float weight = gWeights[weightBase + joint];
         if (weight <= 0.0f)
             continue;
 
-        const uint joint = min(influence.joints[i], gJointCount - 1);
         const DualQuat dq = gPalette[joint];
+        if (!havePivot)
+        {
+            pivot = dq.real;
+            havePivot = true;
+        }
+
         const float signedWeight = (dot(pivot, dq.real) < 0.0f) ? -weight : weight;
 
         real += dq.real * signedWeight;

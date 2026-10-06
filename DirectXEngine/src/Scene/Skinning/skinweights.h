@@ -1,12 +1,37 @@
 #pragma once
-#include <cstdint>
+#include <cstddef>
+#include <vector>
 
-// Per-vertex joint influences. The layout mirrors SkinWeight in
-// LinearBlendSkinningCS.hlsl, so these 32 bytes must not change alone.
-struct SkinWeights
+
+class SkinWeightTable
 {
-	static constexpr int kMaxInfluences = 4;
+public:
+	void Resize(size_t vertexCount, size_t jointCount)
+	{
+		weights.assign(vertexCount, std::vector<float>(jointCount, 0.0f));
+		joints = jointCount;
+	}
 
-	uint32_t joints[kMaxInfluences]{ 0, 0, 0, 0 };
-	float weights[kMaxInfluences]{ 0.0f, 0.0f, 0.0f, 0.0f };
+	size_t VertexCount() const { return weights.size(); }
+	size_t JointCount() const { return joints; }
+	bool IsEmpty() const { return weights.empty() || joints == 0; }
+
+	std::vector<float>& operator[](size_t vertex) { return weights[vertex]; }
+	const std::vector<float>& operator[](size_t vertex) const { return weights[vertex]; }
+
+	// Row major, matching how gWeights is indexed in the skinning shaders:
+	// vertex v owns [v * jointCount, +jointCount).
+	std::vector<float> Flatten() const
+	{
+		std::vector<float> flat;
+		flat.reserve(weights.size() * joints);
+		for (const std::vector<float>& row : weights)
+			flat.insert(flat.end(), row.begin(), row.end());
+		return flat;
+	}
+
+private:
+	std::vector<std::vector<float>> weights;
+	// Kept separately so the joint count survives an empty table.
+	size_t joints = 0;
 };

@@ -74,13 +74,15 @@ void SkinningController::SetShowWeights(bool show)
 void SkinningController::SetMethod(Method newMethod)
 {
 	if (newMethod == method)
+	{
 		return;
+	}
 
 	method = newMethod;
 	for (BoundMesh& bound : boundMeshes)
 	{
 		bound.technique = CreateTechnique();
-		bound.technique->Prepare(bound.restVertices, bound.weights, static_cast<int>(bound.jointCount));
+		bound.technique->Prepare(bound.restVertices, bound.weights);
 
 		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
 		{
@@ -100,7 +102,9 @@ std::vector<SkinningController::BoneSamples> SkinningController::SampleBones() c
 		const int start = bone.GetStartJoint();
 		const int end = bone.GetEndJoint();
 		if (start >= static_cast<int>(bindGlobals.size()) || end >= static_cast<int>(bindGlobals.size()))
+		{
 			continue;
+		}
 
 		const XMVECTOR from = XMLoadFloat4x4(&bindGlobals[start]).r[3];
 		const XMVECTOR to = XMLoadFloat4x4(&bindGlobals[end]).r[3];
@@ -119,12 +123,14 @@ std::vector<SkinningController::BoneSamples> SkinningController::SampleBones() c
 	return samples;
 }
 
-std::vector<SkinWeights> SkinningController::CalculateWeights(const std::vector<VertexData>& restVertices,
-                                                    FXMMATRIX meshBindToRig) const
+SkinWeightTable SkinningController::CalculateWeights(const std::vector<VertexData>& restVertices,
+                                                     FXMMATRIX meshBindToRig) const
 {
 	const std::vector<BoneSamples> bones = SampleBones();
 
-	std::vector<SkinWeights> weights(restVertices.size());
+	SkinWeightTable weights;
+	weights.Resize(restVertices.size(), rig.GetJointCount());
+
 	for (size_t v = 0; v < restVertices.size(); ++v)
 	{
 		const XMVECTOR position = XMVector3Transform(XMLoadFloat3(&restVertices[v].position), meshBindToRig);
@@ -145,30 +151,37 @@ std::vector<SkinWeights> SkinningController::CalculateWeights(const std::vector<
 			}
 		}
 
-		weights[v].joints[0] = static_cast<uint32_t>(closestJoint);
-		weights[v].weights[0] = 1.0f;
+		if (closestJoint < static_cast<int>(weights.JointCount()))
+		{
+			weights[v][closestJoint] = 1.0f;
+		}
 	}
 	return weights;
 }
 
 bool SkinningController::Solve(BoundMesh& bound) const
 {
-	bound.jointCount = rig.GetJointCount();
-	if (bound.jointCount == 0 || bound.restVertices.empty())
+	if (rig.GetJointCount() == 0 || bound.restVertices.empty())
+	{
 		return false;
+	}
 
 	bound.weights = CalculateWeights(bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig));
-	return bound.technique->Prepare(bound.restVertices, bound.weights, static_cast<int>(bound.jointCount));
+	return bound.technique->Prepare(bound.restVertices, bound.weights);
 }
 
 bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 {
 	if (!mesh || IsBound(*mesh))
+	{
 		return false;
+	}
 
 	const std::vector<VertexData>* source = mesh->GetSkinVertices();
 	if (source == nullptr || source->empty())
+	{
 		return false;
+	}
 
 	BoundMesh bound;
 	bound.mesh = mesh;
@@ -178,11 +191,12 @@ bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 
 	// Where the mesh sits inside the rig at the moment of binding: everything
 	// the rig does later is measured against this.
-	XMStoreFloat4x4(&bound.meshBindToRig,
-		mesh->GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
+	XMStoreFloat4x4(&bound.meshBindToRig,mesh->GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
 
 	if (!Solve(bound))
+	{
 		return false;
+	}
 
 	mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
 	ApplyWeightView(bound, *mesh);
@@ -196,7 +210,9 @@ void SkinningController::UnbindMesh(const Object3D& mesh)
 	{
 		const std::shared_ptr<Object3D> bound = it->mesh.lock();
 		if (bound.get() != &mesh)
+		{
 			continue;
+		}
 
 		bound->SetDeformedVertices(nullptr);
 		bound->SetPixelShader(it->originalPixelShader);
@@ -243,8 +259,7 @@ void SkinningController::RebindAll()
 	}
 }
 
-void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& mesh,
-                            std::vector<XMFLOAT4X4>& palette) const
+void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& mesh, std::vector<XMFLOAT4X4>& palette) const
 {
 	const std::vector<XMFLOAT4X4>& poseMatrices = rig.GetSkinningMatrices();
 	const XMMATRIX meshBindToRig = XMLoadFloat4x4(&bound.meshBindToRig);
@@ -253,7 +268,9 @@ void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& me
 
 	palette.resize(poseMatrices.size());
 	for (size_t i = 0; i < poseMatrices.size(); ++i)
+	{
 		XMStoreFloat4x4(&palette[i], meshBindToRig * XMLoadFloat4x4(&poseMatrices[i]) * rigToMesh);
+	}
 }
 
 void SkinningController::Update()

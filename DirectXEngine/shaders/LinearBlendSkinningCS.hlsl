@@ -9,19 +9,14 @@ struct RestVertex
     float2 texcoord;
 };
 
-struct SkinWeight
-{
-    uint4 joints;
-    float4 weights;
-};
-
 struct JointMatrix
 {
     row_major float4x4 m;
 };
 
 StructuredBuffer<RestVertex> gRest : register(t0);
-StructuredBuffer<SkinWeight> gWeights : register(t1);
+// One weight per joint for every vertex, vertex major.
+StructuredBuffer<float> gWeights : register(t1);
 StructuredBuffer<JointMatrix> gPalette : register(t2);
 RWByteAddressBuffer gOut : register(u0);
 
@@ -41,22 +36,20 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         return;
 
     const RestVertex rest = gRest[index];
-    const SkinWeight influence = gWeights[index];
+    const uint weightBase = index * gJointCount;
 
     float3 position = float3(0.0f, 0.0f, 0.0f);
     float3 normal = float3(0.0f, 0.0f, 0.0f);
     float total = 0.0f;
-    uint dominantJoint = influence.joints[0];
+    uint dominantJoint = 0;
     float dominantWeight = 0.0f;
 
-    [unroll]
-    for (uint i = 0; i < 4; ++i)
+    for (uint joint = 0; joint < gJointCount; ++joint)
     {
-        const float weight = influence.weights[i];
+        const float weight = gWeights[weightBase + joint];
         if (weight <= 0.0f)
             continue;
 
-        const uint joint = min(influence.joints[i], gJointCount - 1);
         const float4x4 m = gPalette[joint].m;
 
         position += weight * mul(float4(rest.position, 1.0f), m).xyz;

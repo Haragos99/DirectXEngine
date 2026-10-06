@@ -52,9 +52,8 @@ private:
 	{
 		std::weak_ptr<Object3D> mesh;
 		std::vector<VertexData> restVertices; // mesh local space, as bound
-		std::vector<SkinWeights> weights;
+		SkinWeightTable weights;
 		DirectX::XMFLOAT4X4 meshBindToRig;
-		size_t jointCount = 0;
 		std::wstring originalPixelShader; // restored when the weight view goes off
 		std::unique_ptr<ISkinningTechnique> technique;
 	};
@@ -69,8 +68,8 @@ private:
 	std::unique_ptr<ISkinningTechnique> CreateTechnique() const;
 	std::vector<BoneSamples> SampleBones() const;
 	// Closest bone takes the whole vertex, as in the reference implementation.
-	std::vector<SkinWeights> CalculateWeights(const std::vector<VertexData>& restVertices,
-	                                          DirectX::FXMMATRIX meshBindToRig) const;
+	SkinWeightTable CalculateWeights(const std::vector<VertexData>& restVertices,
+	                                 DirectX::FXMMATRIX meshBindToRig) const;
 	bool Solve(BoundMesh& bound) const;
 	void ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const;
 	void BuildPalette(const BoundMesh& bound, const Object3D& mesh,

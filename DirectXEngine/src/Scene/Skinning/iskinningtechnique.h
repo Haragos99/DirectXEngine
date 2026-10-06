@@ -16,8 +16,7 @@ public:
 
 	// Uploads everything that stays constant while the mesh stays bound.
 	virtual bool Prepare(const std::vector<VertexData>& restVertices,
-	                     const std::vector<SkinWeights>& weights,
-	                     int jointCount) = 0;
+	                     const SkinWeightTable& weights) = 0;
 
 	// One matrix per joint, already expressed in the bound mesh's local space.
 	virtual void Deform(const std::vector<DirectX::XMFLOAT4X4>& palette) = 0;
