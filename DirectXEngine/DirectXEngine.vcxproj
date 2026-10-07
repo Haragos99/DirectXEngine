@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\Scene\Skeleton;$(SolutionDir)DirectXEngine\src\Scene\Skinning;$(SolutionDir)DirectXEngine\src\Scene\Voxel;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXEngine\src\Core;$(SolutionDir)DirectXEngine\src\Rendering;$(SolutionDir)DirectXEngine\src\Scene;$(SolutionDir)DirectXEngine\src\Scene\Loaders;$(SolutionDir)DirectXEngine\src\Scene\Gizmos;$(SolutionDir)DirectXEngine\src\Scene\Skeleton;$(SolutionDir)DirectXEngine\src\Scene\Skinning;$(SolutionDir)DirectXEngine\src\Scene\Voxel;$(SolutionDir)DirectXEngine\src\UI;$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;$(EigenIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)External\imgui;$(SolutionDir)External\imgui\backends;$(EigenIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,6 +184,7 @@
     <ClCompile Include="src\Scene\Voxel\isosurfacejob.cpp" />
     <ClCompile Include="src\Scene\Voxel\isosurfacemodel.cpp" />
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
+    <ClCompile Include="src\Scene\halfedgemesh.cpp" />
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
     <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp" />
     <ClCompile Include="src\UI\Sections\skinbindingsection.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="src\Rendering\envcube.h" />
     <ClInclude Include="src\Rendering\graphics.h" />
     <ClInclude Include="src\Core\keyboard.h" />
+    <ClInclude Include="src\Scene\halfedgemesh.h" />
     <ClInclude Include="src\Scene\mesh.h" />
     <ClInclude Include="src\Scene\meshmodel.h" />
     <ClInclude Include="src\Scene\gaussiansplatting.h" />

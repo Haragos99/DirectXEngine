@@ -1,4 +1,5 @@
 #pragma once
+#include "halfedgemesh.h"
 #include "imodelloader.h"
 #include <string>
 #include <vector>
@@ -21,10 +22,16 @@ public:
 	const std::vector<UINT>& GetIndices() const { return data.indices; }
 	const std::vector<FaceHandle>& GetFaces() const { return data.faces; }
 	const std::vector<DirectX::XMFLOAT3>& GetTangents() const { return tangents; }
+	// Connectivity, built once the geometry is in.
+	const HalfEdgeMesh& GetHalfEdge() const { return halfEdge; }
 
 	void ComputeTangents();
 
 private:
+	// Connectivity is rebuilt with the geometry, so it is never stale.
+	bool BuildTopology(bool loaded);
+
 	MeshData data;
+	HalfEdgeMesh halfEdge;
 	std::vector<DirectX::XMFLOAT3> tangents;
 };

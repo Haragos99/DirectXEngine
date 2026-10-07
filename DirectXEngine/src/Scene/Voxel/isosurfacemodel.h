@@ -21,10 +21,14 @@ public:
 
 	size_t GetTriangleCount() const { return data.indices.size() / 3; }
 
+	const std::vector<VertexData>* GetSkinVertices() const override { return &vertices; }
+	const HalfEdgeMesh* GetHalfEdgeMesh() const override { return &halfEdge; }
+
 protected:
 	void createTexturedVertex() override;
 	void createIndeces() override;
 
 private:
 	MeshData data;
+	HalfEdgeMesh halfEdge;
 };

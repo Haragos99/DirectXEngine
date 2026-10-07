@@ -10,6 +10,7 @@ IsoSurfaceModel::IsoSurfaceModel(MeshData meshData,
 {
 	createTexturedVertex();
 	createIndeces();
+	halfEdge.Build(vertices, indices);
 
 	texture->CreateSolidColorTexture({ 0.35f, 0.75f, 0.95f, 1.0f });
 	shader->createVertexBuffer(vertices);

@@ -213,6 +213,9 @@
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\halfedgemesh.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
@@ -418,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h">
       <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\halfedgemesh.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\skinweights.h">
       <Filter>Header Files\Scene\Skinning</Filter>

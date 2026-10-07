@@ -11,6 +11,7 @@ public:
 	void createTexturedVertex() override;
 	void createIndeces() override;
 	const std::vector<VertexData>* GetSkinVertices() const override { return &vertices; }
+	const HalfEdgeMesh* GetHalfEdgeMesh() const override { return &mesh.GetHalfEdge(); }
 	private:
 		Mesh mesh;
 };
