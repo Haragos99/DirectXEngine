@@ -1,6 +1,8 @@
-#include "boneheat.h"
+#include "boneheatweights.h"
 
 #include "halfedgemesh.h"
+
+#include <Eigen/Sparse>
 
 #include <algorithm>
 #include <cmath>
@@ -61,7 +63,8 @@ namespace
 	}
 }
 
-Eigen::SparseMatrix<double> BoneHeat::CreateLaplaceMatrix(const HalfEdgeMesh& mesh) const
+// Cotangent Laplacian of the welded mesh (BoneHeat::createLaplaceMatrix).
+static Eigen::SparseMatrix<double> CreateLaplaceMatrix(const HalfEdgeMesh& mesh)
 {
 	const int n = static_cast<int>(mesh.VertexCount());
 
@@ -97,7 +100,8 @@ Eigen::SparseMatrix<double> BoneHeat::CreateLaplaceMatrix(const HalfEdgeMesh& me
 	return laplace;
 }
 
-Eigen::SparseMatrix<double> BoneHeat::CreateDiagonalMatrix(const std::vector<double>& closestDistance) const
+// alpha / d^2 per welded vertex (BoneHeat::createDiagolaleMatrix).
+static Eigen::SparseMatrix<double> CreateDiagonalMatrix(const std::vector<double>& closestDistance, double alpha)
 {
 	const int n = static_cast<int>(closestDistance.size());
 
@@ -114,9 +118,10 @@ Eigen::SparseMatrix<double> BoneHeat::CreateDiagonalMatrix(const std::vector<dou
 	return diagonal;
 }
 
-void BoneHeat::CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagonal,
-                                       const Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>>& solver,
-                                       SkinWeightTable& welded) const
+// One solve per influence (BoneHeat::calculateOptimalWeights).
+static void CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagonal,
+                                    const Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>>& solver,
+                                    SkinWeightTable& welded)
 {
 	const int n = static_cast<int>(welded.VertexCount());
 	for (size_t influence = 0; influence < welded.InfluenceCount(); ++influence)
@@ -142,17 +147,32 @@ void BoneHeat::CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagon
 	}
 }
 
-bool BoneHeat::Execute(const HalfEdgeMesh& mesh,
-                       const std::vector<float>& closestDistance,
-                       SkinWeightTable& weights) const
+BoneHeatWeights::BoneHeatWeights()
+	: parameters{ { "Alpha", kDefaultAlpha, kMinAlpha, kMaxAlpha,
+	                "How hard the solve is pulled back to the closest-bone weights.\n"
+	                "Lower spreads the influence further over the surface.", true } }
 {
+}
+
+WeightSolveStatus BoneHeatWeights::Solve(const SkinBindContext& context, SkinWeightTable& weights)
+{
+	// The rigid binding is both the seed and what is left behind on failure.
+	std::vector<float> closestDistance;
+	const WeightSolveStatus seeded = seed.Solve(context, weights, closestDistance);
+	if (seeded != WeightSolveStatus::Ok)
+		return seeded;
+
+	// Without connectivity there is no surface to diffuse over.
+	if (context.topology == nullptr || context.topology->IsEmpty())
+		return WeightSolveStatus::NoTopology;
+
+	const HalfEdgeMesh& mesh = *context.topology;
 	const size_t n = mesh.VertexCount();
-	if (n == 0 || weights.IsEmpty()
-		|| weights.VertexCount() != mesh.RenderVertexCount()
-		|| closestDistance.size() != weights.VertexCount())
-	{
-		return false;
-	}
+	if (weights.VertexCount() != mesh.RenderVertexCount())
+		return WeightSolveStatus::SizeMismatch;
+
+	const double alpha = std::clamp(static_cast<double>(parameters[0].value),
+	                                static_cast<double>(kMinAlpha), static_cast<double>(kMaxAlpha));
 
 	// The Laplacian lives on the welded topology while the weights live on the
 	// render vertices, so gather down onto the welded ones, solve, scatter back.
@@ -167,13 +187,13 @@ bool BoneHeat::Execute(const HalfEdgeMesh& mesh,
 	}
 
 	const Eigen::SparseMatrix<double> laplace = CreateLaplaceMatrix(mesh);
-	const Eigen::SparseMatrix<double> diagonal = CreateDiagonalMatrix(distance);
+	const Eigen::SparseMatrix<double> diagonal = CreateDiagonalMatrix(distance, alpha);
 	const Eigen::SparseMatrix<double> system = -laplace + diagonal;
 
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 	solver.compute(system);
 	if (solver.info() != Eigen::Success)
-		return false;
+		return WeightSolveStatus::FactorisationFailed;
 
 	const SkinWeightTable rigid = welded;
 	CalculateOptimalWeights(diagonal, solver, welded);
@@ -182,5 +202,5 @@ bool BoneHeat::Execute(const HalfEdgeMesh& mesh,
 	for (size_t v = 0; v < weights.VertexCount(); ++v)
 		weights.CopyRow(v, welded, mesh.VertexOf(v));
 
-	return true;
+	return WeightSolveStatus::Ok;
 }

@@ -15,10 +15,13 @@ enum class SkinWeightView : UINT
 	SingleInfluence = 2, // heat ramp of one influence's weight
 };
 
-class ISkinningTechnique
+// Per-frame stage of skinning: takes the weights solved at bind time and one
+// matrix per influence, and produces the deformed vertex buffer the mesh draws.
+// Correctives (Correctives/iskincorrective.h) run on that buffer afterwards.
+class ISkinDeformer
 {
 public:
-	virtual ~ISkinningTechnique() = default;
+	virtual ~ISkinDeformer() = default;
 
 	virtual const char* GetName() const = 0;
 
@@ -34,7 +37,7 @@ public:
 
 	// Optional: write a weight colour instead of the normal so the weights can
 	// be looked at. `selectedInfluence` is only used by SingleInfluence, -1 for
-	// none. Techniques that cannot show them simply keep drawing normally.
+	// none. Deformers that cannot show them simply keep drawing normally.
 	virtual void SetWeightView(SkinWeightView /*view*/, int /*selectedInfluence*/) {}
 
 	// Vertex buffer holding the deformed result, or null before Prepare.

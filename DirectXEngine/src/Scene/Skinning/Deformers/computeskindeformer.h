@@ -1,5 +1,5 @@
 #pragma once
-#include "iskinningtechnique.h"
+#include "iskindeformer.h"
 
 #include <string>
 #include <wrl/client.h>
@@ -8,7 +8,7 @@
 // weights and influence colours as structured inputs, the deformed vertex
 // buffer as a raw UAV, the SkinConstants block of SkinningCommon.hlsli, and the
 // dispatch. A technique only names its shader and encodes the palette.
-class ComputeSkinDeformer : public ISkinningTechnique
+class ComputeSkinDeformer : public ISkinDeformer
 {
 public:
 	bool Prepare(const std::vector<VertexData>& restVertices,

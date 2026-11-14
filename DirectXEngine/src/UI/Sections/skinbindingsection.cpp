@@ -1,6 +1,7 @@
 #include "skinbindingsection.h"
 
 #include "skeleton.h"
+#include "skinningregistry.h"
 #include "uistate.h"
 
 #include "imgui.h"
@@ -9,16 +10,7 @@ namespace
 {
 	const ImVec4 kActiveColor(0.45f, 0.90f, 0.45f, 1.0f);
 	const ImVec4 kPendingColor(0.90f, 0.78f, 0.35f, 1.0f);
-
-	constexpr SkinningController::Method kMethods[] = {
-		SkinningController::Method::LinearBlend,
-		SkinningController::Method::DualQuaternion,
-	};
-
-	constexpr SkinningController::WeightMode kWeightModes[] = {
-		SkinningController::WeightMode::Default,
-		SkinningController::WeightMode::BoneHeat,
-	};
+	const ImVec4 kWarningColor(0.95f, 0.45f, 0.35f, 1.0f);
 
 	constexpr SkinWeightView kWeightViews[] = {
 		SkinWeightView::Off,
@@ -30,9 +22,6 @@ namespace
 	{
 		return ImVec4(color.x, color.y, color.z, 1.0f);
 	}
-
-	constexpr float kMinAlpha = 0.0001f;
-	constexpr float kMaxAlpha = 10.0f;
 }
 
 bool SkinBindingSection::IsVisible(const UIState& state) const
@@ -64,6 +53,35 @@ std::shared_ptr<Skeleton> SkinBindingSection::FindBoundSkeleton(const std::vecto
 			return rig;
 	}
 	return nullptr;
+}
+
+void SkinBindingSection::DrawSolverParameters(SkinningController& skinning)
+{
+	const std::span<const SolverParameter> parameters = skinning.GetSolverParameters();
+	if (parameterEdits.size() != parameters.size())
+		parameterEdits.assign(parameters.size(), 0.0f);
+
+	for (size_t i = 0; i < parameters.size(); ++i)
+	{
+		const SolverParameter& parameter = parameters[i];
+		float& edit = parameterEdits[i];
+
+		ImGuiSliderFlags flags = ImGuiSliderFlags_AlwaysClamp;
+		if (parameter.logarithmic)
+			flags |= ImGuiSliderFlags_Logarithmic;
+
+		ImGui::PushID(static_cast<int>(i));
+		ImGui::SliderFloat(parameter.name, &edit, parameter.min, parameter.max, "%.4f", flags);
+		if (parameter.tooltip != nullptr)
+			ImGui::SetItemTooltip("%s", parameter.tooltip);
+		// Solving is too costly to redo on every frame of a drag. Outside a drag
+		// the edit follows the solver, so switching solvers or rigs shows its value.
+		if (ImGui::IsItemDeactivatedAfterEdit())
+			skinning.SetSolverParameter(i, edit);
+		else if (!ImGui::IsItemActive())
+			edit = parameter.value;
+		ImGui::PopID();
+	}
 }
 
 void SkinBindingSection::DrawBonePicker(SkinningController& skinning, const Object3D& mesh)
@@ -152,49 +170,51 @@ void SkinBindingSection::Draw(UIState& state)
 
 	// Offered before binding too, so the very first deform already uses the
 	// technique that was asked for.
-	if (ImGui::BeginCombo("Technique", skinning.GetMethodName()))
+	const std::span<const SkinDeformerEntry> deformers = SkinningRegistry::Deformers();
+	if (ImGui::BeginCombo("Technique", skinning.GetDeformerName()))
 	{
-		for (SkinningController::Method option : kMethods)
+		for (size_t i = 0; i < deformers.size(); ++i)
 		{
-			if (ImGui::Selectable(SkinningController::GetMethodName(option), skinning.GetMethod() == option))
-				skinning.SetMethod(option);
+			if (ImGui::Selectable(deformers[i].name, skinning.GetDeformerIndex() == i))
+				skinning.SetDeformer(i);
 		}
 		ImGui::EndCombo();
 	}
 
-	// Which weights that technique blends with: the rigid default, or bone heat
-	// diffused on top of it.
-	if (ImGui::BeginCombo("Weights", skinning.GetWeightModeName()))
+	// Which weights that technique blends with.
+	const std::span<const WeightSolverEntry> solvers = SkinningRegistry::WeightSolvers();
+	if (ImGui::BeginCombo("Weights", skinning.GetWeightSolverName()))
 	{
-		for (SkinningController::WeightMode option : kWeightModes)
+		for (size_t i = 0; i < solvers.size(); ++i)
 		{
-			if (ImGui::Selectable(SkinningController::GetWeightModeName(option), skinning.GetWeightMode() == option))
-				skinning.SetWeightMode(option);
+			if (ImGui::Selectable(solvers[i].name, skinning.GetWeightSolverIndex() == i))
+				skinning.SetWeightSolver(i);
 		}
 		ImGui::EndCombo();
 	}
 
-	if (skinning.GetWeightMode() == SkinningController::WeightMode::BoneHeat)
-	{
-		ImGui::SliderFloat("Alpha", &alpha, kMinAlpha, kMaxAlpha, "%.4f", ImGuiSliderFlags_Logarithmic);
-		ImGui::SetItemTooltip("How hard the solve is pulled back to the closest-bone weights.\n"
-		                      "Lower spreads the influence further over the surface.");
-		if (ImGui::IsItemDeactivatedAfterEdit())
-			skinning.SetBoneHeatAlpha(alpha);
-		else if (!ImGui::IsItemActive())
-			alpha = skinning.GetBoneHeatAlpha();
-	}
+	DrawSolverParameters(skinning);
 
 	if (boundTo == nullptr)
 	{
-		ImGui::TextColored(kPendingColor, "Not bound - will animate with %s", skinning.GetMethodName());
+		ImGui::TextColored(kPendingColor, "Not bound - will animate with %s", skinning.GetDeformerName());
 		if (ImGui::Button("Bind"))
 			skinning.BindMesh(mesh);
 		return;
 	}
 
 	ImGui::TextColored(kActiveColor, "Animating with %s, %s weights",
-	                   skinning.GetMethodName(), skinning.GetWeightModeName());
+	                   skinning.GetDeformerName(), skinning.GetWeightSolverName());
+
+	// A solver that could not run leaves the closest-bone weights behind; say so
+	// rather than let the label above claim otherwise.
+	if (const std::optional<SkinningController::BindingView> binding = skinning.GetBinding(*mesh);
+		binding && binding->status != WeightSolveStatus::Ok)
+	{
+		ImGui::TextColored(kWarningColor, "%s failed: %s.", skinning.GetWeightSolverName(),
+		                   GetWeightSolveStatusMessage(binding->status));
+		ImGui::TextColored(kWarningColor, "Using closest-bone weights instead.");
+	}
 
 	if (ImGui::BeginCombo("Weight view", SkinningController::GetWeightViewName(skinning.GetWeightView())))
 	{

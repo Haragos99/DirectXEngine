@@ -27,10 +27,13 @@ public:
 private:
 	// Which bone the single-bone weight view shows, each with its bone colour.
 	static void DrawBonePicker(SkinningController& skinning, const Object3D& mesh);
+	// One slider per parameter the selected weight solver declares.
+	void DrawSolverParameters(SkinningController& skinning);
 
 	// Index into the collected skeletons, kept across frames.
 	int selectedRig = 0;
-	// Edited copy of bone heat's alpha: solving is too costly to redo on every
-	// frame of a drag, so the controller only hears about it once the drag ends.
-	float alpha = 0.001f;
+	// Edited copies of the solver's parameters: solving is too costly to redo on
+	// every frame of a drag, so the controller only hears about them once the
+	// drag ends.
+	std::vector<float> parameterEdits;
 };

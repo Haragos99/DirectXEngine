@@ -1,10 +1,13 @@
 #pragma once
-#include "iskinningtechnique.h"
+#include "iskindeformer.h"
+#include "iweightsolver.h"
+#include "skinbindcontext.h"
 #include "skininfluence.h"
 
 #include <cstdint>
 #include <memory>
 #include <optional>
+#include <span>
 #include <string>
 #include <vector>
 #include <wrl/client.h>
@@ -12,22 +15,15 @@
 class Object3D;
 class Skeleton;
 
+// Binds meshes to one skeleton and keeps them deformed. Owns the binding
+// lifecycle only; the techniques are pluggable stages picked from
+// SkinningRegistry:
+//
+//   bind time: IWeightSolver  -> weights
+//   per frame: ISkinDeformer  -> deformed vertex buffer   (-> ISkinCorrective, later)
 class SkinningController
 {
 public:
-	enum class Method
-	{
-		LinearBlend,
-		DualQuaternion,
-	};
-
-	// How the weights feeding that technique are solved.
-	enum class WeightMode
-	{
-		Default,
-		BoneHeat,
-	};
-
 	SkinningController(Skeleton& _rig,
 	                   Microsoft::WRL::ComPtr<ID3D11Device> _device,
 	                   Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context);
@@ -40,23 +36,21 @@ public:
 	bool IsBound(const Object3D& mesh) const;
 	size_t GetBoundMeshCount() const { return boundMeshes.size(); }
 
-	void SetMethod(Method newMethod);
-	Method GetMethod() const { return method; }
-	const char* GetMethodName() const { return GetMethodName(method); }
-	// Single source of the labels every panel shows.
-	static const char* GetMethodName(Method method);
+	// Deformer, as an index into SkinningRegistry::Deformers().
+	void SetDeformer(size_t index);
+	size_t GetDeformerIndex() const { return deformerIndex; }
+	const char* GetDeformerName() const;
 
-	void SetWeightMode(WeightMode newMode);
-	WeightMode GetWeightMode() const { return weightMode; }
-	const char* GetWeightModeName() const { return GetWeightModeName(weightMode); }
-	static const char* GetWeightModeName(WeightMode mode);
+	// Weight solver, as an index into SkinningRegistry::WeightSolvers(). Each
+	// solver keeps its own parameters when another one is picked in between.
+	void SetWeightSolver(size_t index);
+	size_t GetWeightSolverIndex() const { return solverIndex; }
+	const char* GetWeightSolverName() const;
+	std::span<const SolverParameter> GetSolverParameters() const;
+	// Clamps to the parameter's range and re-solves every bound mesh.
+	void SetSolverParameter(size_t parameter, float value);
 
-	// Bone heat's alpha: how hard the solve is pulled back to the rigid binding.
-	void SetBoneHeatAlpha(float newAlpha);
-	float GetBoneHeatAlpha() const { return boneHeatAlpha; }
-
-	// Re-solves the weights of every bound mesh in the bind pose it was captured
-	// in. Needed after the weight strategy, or anything feeding it, changes.
+	// Re-solves the weights of every bound mesh in the bind pose it was captured in.
 	void ResolveWeights();
 
 	// Draws every bound mesh coloured by its weights instead of its own shading:
@@ -76,19 +70,21 @@ public:
 	// Columns of the bound mesh's weight table, null when it is not bound here.
 	const std::vector<SkinInfluence>* GetInfluences(const Object3D& mesh) const;
 
-	// Read access for the weight table. The references stay valid until the
-	// next bind, unbind or re-solve, so take a fresh view every frame.
+	// Read access for the UI. The references stay valid until the next bind,
+	// unbind or re-solve, so take a fresh view every frame.
 	struct BindingView
 	{
 		const SkinWeightTable& weights;
 		const std::vector<SkinInfluence>& influences;
+		// Anything but Ok means the solver fell back to the closest-bone weights.
+		WeightSolveStatus status;
 		// Changes whenever the weights are re-solved, so derived data can be cached.
 		uint64_t revision;
 	};
 	std::optional<BindingView> GetBinding(const Object3D& mesh) const;
 
-	// Re-solves the weights of every bound mesh. Needed after the rig gains a
-	// joint or a rest offset moves, because the bind pose is then a different one.
+	// Recaptures where every bound mesh sits in the rig and re-solves it. Needed
+	// after the rig gains a joint or a rest offset moves.
 	void RebindAll();
 
 	// Re-deforms every bound mesh from the rig's current pose.
@@ -101,33 +97,34 @@ private:
 		std::vector<VertexData> restVertices; // mesh local space, as bound
 		std::vector<SkinInfluence> influences; // the columns of `weights`
 		SkinWeightTable weights;
+		WeightSolveStatus status = WeightSolveStatus::Ok;
+		uint64_t revision = 0;
 		DirectX::XMFLOAT4X4 meshBindToRig;
 		// Restored when the weight view goes off or the mesh is unbound.
 		std::wstring originalVertexShader;
 		std::wstring originalPixelShader;
-		std::unique_ptr<ISkinningTechnique> technique;
-		uint64_t revision = 0;
+		std::unique_ptr<ISkinDeformer> deformer;
 	};
 
-	// Points sampled along one influence's bone, in the rig's bind pose.
-	struct BoneSamples
+	// How much of a binding has to be redone; each scope includes the ones below.
+	enum class RebuildScope
 	{
-		std::vector<DirectX::XMFLOAT3> points;
+		Deformer, // new deformer, same weights
+		Weights,  // re-solve, same bind transform
+		BindPose, // recapture where the mesh sits in the rig, then re-solve
 	};
 
-	std::unique_ptr<ISkinningTechnique> CreateTechnique() const;
+	// The one place a binding is (re)built and handed to the mesh. False leaves
+	// the mesh drawing its own vertices with its own shaders.
+	bool Rebuild(BoundMesh& bound, Object3D& mesh, RebuildScope scope);
+	void RebuildAll(RebuildScope scope);
+
+	std::unique_ptr<ISkinDeformer> CreateDeformer() const;
 	// One influence per bone, or a single root one for a rig without bones.
 	std::vector<SkinInfluence> BuildInfluences() const;
-	// One entry per influence, in the same order.
-	std::vector<BoneSamples> SampleBones(const std::vector<SkinInfluence>& influences) const;
-	// Closest bone takes the whole vertex, as in the reference implementation.
-	// closestDistance comes back holding each vertex's distance to that bone,
-	// which is what bone heat weighs its constraint by.
-	SkinWeightTable CalculateWeights(const std::vector<SkinInfluence>& influences,
-	                                 const std::vector<VertexData>& restVertices,
-	                                 DirectX::FXMMATRIX meshBindToRig,
-	                                 std::vector<float>& closestDistance) const;
-	bool Solve(BoundMesh& bound) const;
+	SkinBindContext BuildBindContext(const BoundMesh& bound, const Object3D& mesh) const;
+	void SolveWeights(BoundMesh& bound, const Object3D& mesh);
+
 	static std::vector<DirectX::XMFLOAT3> InfluenceColors(const BoundMesh& bound);
 	static void RestoreShaders(const BoundMesh& bound, Object3D& mesh);
 	void ApplyWeightViewToAll() const;
@@ -139,12 +136,13 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	std::vector<BoundMesh> boundMeshes;
-	Method method = Method::LinearBlend;
-	WeightMode weightMode = WeightMode::Default;
-	// The epsilon the reference implementation defaults to.
-	float boneHeatAlpha = 0.001f;
+
+	size_t deformerIndex = 0;
+	size_t solverIndex = 0;
+	// One instance per registry entry, so parameters survive switching.
+	std::vector<std::unique_ptr<IWeightSolver>> solvers;
+
 	SkinWeightView weightView = SkinWeightView::Off;
 	int focusedBone = kNoBone;
-	// Source of BoundMesh::revision; Solve is const but hands out new ones.
-	mutable uint64_t lastRevision = 0;
+	uint64_t lastRevision = 0; // source of BoundMesh::revision
 };

@@ -1,23 +1,16 @@
 #include "skinningcontroller.h"
 
-#include "boneheat.h"
-#include "dualquaternionskinning.h"
-#include "halfedgemesh.h"
-#include "linearblendskinning.h"
 #include "object3d.h"
 #include "skeleton.h"
+#include "skinningregistry.h"
 
-#include <cmath>
-#include <limits>
+#include <algorithm>
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
 namespace
 {
-	// Enough points that a long bone still wins over a short one nearby.
-	constexpr int kSamplesPerBone = 16;
-
 	const wchar_t* kWeightVertexShader = L"shaders\\SkinWeightVertexShader.hlsl";
 	const wchar_t* kWeightPixelShader = L"shaders\\SkinWeightPixelShader.hlsl";
 }
@@ -25,6 +18,8 @@ namespace
 SkinningController::SkinningController(Skeleton& _rig, ComPtr<ID3D11Device> _device, ComPtr<ID3D11DeviceContext> _context)
 	: rig(_rig), device(_device), context(_context)
 {
+	for (const WeightSolverEntry& entry : SkinningRegistry::WeightSolvers())
+		solvers.push_back(entry.create());
 }
 
 SkinningController::~SkinningController()
@@ -32,41 +27,69 @@ SkinningController::~SkinningController()
 	UnbindAll();
 }
 
-std::unique_ptr<ISkinningTechnique> SkinningController::CreateTechnique() const
+// ---------------------------------------------------------------- techniques
+
+std::unique_ptr<ISkinDeformer> SkinningController::CreateDeformer() const
 {
-	switch (method)
-	{
-	case Method::DualQuaternion:
-		return std::make_unique<DualQuaternionSkinning>(device, context);
-	case Method::LinearBlend:
-	default:
-		return std::make_unique<LinearBlendSkinning>(device, context);
-	}
+	return SkinningRegistry::Deformers()[deformerIndex].create(device, context);
 }
 
-const char* SkinningController::GetMethodName(Method method)
+const char* SkinningController::GetDeformerName() const
 {
-	switch (method)
-	{
-	case Method::DualQuaternion:
-		return "Dual Quaternion (DQS)";
-	case Method::LinearBlend:
-	default:
-		return "Linear Blend (LBS)";
-	}
+	return SkinningRegistry::Deformers()[deformerIndex].name;
 }
 
-const char* SkinningController::GetWeightModeName(WeightMode mode)
+void SkinningController::SetDeformer(size_t index)
 {
-	switch (mode)
-	{
-	case WeightMode::BoneHeat:
-		return "Bone Heat";
-	case WeightMode::Default:
-	default:
-		return "Default (closest bone)";
-	}
+	if (index == deformerIndex || index >= SkinningRegistry::Deformers().size())
+		return;
+
+	deformerIndex = index;
+	RebuildAll(RebuildScope::Deformer);
 }
+
+const char* SkinningController::GetWeightSolverName() const
+{
+	return SkinningRegistry::WeightSolvers()[solverIndex].name;
+}
+
+void SkinningController::SetWeightSolver(size_t index)
+{
+	if (index == solverIndex || index >= solvers.size())
+		return;
+
+	solverIndex = index;
+	ResolveWeights();
+}
+
+std::span<const SolverParameter> SkinningController::GetSolverParameters() const
+{
+	const IWeightSolver& solver = *solvers[solverIndex];
+	return solver.GetParameters();
+}
+
+void SkinningController::SetSolverParameter(size_t parameter, float value)
+{
+	const std::span<SolverParameter> parameters = solvers[solverIndex]->GetParameters();
+	if (parameter >= parameters.size())
+		return;
+
+	// The limits live with the solver, so a typed-in value cannot break it.
+	SolverParameter& target = parameters[parameter];
+	value = std::clamp(value, target.min, target.max);
+	if (value == target.value)
+		return;
+
+	target.value = value;
+	ResolveWeights();
+}
+
+void SkinningController::ResolveWeights()
+{
+	RebuildAll(RebuildScope::Weights);
+}
+
+// ---------------------------------------------------------------- weight view
 
 const char* SkinningController::GetWeightViewName(SkinWeightView view)
 {
@@ -106,7 +129,7 @@ void SkinningController::ApplyWeightView(const BoundMesh& bound, Object3D& mesh)
 			selected = static_cast<int>(i);
 	}
 
-	bound.technique->SetWeightView(weightView, selected);
+	bound.deformer->SetWeightView(weightView, selected);
 	if (weightView == SkinWeightView::Off)
 		RestoreShaders(bound, mesh);
 	else
@@ -117,7 +140,8 @@ void SkinningController::ApplyWeightViewToAll() const
 {
 	for (const BoundMesh& bound : boundMeshes)
 	{
-		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
+		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
+		if (mesh && bound.deformer && bound.deformer->GetDeformedVertices())
 			ApplyWeightView(bound, *mesh);
 	}
 }
@@ -145,12 +169,14 @@ int SkinningController::GetHighlightedBone() const
 	return weightView == SkinWeightView::SingleInfluence && focusedBone >= 0 ? focusedBone : -1;
 }
 
+// ---------------------------------------------------------------- read access
+
 std::optional<SkinningController::BindingView> SkinningController::GetBinding(const Object3D& mesh) const
 {
 	for (const BoundMesh& bound : boundMeshes)
 	{
 		if (bound.mesh.lock().get() == &mesh)
-			return BindingView{ bound.weights, bound.influences, bound.revision };
+			return BindingView{ bound.weights, bound.influences, bound.status, bound.revision };
 	}
 	return std::nullopt;
 }
@@ -165,65 +191,7 @@ const std::vector<SkinInfluence>* SkinningController::GetInfluences(const Object
 	return nullptr;
 }
 
-void SkinningController::SetMethod(Method newMethod)
-{
-	if (newMethod == method)
-	{
-		return;
-	}
-
-	method = newMethod;
-	for (BoundMesh& bound : boundMeshes)
-	{
-		bound.technique = CreateTechnique();
-		bound.technique->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
-
-		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
-		{
-			mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
-			ApplyWeightView(bound, *mesh);
-		}
-	}
-}
-
-void SkinningController::SetWeightMode(WeightMode newMode)
-{
-	if (newMode == weightMode)
-	{
-		return;
-	}
-
-	weightMode = newMode;
-	ResolveWeights();
-}
-
-void SkinningController::SetBoneHeatAlpha(float newAlpha)
-{
-	if (newAlpha == boneHeatAlpha)
-	{
-		return;
-	}
-
-	boneHeatAlpha = newAlpha;
-	if (weightMode == WeightMode::BoneHeat)
-	{
-		ResolveWeights();
-	}
-}
-
-void SkinningController::ResolveWeights()
-{
-	for (BoundMesh& bound : boundMeshes)
-	{
-		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
-		if (!mesh || !Solve(bound))
-			continue;
-
-		mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
-		// The columns may have changed, and with them the focused one's index.
-		ApplyWeightView(bound, *mesh);
-	}
-}
+// ---------------------------------------------------------------- solving
 
 std::vector<SkinInfluence> SkinningController::BuildInfluences() const
 {
@@ -262,112 +230,79 @@ std::vector<SkinInfluence> SkinningController::BuildInfluences() const
 	return influences;
 }
 
-std::vector<SkinningController::BoneSamples> SkinningController::SampleBones(const std::vector<SkinInfluence>& influences) const
+SkinBindContext SkinningController::BuildBindContext(const BoundMesh& bound, const Object3D& mesh) const
 {
 	const std::vector<XMFLOAT4X4>& bindGlobals = rig.GetBindGlobals();
 	const auto bindPosition = [&](int joint)
 	{
-		return joint >= 0 && joint < static_cast<int>(bindGlobals.size())
-			? XMLoadFloat4x4(&bindGlobals[joint]).r[3]
-			: XMVectorZero();
+		if (joint < 0 || joint >= static_cast<int>(bindGlobals.size()))
+			return XMFLOAT3(0.0f, 0.0f, 0.0f);
+		const XMFLOAT4X4& m = bindGlobals[joint];
+		return XMFLOAT3(m._41, m._42, m._43);
 	};
 
-	std::vector<BoneSamples> samples(influences.size());
-	for (size_t i = 0; i < influences.size(); ++i)
+	std::vector<BoneSegment> bones;
+	bones.reserve(bound.influences.size());
+	for (const SkinInfluence& influence : bound.influences)
 	{
-		const SkinInfluence& influence = influences[i];
 		if (influence.bone == SkinInfluence::kRootFallback)
 		{
-			XMFLOAT3 point;
-			XMStoreFloat3(&point, bindPosition(influence.drivingJoint));
-			samples[i].points.push_back(point);
+			const XMFLOAT3 root = bindPosition(influence.drivingJoint);
+			bones.push_back({ root, root });
 			continue;
 		}
 
 		const Bone& bone = rig.GetBones()[influence.bone];
-		const XMVECTOR from = bindPosition(bone.GetStartJoint());
-		const XMVECTOR to = bindPosition(bone.GetEndJoint());
-
-		samples[i].points.reserve(kSamplesPerBone + 1);
-		for (int s = 0; s <= kSamplesPerBone; ++s)
-		{
-			XMFLOAT3 point;
-			XMStoreFloat3(&point, XMVectorLerp(from, to, static_cast<float>(s) / kSamplesPerBone));
-			samples[i].points.push_back(point);
-		}
+		bones.push_back({ bindPosition(bone.GetStartJoint()), bindPosition(bone.GetEndJoint()) });
 	}
-	return samples;
+
+	return SkinBindContext{ bound.restVertices, mesh.GetHalfEdgeMesh(), bound.meshBindToRig, std::move(bones) };
 }
 
-SkinWeightTable SkinningController::CalculateWeights(const std::vector<SkinInfluence>& influences,
-                                                     const std::vector<VertexData>& restVertices,
-                                                     FXMMATRIX meshBindToRig,
-                                                     std::vector<float>& closestDistance) const
-{
-	const std::vector<BoneSamples> bones = SampleBones(influences);
-
-	SkinWeightTable weights;
-	weights.Resize(restVertices.size(), influences.size());
-	closestDistance.assign(restVertices.size(), 0.0f);
-
-	for (size_t v = 0; v < restVertices.size(); ++v)
-	{
-		const XMVECTOR position = XMVector3Transform(XMLoadFloat3(&restVertices[v].position), meshBindToRig);
-
-		size_t closestInfluence = 0;
-		float closest = std::numeric_limits<float>::infinity();
-		for (size_t i = 0; i < bones.size(); ++i)
-		{
-			for (const XMFLOAT3& point : bones[i].points)
-			{
-				const float distance = XMVectorGetX(
-					XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&point), position)));
-				if (distance < closest)
-				{
-					closest = distance;
-					closestInfluence = i;
-				}
-			}
-		}
-
-		if (closestInfluence < weights.InfluenceCount())
-		{
-			weights[v][closestInfluence] = 1.0f;
-		}
-		if (std::isfinite(closest))
-		{
-			closestDistance[v] = std::sqrt(closest);
-		}
-	}
-	return weights;
-}
-
-bool SkinningController::Solve(BoundMesh& bound) const
+void SkinningController::SolveWeights(BoundMesh& bound, const Object3D& mesh)
 {
 	bound.influences = BuildInfluences();
 	bound.revision = ++lastRevision;
-	if (bound.influences.empty() || bound.restVertices.empty())
-	{
-		return false;
-	}
-
-	std::vector<float> closestDistance;
-	bound.weights = CalculateWeights(bound.influences, bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig), closestDistance);
-
-	if (weightMode == WeightMode::BoneHeat)
-	{
-		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
-		const HalfEdgeMesh* topology = mesh ? mesh->GetHalfEdgeMesh() : nullptr;
-		// Without connectivity there is no surface to diffuse over, so the rigid
-		// binding is what the technique gets.
-		if (topology != nullptr && !topology->IsEmpty())
-		{
-			BoneHeat(boneHeatAlpha).Execute(*topology, closestDistance, bound.weights);
-		}
-	}
-
-	return bound.technique->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
+	bound.status = solvers[solverIndex]->Solve(BuildBindContext(bound, mesh), bound.weights);
 }
+
+bool SkinningController::Rebuild(BoundMesh& bound, Object3D& mesh, RebuildScope scope)
+{
+	if (scope == RebuildScope::BindPose)
+	{
+		// Where the mesh sits inside the rig at the moment of binding: everything
+		// the rig does later is measured against this.
+		XMStoreFloat4x4(&bound.meshBindToRig,
+			mesh.GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
+	}
+
+	if (scope != RebuildScope::Deformer)
+		SolveWeights(bound, mesh);
+
+	if (scope == RebuildScope::Deformer || !bound.deformer)
+		bound.deformer = CreateDeformer();
+
+	const bool prepared = !bound.weights.IsEmpty()
+		&& bound.deformer->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
+
+	mesh.SetDeformedVertices(prepared ? bound.deformer->GetDeformedVertices() : nullptr);
+	if (prepared)
+		ApplyWeightView(bound, mesh); // the columns, and the focused one's index, may have changed
+	else
+		RestoreShaders(bound, mesh);
+	return prepared;
+}
+
+void SkinningController::RebuildAll(RebuildScope scope)
+{
+	for (BoundMesh& bound : boundMeshes)
+	{
+		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
+			Rebuild(bound, *mesh, scope);
+	}
+}
+
+// ---------------------------------------------------------------- lifecycle
 
 bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 {
@@ -387,19 +322,12 @@ bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 	bound.restVertices = *source;
 	bound.originalVertexShader = mesh->GetVertexShaderPath();
 	bound.originalPixelShader = mesh->GetPixelShaderPath();
-	bound.technique = CreateTechnique();
 
-	// Where the mesh sits inside the rig at the moment of binding: everything
-	// the rig does later is measured against this.
-	XMStoreFloat4x4(&bound.meshBindToRig,mesh->GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
-
-	if (!Solve(bound))
+	if (!Rebuild(bound, *mesh, RebuildScope::BindPose))
 	{
 		return false;
 	}
 
-	mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
-	ApplyWeightView(bound, *mesh);
 	boundMeshes.push_back(std::move(bound));
 	return true;
 }
@@ -446,19 +374,10 @@ bool SkinningController::IsBound(const Object3D& mesh) const
 
 void SkinningController::RebindAll()
 {
-	for (BoundMesh& bound : boundMeshes)
-	{
-		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
-		if (!mesh)
-			continue;
-
-		XMStoreFloat4x4(&bound.meshBindToRig,
-			mesh->GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
-		Solve(bound);
-		mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
-		ApplyWeightView(bound, *mesh);
-	}
+	RebuildAll(RebuildScope::BindPose);
 }
+
+// ---------------------------------------------------------------- per frame
 
 void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& mesh, std::vector<XMFLOAT4X4>& palette) const
 {
@@ -491,7 +410,7 @@ void SkinningController::Update()
 		}
 
 		BuildPalette(*it, *mesh, palette);
-		it->technique->Deform(palette);
+		it->deformer->Deform(palette);
 		++it;
 	}
 }
