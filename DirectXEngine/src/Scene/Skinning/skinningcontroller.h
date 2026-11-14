@@ -57,9 +57,22 @@ public:
 	// in. Needed after the weight strategy, or anything feeding it, changes.
 	void ResolveWeights();
 
-	// Draws every bound mesh coloured by the bone that drives it.
-	void SetShowWeights(bool show);
-	bool GetShowWeights() const { return showWeights; }
+	// Draws every bound mesh coloured by its weights instead of its own shading:
+	// blended from the bones' colours, or as a heat ramp of the focused bone.
+	void SetWeightView(SkinWeightView view);
+	SkinWeightView GetWeightView() const { return weightView; }
+	static const char* GetWeightViewName(SkinWeightView view);
+
+	// The bone the single-influence view shows: an index into the rig's bones,
+	// SkinInfluence::kRootFallback for a rig without bones, or kNoBone.
+	static constexpr int kNoBone = -2;
+	void SetFocusedBone(int bone);
+	int GetFocusedBone() const { return focusedBone; }
+	// The bone the skeleton should draw highlighted, -1 for none.
+	int GetHighlightedBone() const;
+
+	// Columns of the bound mesh's weight table, null when it is not bound here.
+	const std::vector<SkinInfluence>* GetInfluences(const Object3D& mesh) const;
 
 	// Re-solves the weights of every bound mesh. Needed after the rig gains a
 	// joint or a rest offset moves, because the bind pose is then a different one.
@@ -76,7 +89,9 @@ private:
 		std::vector<SkinInfluence> influences; // the columns of `weights`
 		SkinWeightTable weights;
 		DirectX::XMFLOAT4X4 meshBindToRig;
-		std::wstring originalPixelShader; // restored when the weight view goes off
+		// Restored when the weight view goes off or the mesh is unbound.
+		std::wstring originalVertexShader;
+		std::wstring originalPixelShader;
 		std::unique_ptr<ISkinningTechnique> technique;
 	};
 
@@ -99,6 +114,9 @@ private:
 	                                 DirectX::FXMMATRIX meshBindToRig,
 	                                 std::vector<float>& closestDistance) const;
 	bool Solve(BoundMesh& bound) const;
+	static std::vector<DirectX::XMFLOAT3> InfluenceColors(const BoundMesh& bound);
+	static void RestoreShaders(const BoundMesh& bound, Object3D& mesh);
+	void ApplyWeightViewToAll() const;
 	void ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const;
 	void BuildPalette(const BoundMesh& bound, const Object3D& mesh,
 	                  std::vector<DirectX::XMFLOAT4X4>& palette) const;
@@ -111,5 +129,6 @@ private:
 	WeightMode weightMode = WeightMode::Default;
 	// The epsilon the reference implementation defaults to.
 	float boneHeatAlpha = 0.001f;
-	bool showWeights = false;
+	SkinWeightView weightView = SkinWeightView::Off;
+	int focusedBone = kNoBone;
 };

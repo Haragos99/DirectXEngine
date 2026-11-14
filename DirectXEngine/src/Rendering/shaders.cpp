@@ -159,6 +159,12 @@ void Shader::setPixelShader(const std::wstring& path)
 	pixelShaderName = path;
 }
 
+void Shader::setVertexShader(const std::wstring& path)
+{
+	loadVertexShader(path);
+	vertexShaderName = path;
+}
+
 void Shader::renderDraw(MatrixBuffer& mb, LightBuffer& lightData)
 {
 	UINT stride = sizeof(VertexData);

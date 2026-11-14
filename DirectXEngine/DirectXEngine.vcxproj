@@ -185,6 +185,7 @@
     <ClCompile Include="src\Scene\Voxel\isosurfacejob.cpp" />
     <ClCompile Include="src\Scene\Voxel\isosurfacemodel.cpp" />
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
+    <ClCompile Include="src\Scene\Skinning\computeskindeformer.cpp" />
     <ClCompile Include="src\Scene\halfedgemesh.cpp" />
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
     <ClCompile Include="src\Scene\Skinning\boneheat.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="src\Scene\Skinning\skinweights.h" />
     <ClInclude Include="src\Scene\Skinning\skininfluence.h" />
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
+    <ClInclude Include="src\Scene\Skinning\computeskindeformer.h" />
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
     <ClInclude Include="src\Scene\Skinning\boneheat.h" />
     <ClInclude Include="src\Scene\Skinning\skinningcontroller.h" />
@@ -420,6 +422,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VSMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PSMain</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -444,6 +454,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\SkinningCommon.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Background.dds" />

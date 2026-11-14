@@ -1,15 +1,7 @@
 // Dual quaternion skinning. Blending rigid transforms instead of matrices keeps
 // the volume of a twisted joint, which is where linear blending collapses.
-//
-// The result is the mesh's own vertex buffer, so it is written through a raw
-// UAV: a structured buffer cannot also be an input assembler buffer.
 
-struct RestVertex
-{
-    float3 position;
-    float3 normal;
-    float2 texcoord;
-};
+#include "SkinningCommon.hlsli"
 
 // Rigid only: any scale in the palette was dropped on the CPU side.
 struct DualQuat
@@ -18,19 +10,7 @@ struct DualQuat
     float4 dual;
 };
 
-StructuredBuffer<RestVertex> gRest : register(t0);
-// One weight per influence (bone) for every vertex, vertex major.
-StructuredBuffer<float> gWeights : register(t1);
 StructuredBuffer<DualQuat> gPalette : register(t2);
-RWByteAddressBuffer gOut : register(u0);
-
-cbuffer SkinConstants : register(b0)
-{
-    uint gVertexCount;
-    uint gJointCount;
-    uint gWeightColors;
-    uint gPadding;
-};
 
 float3 RotateByQuaternion(float4 q, float3 v)
 {
@@ -45,13 +25,11 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         return;
 
     const RestVertex rest = gRest[index];
-    const uint weightBase = index * gJointCount;
+    const uint weightBase = index * gInfluenceCount;
 
     float4 real = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 dual = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float total = 0.0f;
-    uint dominantJoint = 0;
-    float dominantWeight = 0.0f;
 
     // q and -q are the same rotation, so every quaternion has to be pulled into
     // the same hemisphere as the first contributing one or the blend takes the
@@ -59,13 +37,13 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     float4 pivot = float4(0.0f, 0.0f, 0.0f, 1.0f);
     bool havePivot = false;
 
-    for (uint joint = 0; joint < gJointCount; ++joint)
+    for (uint i = 0; i < gInfluenceCount; ++i)
     {
-        const float weight = gWeights[weightBase + joint];
+        const float weight = gWeights[weightBase + i];
         if (weight <= 0.0f)
             continue;
 
-        const DualQuat dq = gPalette[joint];
+        const DualQuat dq = gPalette[i];
         if (!havePivot)
         {
             pivot = dq.real;
@@ -77,12 +55,6 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         real += dq.real * signedWeight;
         dual += dq.dual * signedWeight;
         total += weight;
-
-        if (weight > dominantWeight)
-        {
-            dominantWeight = weight;
-            dominantJoint = joint;
-        }
     }
 
     float3 position = rest.position;
@@ -105,14 +77,5 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     const float length2 = dot(normal, normal);
     normal = length2 > 1e-12f ? normal * rsqrt(length2) : rest.normal;
 
-    // SkinWeightPixelShader reads the influence out of the texcoord.
-    const float2 texcoord = (gWeightColors != 0)
-        ? float2((float) dominantJoint, dominantWeight)
-        : rest.texcoord;
-
-    // Must match sizeof(VertexData): float3 + float3 + float2.
-    const uint offset = index * 32u;
-    gOut.Store3(offset, asuint(position));
-    gOut.Store3(offset + 12u, asuint(normal));
-    gOut.Store2(offset + 24u, asuint(texcoord));
+    StoreVertex(index, position, normal, rest.texcoord);
 }

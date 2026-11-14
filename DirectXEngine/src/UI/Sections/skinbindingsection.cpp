@@ -20,6 +20,17 @@ namespace
 		SkinningController::WeightMode::BoneHeat,
 	};
 
+	constexpr SkinWeightView kWeightViews[] = {
+		SkinWeightView::Off,
+		SkinWeightView::Blended,
+		SkinWeightView::SingleInfluence,
+	};
+
+	ImVec4 ToImVec4(const DirectX::XMFLOAT3& color)
+	{
+		return ImVec4(color.x, color.y, color.z, 1.0f);
+	}
+
 	constexpr float kMinAlpha = 0.0001f;
 	constexpr float kMaxAlpha = 10.0f;
 }
@@ -39,6 +50,43 @@ void SkinBindingSection::CollectSkeletons(const std::vector<std::shared_ptr<Obje
 			found.push_back(rig);
 
 		CollectSkeletons(object->GetChildren(), found);
+	}
+}
+
+void SkinBindingSection::DrawBonePicker(SkinningController& skinning, const Object3D& mesh)
+{
+	const std::vector<SkinInfluence>* influences = skinning.GetInfluences(mesh);
+	if (influences == nullptr || influences->empty())
+		return;
+
+	const SkinInfluence* focused = nullptr;
+	for (const SkinInfluence& influence : *influences)
+	{
+		if (influence.bone == skinning.GetFocusedBone())
+			focused = &influence;
+	}
+
+	// Nothing focused yet: show the first bone rather than an all-blue mesh.
+	if (focused == nullptr)
+	{
+		focused = &influences->front();
+		skinning.SetFocusedBone(focused->bone);
+	}
+
+	ImGui::ColorButton("##focused", ToImVec4(focused->color), ImGuiColorEditFlags_NoTooltip);
+	ImGui::SameLine();
+	if (ImGui::BeginCombo("Bone", focused->name.c_str()))
+	{
+		for (const SkinInfluence& influence : *influences)
+		{
+			ImGui::PushID(influence.bone);
+			ImGui::ColorButton("##color", ToImVec4(influence.color), ImGuiColorEditFlags_NoTooltip);
+			ImGui::SameLine();
+			if (ImGui::Selectable(influence.name.c_str(), &influence == focused))
+				skinning.SetFocusedBone(influence.bone);
+			ImGui::PopID();
+		}
+		ImGui::EndCombo();
 	}
 }
 
@@ -135,9 +183,20 @@ void SkinBindingSection::Draw(UIState& state)
 	ImGui::TextColored(kActiveColor, "Animating with %s, %s weights",
 	                   skinning.GetMethodName(), skinning.GetWeightModeName());
 
-	bool showWeights = skinning.GetShowWeights();
-	if (ImGui::Checkbox("Show weight influence", &showWeights))
-		skinning.SetShowWeights(showWeights);
+	if (ImGui::BeginCombo("Weight view", SkinningController::GetWeightViewName(skinning.GetWeightView())))
+	{
+		for (SkinWeightView option : kWeightViews)
+		{
+			if (ImGui::Selectable(SkinningController::GetWeightViewName(option), skinning.GetWeightView() == option))
+				skinning.SetWeightView(option);
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::SetItemTooltip("Blended: every vertex in the sum of its bones' colours.\n"
+	                      "Single bone: one bone's weight, blue 0 to red 1.");
+
+	if (skinning.GetWeightView() == SkinWeightView::SingleInfluence)
+		DrawBonePicker(skinning, *mesh);
 
 	if (ImGui::Button("Unbind"))
 		skinning.UnbindMesh(*mesh);

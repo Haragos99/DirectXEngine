@@ -6,6 +6,7 @@
 
 class Object3D;
 class Skeleton;
+class SkinningController;
 
 // Binds the selected mesh to a rig: pick a skeleton, press Bind, and the rig
 // deforms the mesh from then on. Only shown while a skinnable mesh is selected.
@@ -20,6 +21,8 @@ private:
 	// Every skeleton in the scene, however deeply it is parented.
 	static void CollectSkeletons(const std::vector<std::shared_ptr<Object3D>>& objects,
 	                             std::vector<std::shared_ptr<Skeleton>>& found);
+	// Which bone the single-bone weight view shows, each with its bone colour.
+	static void DrawBonePicker(SkinningController& skinning, const Object3D& mesh);
 
 	// Index into the collected skeletons, kept across frames.
 	int selectedRig = 0;

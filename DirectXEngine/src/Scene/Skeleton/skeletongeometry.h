@@ -15,16 +15,19 @@ class SkeletonGeometry
 public:
 	// Rebuilds the mesh for the given pose. `highlightedJoint` is drawn in the
 	// selection colour together with the bones that touch it; pass -1 for none.
+	// When `focusedBone` is a bone index, every other bone is drawn dimmed, so
+	// it reads against the single-bone weight view; pass -1 for none.
 	void Build(const std::vector<Joint>& joints,
 	           const std::vector<Bone>& bones,
 	           const SkeletonPose& pose,
-	           int highlightedJoint);
+	           int highlightedJoint,
+	           int focusedBone = -1);
 
 	const std::vector<VertexData>& GetVertices() const { return vertices; }
 	const std::vector<UINT>& GetIndices() const { return indices; }
 
 private:
-	void AppendBone(const Bone& bone, const SkeletonPose& pose, bool highlighted);
+	void AppendBone(const Bone& bone, const SkeletonPose& pose, bool highlighted, bool dimmed);
 	void AppendJointMarker(const DirectX::XMFLOAT3& position, bool highlighted);
 	void AppendVertex(const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& color);
 

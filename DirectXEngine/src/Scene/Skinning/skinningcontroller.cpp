@@ -18,6 +18,7 @@ namespace
 	// Enough points that a long bone still wins over a short one nearby.
 	constexpr int kSamplesPerBone = 16;
 
+	const wchar_t* kWeightVertexShader = L"shaders\\SkinWeightVertexShader.hlsl";
 	const wchar_t* kWeightPixelShader = L"shaders\\SkinWeightPixelShader.hlsl";
 }
 
@@ -67,23 +68,91 @@ const char* SkinningController::GetWeightModeName(WeightMode mode)
 	}
 }
 
-void SkinningController::ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const
+const char* SkinningController::GetWeightViewName(SkinWeightView view)
 {
-	bound.technique->SetWeightDebug(showWeights);
-	mesh.SetPixelShader(showWeights ? kWeightPixelShader : bound.originalPixelShader);
+	switch (view)
+	{
+	case SkinWeightView::Blended:
+		return "Blended bone colours";
+	case SkinWeightView::SingleInfluence:
+		return "Single bone (heat)";
+	case SkinWeightView::Off:
+	default:
+		return "Off";
+	}
 }
 
-void SkinningController::SetShowWeights(bool show)
+std::vector<XMFLOAT3> SkinningController::InfluenceColors(const BoundMesh& bound)
 {
-	if (show == showWeights)
-		return;
+	std::vector<XMFLOAT3> colors;
+	colors.reserve(bound.influences.size());
+	for (const SkinInfluence& influence : bound.influences)
+		colors.push_back(influence.color);
+	return colors;
+}
 
-	showWeights = show;
+void SkinningController::RestoreShaders(const BoundMesh& bound, Object3D& mesh)
+{
+	mesh.SetShaders(bound.originalVertexShader, bound.originalPixelShader);
+}
+
+void SkinningController::ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const
+{
+	// The focused bone is a rig-wide choice; each mesh has its own columns.
+	int selected = -1;
+	for (size_t i = 0; i < bound.influences.size(); ++i)
+	{
+		if (bound.influences[i].bone == focusedBone)
+			selected = static_cast<int>(i);
+	}
+
+	bound.technique->SetWeightView(weightView, selected);
+	if (weightView == SkinWeightView::Off)
+		RestoreShaders(bound, mesh);
+	else
+		mesh.SetShaders(kWeightVertexShader, kWeightPixelShader);
+}
+
+void SkinningController::ApplyWeightViewToAll() const
+{
 	for (const BoundMesh& bound : boundMeshes)
 	{
 		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
 			ApplyWeightView(bound, *mesh);
 	}
+}
+
+void SkinningController::SetWeightView(SkinWeightView view)
+{
+	if (view == weightView)
+		return;
+
+	weightView = view;
+	ApplyWeightViewToAll();
+}
+
+void SkinningController::SetFocusedBone(int bone)
+{
+	if (bone == focusedBone)
+		return;
+
+	focusedBone = bone;
+	ApplyWeightViewToAll();
+}
+
+int SkinningController::GetHighlightedBone() const
+{
+	return weightView == SkinWeightView::SingleInfluence && focusedBone >= 0 ? focusedBone : -1;
+}
+
+const std::vector<SkinInfluence>* SkinningController::GetInfluences(const Object3D& mesh) const
+{
+	for (const BoundMesh& bound : boundMeshes)
+	{
+		if (bound.mesh.lock().get() == &mesh)
+			return &bound.influences;
+	}
+	return nullptr;
 }
 
 void SkinningController::SetMethod(Method newMethod)
@@ -97,7 +166,7 @@ void SkinningController::SetMethod(Method newMethod)
 	for (BoundMesh& bound : boundMeshes)
 	{
 		bound.technique = CreateTechnique();
-		bound.technique->Prepare(bound.restVertices, bound.weights);
+		bound.technique->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
 
 		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
 		{
@@ -141,6 +210,8 @@ void SkinningController::ResolveWeights()
 			continue;
 
 		mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
+		// The columns may have changed, and with them the focused one's index.
+		ApplyWeightView(bound, *mesh);
 	}
 }
 
@@ -284,7 +355,7 @@ bool SkinningController::Solve(BoundMesh& bound) const
 		}
 	}
 
-	return bound.technique->Prepare(bound.restVertices, bound.weights);
+	return bound.technique->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
 }
 
 bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
@@ -303,6 +374,7 @@ bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 	BoundMesh bound;
 	bound.mesh = mesh;
 	bound.restVertices = *source;
+	bound.originalVertexShader = mesh->GetVertexShaderPath();
 	bound.originalPixelShader = mesh->GetPixelShaderPath();
 	bound.technique = CreateTechnique();
 
@@ -332,7 +404,7 @@ void SkinningController::UnbindMesh(const Object3D& mesh)
 		}
 
 		bound->SetDeformedVertices(nullptr);
-		bound->SetPixelShader(it->originalPixelShader);
+		RestoreShaders(*it, *bound);
 		boundMeshes.erase(it);
 		return;
 	}
@@ -345,7 +417,7 @@ void SkinningController::UnbindAll()
 		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
 		{
 			mesh->SetDeformedVertices(nullptr);
-			mesh->SetPixelShader(bound.originalPixelShader);
+			RestoreShaders(bound, *mesh);
 		}
 	}
 	boundMeshes.clear();
@@ -373,6 +445,7 @@ void SkinningController::RebindAll()
 			mesh->GetWorldMatrix() * XMMatrixInverse(nullptr, rig.GetWorldMatrix()));
 		Solve(bound);
 		mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
+		ApplyWeightView(bound, *mesh);
 	}
 }
 

@@ -213,6 +213,9 @@
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Skinning\computeskindeformer.cpp">
+      <Filter>Source Files\Scene\Skinning</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene\halfedgemesh.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -435,6 +438,9 @@
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\computeskindeformer.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h">
@@ -685,6 +691,9 @@
     <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
@@ -705,5 +714,10 @@
     <Image Include="..\Resources\moss.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\SkinningCommon.hlsli">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

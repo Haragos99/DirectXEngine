@@ -82,5 +82,7 @@ private:
 	SkinningController skinning;
 	int skeletonNumber = 0;
 	int selectedJoint = -1;
+	// Bone the geometry was last built with in focus, -1 for none.
+	int builtFocusedBone = -1;
 	bool poseDirty = false;
 };
