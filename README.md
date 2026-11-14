@@ -37,6 +37,13 @@ git submodule add https://github.com/ocornut/imgui.git external/imgui
 git submodule update --init --recursive
 ```
 
+Eigen (used by Bone Heat skinning) comes from vcpkg through its Visual Studio user-wide integration:
+
+```bash
+vcpkg install eigen3:x64-windows
+vcpkg integrate install
+```
+
 ## Requirements
 
 - Windows 10 or later
