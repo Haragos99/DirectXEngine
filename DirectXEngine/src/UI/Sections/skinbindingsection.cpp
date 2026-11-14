@@ -14,6 +14,14 @@ namespace
 		SkinningController::Method::LinearBlend,
 		SkinningController::Method::DualQuaternion,
 	};
+
+	constexpr SkinningController::WeightMode kWeightModes[] = {
+		SkinningController::WeightMode::Default,
+		SkinningController::WeightMode::BoneHeat,
+	};
+
+	constexpr float kMinAlpha = 0.0001f;
+	constexpr float kMaxAlpha = 10.0f;
 }
 
 bool SkinBindingSection::IsVisible(const UIState& state) const
@@ -93,6 +101,29 @@ void SkinBindingSection::Draw(UIState& state)
 		ImGui::EndCombo();
 	}
 
+	// Which weights that technique blends with: the rigid default, or bone heat
+	// diffused on top of it.
+	if (ImGui::BeginCombo("Weights", skinning.GetWeightModeName()))
+	{
+		for (SkinningController::WeightMode option : kWeightModes)
+		{
+			if (ImGui::Selectable(SkinningController::GetWeightModeName(option), skinning.GetWeightMode() == option))
+				skinning.SetWeightMode(option);
+		}
+		ImGui::EndCombo();
+	}
+
+	if (skinning.GetWeightMode() == SkinningController::WeightMode::BoneHeat)
+	{
+		ImGui::SliderFloat("Alpha", &alpha, kMinAlpha, kMaxAlpha, "%.4f", ImGuiSliderFlags_Logarithmic);
+		ImGui::SetItemTooltip("How hard the solve is pulled back to the closest-bone weights.\n"
+		                      "Lower spreads the influence further over the surface.");
+		if (ImGui::IsItemDeactivatedAfterEdit())
+			skinning.SetBoneHeatAlpha(alpha);
+		else if (!ImGui::IsItemActive())
+			alpha = skinning.GetBoneHeatAlpha();
+	}
+
 	if (boundTo == nullptr)
 	{
 		ImGui::TextColored(kPendingColor, "Not bound - will animate with %s", skinning.GetMethodName());
@@ -101,7 +132,8 @@ void SkinBindingSection::Draw(UIState& state)
 		return;
 	}
 
-	ImGui::TextColored(kActiveColor, "Animating with %s", skinning.GetMethodName());
+	ImGui::TextColored(kActiveColor, "Animating with %s, %s weights",
+	                   skinning.GetMethodName(), skinning.GetWeightModeName());
 
 	bool showWeights = skinning.GetShowWeights();
 	if (ImGui::Checkbox("Show weight influence", &showWeights))

@@ -187,6 +187,7 @@
     <ClCompile Include="src\Scene\Skinning\linearblendskinning.cpp" />
     <ClCompile Include="src\Scene\halfedgemesh.cpp" />
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp" />
+    <ClCompile Include="src\Scene\Skinning\boneheat.cpp" />
     <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp" />
     <ClCompile Include="src\UI\Sections\skinbindingsection.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
@@ -281,6 +282,7 @@
     <ClInclude Include="src\Scene\Skinning\skinweights.h" />
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
+    <ClInclude Include="src\Scene\Skinning\boneheat.h" />
     <ClInclude Include="src\Scene\Skinning\skinningcontroller.h" />
     <ClInclude Include="src\UI\Sections\skinbindingsection.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />

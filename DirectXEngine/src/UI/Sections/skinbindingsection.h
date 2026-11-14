@@ -23,4 +23,7 @@ private:
 
 	// Index into the collected skeletons, kept across frames.
 	int selectedRig = 0;
+	// Edited copy of bone heat's alpha: solving is too costly to redo on every
+	// frame of a drag, so the controller only hears about it once the drag ends.
+	float alpha = 0.001f;
 };

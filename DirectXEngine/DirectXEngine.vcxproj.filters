@@ -219,6 +219,9 @@
     <ClCompile Include="src\Scene\Skinning\dualquaternionskinning.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\Skinning\boneheat.cpp">
+      <Filter>Source Files\Scene\Skinning</Filter>
+    </ClCompile>
     <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp">
       <Filter>Source Files\Scene\Skinning</Filter>
     </ClCompile>
@@ -432,6 +435,9 @@
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\boneheat.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Skinning\skinningcontroller.h">

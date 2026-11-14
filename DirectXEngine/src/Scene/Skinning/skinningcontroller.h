@@ -18,6 +18,13 @@ public:
 		DualQuaternion,
 	};
 
+	// How the weights feeding that technique are solved.
+	enum class WeightMode
+	{
+		Default,
+		BoneHeat,
+	};
+
 	SkinningController(Skeleton& _rig,
 	                   Microsoft::WRL::ComPtr<ID3D11Device> _device,
 	                   Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context);
@@ -35,6 +42,19 @@ public:
 	const char* GetMethodName() const { return GetMethodName(method); }
 	// Single source of the labels every panel shows.
 	static const char* GetMethodName(Method method);
+
+	void SetWeightMode(WeightMode newMode);
+	WeightMode GetWeightMode() const { return weightMode; }
+	const char* GetWeightModeName() const { return GetWeightModeName(weightMode); }
+	static const char* GetWeightModeName(WeightMode mode);
+
+	// Bone heat's alpha: how hard the solve is pulled back to the rigid binding.
+	void SetBoneHeatAlpha(float newAlpha);
+	float GetBoneHeatAlpha() const { return boneHeatAlpha; }
+
+	// Re-solves the weights of every bound mesh in the bind pose it was captured
+	// in. Needed after the weight strategy, or anything feeding it, changes.
+	void ResolveWeights();
 
 	// Draws every bound mesh coloured by the joint that drives it.
 	void SetShowWeights(bool show);
@@ -68,8 +88,11 @@ private:
 	std::unique_ptr<ISkinningTechnique> CreateTechnique() const;
 	std::vector<BoneSamples> SampleBones() const;
 	// Closest bone takes the whole vertex, as in the reference implementation.
+	// closestDistance comes back holding each vertex's distance to that bone,
+	// which is what bone heat weighs its constraint by.
 	SkinWeightTable CalculateWeights(const std::vector<VertexData>& restVertices,
-	                                 DirectX::FXMMATRIX meshBindToRig) const;
+	                                 DirectX::FXMMATRIX meshBindToRig,
+	                                 std::vector<float>& closestDistance) const;
 	bool Solve(BoundMesh& bound) const;
 	void ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const;
 	void BuildPalette(const BoundMesh& bound, const Object3D& mesh,
@@ -80,5 +103,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 	std::vector<BoundMesh> boundMeshes;
 	Method method = Method::LinearBlend;
+	WeightMode weightMode = WeightMode::Default;
+	// The epsilon the reference implementation defaults to.
+	float boneHeatAlpha = 0.001f;
 	bool showWeights = false;
 };

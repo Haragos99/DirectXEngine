@@ -1,10 +1,13 @@
 #include "skinningcontroller.h"
 
+#include "boneheat.h"
 #include "dualquaternionskinning.h"
+#include "halfedgemesh.h"
 #include "linearblendskinning.h"
 #include "object3d.h"
 #include "skeleton.h"
 
+#include <cmath>
 #include <limits>
 
 using namespace DirectX;
@@ -52,6 +55,18 @@ const char* SkinningController::GetMethodName(Method method)
 	}
 }
 
+const char* SkinningController::GetWeightModeName(WeightMode mode)
+{
+	switch (mode)
+	{
+	case WeightMode::BoneHeat:
+		return "Bone Heat";
+	case WeightMode::Default:
+	default:
+		return "Default (closest bone)";
+	}
+}
+
 void SkinningController::ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const
 {
 	bound.technique->SetWeightDebug(showWeights);
@@ -92,6 +107,43 @@ void SkinningController::SetMethod(Method newMethod)
 	}
 }
 
+void SkinningController::SetWeightMode(WeightMode newMode)
+{
+	if (newMode == weightMode)
+	{
+		return;
+	}
+
+	weightMode = newMode;
+	ResolveWeights();
+}
+
+void SkinningController::SetBoneHeatAlpha(float newAlpha)
+{
+	if (newAlpha == boneHeatAlpha)
+	{
+		return;
+	}
+
+	boneHeatAlpha = newAlpha;
+	if (weightMode == WeightMode::BoneHeat)
+	{
+		ResolveWeights();
+	}
+}
+
+void SkinningController::ResolveWeights()
+{
+	for (BoundMesh& bound : boundMeshes)
+	{
+		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
+		if (!mesh || !Solve(bound))
+			continue;
+
+		mesh->SetDeformedVertices(bound.technique->GetDeformedVertices());
+	}
+}
+
 std::vector<SkinningController::BoneSamples> SkinningController::SampleBones() const
 {
 	const std::vector<XMFLOAT4X4>& bindGlobals = rig.GetBindGlobals();
@@ -124,12 +176,14 @@ std::vector<SkinningController::BoneSamples> SkinningController::SampleBones() c
 }
 
 SkinWeightTable SkinningController::CalculateWeights(const std::vector<VertexData>& restVertices,
-                                                     FXMMATRIX meshBindToRig) const
+                                                     FXMMATRIX meshBindToRig,
+                                                     std::vector<float>& closestDistance) const
 {
 	const std::vector<BoneSamples> bones = SampleBones();
 
 	SkinWeightTable weights;
 	weights.Resize(restVertices.size(), rig.GetJointCount());
+	closestDistance.assign(restVertices.size(), 0.0f);
 
 	for (size_t v = 0; v < restVertices.size(); ++v)
 	{
@@ -155,6 +209,10 @@ SkinWeightTable SkinningController::CalculateWeights(const std::vector<VertexDat
 		{
 			weights[v][closestJoint] = 1.0f;
 		}
+		if (std::isfinite(closest))
+		{
+			closestDistance[v] = std::sqrt(closest);
+		}
 	}
 	return weights;
 }
@@ -166,7 +224,21 @@ bool SkinningController::Solve(BoundMesh& bound) const
 		return false;
 	}
 
-	bound.weights = CalculateWeights(bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig));
+	std::vector<float> closestDistance;
+	bound.weights = CalculateWeights(bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig), closestDistance);
+
+	if (weightMode == WeightMode::BoneHeat)
+	{
+		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
+		const HalfEdgeMesh* topology = mesh ? mesh->GetHalfEdgeMesh() : nullptr;
+		// Without connectivity there is no surface to diffuse over, so the rigid
+		// binding is what the technique gets.
+		if (topology != nullptr && !topology->IsEmpty())
+		{
+			BoneHeat(boneHeatAlpha).Execute(*topology, closestDistance, bound.weights);
+		}
+	}
+
 	return bound.technique->Prepare(bound.restVertices, bound.weights);
 }
 
