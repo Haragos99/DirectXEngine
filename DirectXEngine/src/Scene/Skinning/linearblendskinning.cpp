@@ -108,16 +108,16 @@ bool LinearBlendSkinning::Prepare(const std::vector<VertexData>& restVertices,
 	vertexCount = 0;
 	jointCount = 0;
 
-	if (restVertices.empty() || restVertices.size() != weights.VertexCount() || weights.JointCount() == 0)
+	if (restVertices.empty() || restVertices.size() != weights.VertexCount() || weights.InfluenceCount() == 0)
 		return false;
 
 	if (!LoadShader())
 		return false;
 
 	const UINT count = static_cast<UINT>(restVertices.size());
-	const UINT joints = static_cast<UINT>(weights.JointCount());
-	// The table keeps readable per-vertex rows; the GPU needs one array.
-	const std::vector<float> flatWeights = weights.Flatten();
+	const UINT joints = static_cast<UINT>(weights.InfluenceCount());
+	// Already laid out the way gWeights is indexed.
+	const std::vector<float>& flatWeights = weights.Data();
 
 	if (!CreateInput(restVertices.data(), sizeof(VertexData), count, restBuffer, restView))
 		return false;

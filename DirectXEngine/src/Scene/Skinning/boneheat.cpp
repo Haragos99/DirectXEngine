@@ -31,19 +31,19 @@ namespace
 		return std::tan(kHalfPi - theta);
 	}
 
-	// Bone heat only re-decides which joints drive a vertex, so each row has to
+	// Bone heat only re-decides which bones drive a vertex, so each row has to
 	// come back out a partition of unity: a row summing to anything else scales
 	// the vertex even where the rig has not moved.
 	void Normalise(SkinWeightTable& welded, const SkinWeightTable& rigid)
 	{
 		for (size_t v = 0; v < welded.VertexCount(); ++v)
 		{
-			std::vector<float>& row = welded[v];
+			const std::span<float> row = welded[v];
 
 			double total = 0.0;
 			for (float& weight : row)
 			{
-				// The cotangent Laplacian can overshoot, and a joint pulling a
+				// The cotangent Laplacian can overshoot, and a bone pulling a
 				// vertex backwards is not something the solve is asking for.
 				weight = std::max(weight, 0.0f);
 				total += weight;
@@ -51,7 +51,7 @@ namespace
 
 			if (total < kMinimumWeightSum)
 			{
-				row = rigid[v];
+				welded.CopyRow(v, rigid, v);
 				continue;
 			}
 
@@ -119,18 +119,18 @@ void BoneHeat::CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagon
                                        SkinWeightTable& welded) const
 {
 	const int n = static_cast<int>(welded.VertexCount());
-	for (size_t joint = 0; joint < welded.JointCount(); ++joint)
+	for (size_t influence = 0; influence < welded.InfluenceCount(); ++influence)
 	{
 		Eigen::VectorXd baseWeight = Eigen::VectorXd::Zero(n);
-		bool influences = false;
+		bool used = false;
 		for (int v = 0; v < n; ++v)
 		{
-			baseWeight[v] = welded[v][joint];
-			influences = influences || baseWeight[v] != 0.0;
+			baseWeight[v] = welded[v][influence];
+			used = used || baseWeight[v] != 0.0;
 		}
 
-		// A joint nothing binds to solves to zero, so there is nothing to gain.
-		if (!influences)
+		// An influence nothing binds to solves to zero, so there is nothing to gain.
+		if (!used)
 			continue;
 
 		const Eigen::VectorXd optimal = solver.solve(diagonal * baseWeight);
@@ -138,7 +138,7 @@ void BoneHeat::CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagon
 			continue;
 
 		for (int v = 0; v < n; ++v)
-			welded[v][joint] = static_cast<float>(optimal[v]);
+			welded[v][influence] = static_cast<float>(optimal[v]);
 	}
 }
 
@@ -157,12 +157,12 @@ bool BoneHeat::Execute(const HalfEdgeMesh& mesh,
 	// The Laplacian lives on the welded topology while the weights live on the
 	// render vertices, so gather down onto the welded ones, solve, scatter back.
 	SkinWeightTable welded;
-	welded.Resize(n, weights.JointCount());
+	welded.Resize(n, weights.InfluenceCount());
 	std::vector<double> distance(n, std::numeric_limits<double>::infinity());
 	for (size_t v = 0; v < weights.VertexCount(); ++v)
 	{
 		const int target = mesh.VertexOf(v);
-		welded[target] = weights[v];
+		welded.CopyRow(target, weights, v);
 		distance[target] = std::min(distance[target], static_cast<double>(closestDistance[v]));
 	}
 
@@ -180,7 +180,7 @@ bool BoneHeat::Execute(const HalfEdgeMesh& mesh,
 	Normalise(welded, rigid);
 
 	for (size_t v = 0; v < weights.VertexCount(); ++v)
-		weights[v] = welded[mesh.VertexOf(v)];
+		weights.CopyRow(v, welded, mesh.VertexOf(v));
 
 	return true;
 }

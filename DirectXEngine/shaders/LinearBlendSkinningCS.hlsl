@@ -15,7 +15,7 @@ struct JointMatrix
 };
 
 StructuredBuffer<RestVertex> gRest : register(t0);
-// One weight per joint for every vertex, vertex major.
+// One weight per influence (bone) for every vertex, vertex major.
 StructuredBuffer<float> gWeights : register(t1);
 StructuredBuffer<JointMatrix> gPalette : register(t2);
 RWByteAddressBuffer gOut : register(u0);

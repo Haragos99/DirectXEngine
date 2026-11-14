@@ -144,70 +144,114 @@ void SkinningController::ResolveWeights()
 	}
 }
 
-std::vector<SkinningController::BoneSamples> SkinningController::SampleBones() const
+std::vector<SkinInfluence> SkinningController::BuildInfluences() const
 {
-	const std::vector<XMFLOAT4X4>& bindGlobals = rig.GetBindGlobals();
+	const int jointCount = static_cast<int>(rig.GetJointCount());
 
-	std::vector<BoneSamples> samples;
-	for (const Bone& bone : rig.GetBones())
+	std::vector<SkinInfluence> influences;
+	for (size_t b = 0; b < rig.GetBones().size(); ++b)
 	{
+		const Bone& bone = rig.GetBones()[b];
 		const int start = bone.GetStartJoint();
 		const int end = bone.GetEndJoint();
-		if (start >= static_cast<int>(bindGlobals.size()) || end >= static_cast<int>(bindGlobals.size()))
+		if (start < 0 || start >= jointCount || end < 0 || end >= jointCount)
 		{
 			continue;
 		}
 
-		const XMVECTOR from = XMLoadFloat4x4(&bindGlobals[start]).r[3];
-		const XMVECTOR to = XMLoadFloat4x4(&bindGlobals[end]).r[3];
+		SkinInfluence influence;
+		influence.bone = static_cast<int>(b);
+		// The bone start->end sits still in the start joint's frame, so that
+		// joint's skinning matrix is what carries the skin around it.
+		influence.drivingJoint = start;
+		influence.color = bone.GetColor();
+		influence.name = rig.GetJoint(start).GetName() + " > " + rig.GetJoint(end).GetName();
+		influences.push_back(std::move(influence));
+	}
 
-		BoneSamples boneSamples;
-		boneSamples.jointId = end; // the end joint is what drives this bone
-		boneSamples.points.reserve(kSamplesPerBone + 1);
-		for (int i = 0; i <= kSamplesPerBone; ++i)
+	// Without bones every vertex simply rides on the root.
+	if (influences.empty() && jointCount > 0)
+	{
+		SkinInfluence root;
+		root.drivingJoint = 0;
+		root.color = XMFLOAT3(0.6f, 0.6f, 0.6f);
+		root.name = rig.GetJoint(0).GetName();
+		influences.push_back(std::move(root));
+	}
+	return influences;
+}
+
+std::vector<SkinningController::BoneSamples> SkinningController::SampleBones(const std::vector<SkinInfluence>& influences) const
+{
+	const std::vector<XMFLOAT4X4>& bindGlobals = rig.GetBindGlobals();
+	const auto bindPosition = [&](int joint)
+	{
+		return joint >= 0 && joint < static_cast<int>(bindGlobals.size())
+			? XMLoadFloat4x4(&bindGlobals[joint]).r[3]
+			: XMVectorZero();
+	};
+
+	std::vector<BoneSamples> samples(influences.size());
+	for (size_t i = 0; i < influences.size(); ++i)
+	{
+		const SkinInfluence& influence = influences[i];
+		if (influence.bone == SkinInfluence::kRootFallback)
 		{
 			XMFLOAT3 point;
-			XMStoreFloat3(&point, XMVectorLerp(from, to, static_cast<float>(i) / kSamplesPerBone));
-			boneSamples.points.push_back(point);
+			XMStoreFloat3(&point, bindPosition(influence.drivingJoint));
+			samples[i].points.push_back(point);
+			continue;
 		}
-		samples.push_back(std::move(boneSamples));
+
+		const Bone& bone = rig.GetBones()[influence.bone];
+		const XMVECTOR from = bindPosition(bone.GetStartJoint());
+		const XMVECTOR to = bindPosition(bone.GetEndJoint());
+
+		samples[i].points.reserve(kSamplesPerBone + 1);
+		for (int s = 0; s <= kSamplesPerBone; ++s)
+		{
+			XMFLOAT3 point;
+			XMStoreFloat3(&point, XMVectorLerp(from, to, static_cast<float>(s) / kSamplesPerBone));
+			samples[i].points.push_back(point);
+		}
 	}
 	return samples;
 }
 
-SkinWeightTable SkinningController::CalculateWeights(const std::vector<VertexData>& restVertices,
+SkinWeightTable SkinningController::CalculateWeights(const std::vector<SkinInfluence>& influences,
+                                                     const std::vector<VertexData>& restVertices,
                                                      FXMMATRIX meshBindToRig,
                                                      std::vector<float>& closestDistance) const
 {
-	const std::vector<BoneSamples> bones = SampleBones();
+	const std::vector<BoneSamples> bones = SampleBones(influences);
 
 	SkinWeightTable weights;
-	weights.Resize(restVertices.size(), rig.GetJointCount());
+	weights.Resize(restVertices.size(), influences.size());
 	closestDistance.assign(restVertices.size(), 0.0f);
 
 	for (size_t v = 0; v < restVertices.size(); ++v)
 	{
 		const XMVECTOR position = XMVector3Transform(XMLoadFloat3(&restVertices[v].position), meshBindToRig);
 
-		int closestJoint = 0;
+		size_t closestInfluence = 0;
 		float closest = std::numeric_limits<float>::infinity();
-		for (const BoneSamples& bone : bones)
+		for (size_t i = 0; i < bones.size(); ++i)
 		{
-			for (const XMFLOAT3& point : bone.points)
+			for (const XMFLOAT3& point : bones[i].points)
 			{
 				const float distance = XMVectorGetX(
 					XMVector3LengthSq(XMVectorSubtract(XMLoadFloat3(&point), position)));
 				if (distance < closest)
 				{
 					closest = distance;
-					closestJoint = bone.jointId;
+					closestInfluence = i;
 				}
 			}
 		}
 
-		if (closestJoint < static_cast<int>(weights.JointCount()))
+		if (closestInfluence < weights.InfluenceCount())
 		{
-			weights[v][closestJoint] = 1.0f;
+			weights[v][closestInfluence] = 1.0f;
 		}
 		if (std::isfinite(closest))
 		{
@@ -219,13 +263,14 @@ SkinWeightTable SkinningController::CalculateWeights(const std::vector<VertexDat
 
 bool SkinningController::Solve(BoundMesh& bound) const
 {
-	if (rig.GetJointCount() == 0 || bound.restVertices.empty())
+	bound.influences = BuildInfluences();
+	if (bound.influences.empty() || bound.restVertices.empty())
 	{
 		return false;
 	}
 
 	std::vector<float> closestDistance;
-	bound.weights = CalculateWeights(bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig), closestDistance);
+	bound.weights = CalculateWeights(bound.influences, bound.restVertices, XMLoadFloat4x4(&bound.meshBindToRig), closestDistance);
 
 	if (weightMode == WeightMode::BoneHeat)
 	{
@@ -338,10 +383,14 @@ void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& me
 	// Back out of the mesh's own world matrix, which the vertex shader reapplies.
 	const XMMATRIX rigToMesh = rig.GetWorldMatrix() * XMMatrixInverse(nullptr, mesh.GetWorldMatrix());
 
-	palette.resize(poseMatrices.size());
-	for (size_t i = 0; i < poseMatrices.size(); ++i)
+	palette.resize(bound.influences.size());
+	for (size_t i = 0; i < bound.influences.size(); ++i)
 	{
-		XMStoreFloat4x4(&palette[i], meshBindToRig * XMLoadFloat4x4(&poseMatrices[i]) * rigToMesh);
+		const int joint = bound.influences[i].drivingJoint;
+		const XMMATRIX skinning = joint >= 0 && joint < static_cast<int>(poseMatrices.size())
+			? XMLoadFloat4x4(&poseMatrices[joint])
+			: XMMatrixIdentity();
+		XMStoreFloat4x4(&palette[i], meshBindToRig * skinning * rigToMesh);
 	}
 }
 

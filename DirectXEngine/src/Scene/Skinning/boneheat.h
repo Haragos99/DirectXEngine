@@ -8,7 +8,7 @@ class HalfEdgeMesh;
 
 // Bone heat diffusion, following the reference implementation: start from the
 // rigid closest-bone binding and relax it over the surface by solving
-// (-L + alpha*D) w_k = alpha*D * ~w_k once per joint, with L the cotangent
+// (-L + alpha*D) w_k = alpha*D * ~w_k once per bone, with L the cotangent
 // Laplacian and D the inverse squared distance to the closest bone.
 //
 // Alpha trades the two sides off: large values pin the result to the rigid

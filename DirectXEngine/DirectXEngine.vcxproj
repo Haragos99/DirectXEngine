@@ -280,6 +280,7 @@
     <ClInclude Include="src\Scene\Voxel\isosurfacemodel.h" />
     <ClInclude Include="src\Scene\Skinning\iskinningtechnique.h" />
     <ClInclude Include="src\Scene\Skinning\skinweights.h" />
+    <ClInclude Include="src\Scene\Skinning\skininfluence.h" />
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h" />
     <ClInclude Include="src\Scene\Skinning\dualquaternionskinning.h" />
     <ClInclude Include="src\Scene\Skinning\boneheat.h" />

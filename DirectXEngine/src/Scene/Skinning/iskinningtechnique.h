@@ -18,10 +18,11 @@ public:
 	virtual bool Prepare(const std::vector<VertexData>& restVertices,
 	                     const SkinWeightTable& weights) = 0;
 
-	// One matrix per joint, already expressed in the bound mesh's local space.
+	// One matrix per influence (weight table column), already expressed in the
+	// bound mesh's local space.
 	virtual void Deform(const std::vector<DirectX::XMFLOAT4X4>& palette) = 0;
 
-	// Optional: write the dominant joint into the texcoord so the weights can be
+	// Optional: write the dominant influence into the texcoord so the weights can be
 	// looked at. Techniques that cannot show them simply keep drawing normally.
 	virtual void SetWeightDebug(bool /*enabled*/) {}
 

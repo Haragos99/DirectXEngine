@@ -1,37 +1,42 @@
 #pragma once
+#include <algorithm>
 #include <cstddef>
+#include <span>
 #include <vector>
 
-
+// Vertex x influence weights, stored row major in one array: vertex v owns
+// [v * InfluenceCount(), +InfluenceCount()). That is exactly how gWeights is
+// indexed in the skinning shaders, so the array uploads as it is.
 class SkinWeightTable
 {
 public:
-	void Resize(size_t vertexCount, size_t jointCount)
+	void Resize(size_t vertexCount, size_t influenceCount)
 	{
-		weights.assign(vertexCount, std::vector<float>(jointCount, 0.0f));
-		joints = jointCount;
+		vertices = vertexCount;
+		influences = influenceCount;
+		weights.assign(vertexCount * influenceCount, 0.0f);
 	}
 
-	size_t VertexCount() const { return weights.size(); }
-	size_t JointCount() const { return joints; }
-	bool IsEmpty() const { return weights.empty() || joints == 0; }
+	size_t VertexCount() const { return vertices; }
+	size_t InfluenceCount() const { return influences; }
+	bool IsEmpty() const { return vertices == 0 || influences == 0; }
 
-	std::vector<float>& operator[](size_t vertex) { return weights[vertex]; }
-	const std::vector<float>& operator[](size_t vertex) const { return weights[vertex]; }
+	std::span<float> Row(size_t vertex) { return { weights.data() + vertex * influences, influences }; }
+	std::span<const float> Row(size_t vertex) const { return { weights.data() + vertex * influences, influences }; }
+	std::span<float> operator[](size_t vertex) { return Row(vertex); }
+	std::span<const float> operator[](size_t vertex) const { return Row(vertex); }
 
-	// Row major, matching how gWeights is indexed in the skinning shaders:
-	// vertex v owns [v * jointCount, +jointCount).
-	std::vector<float> Flatten() const
+	// Copies one row over another. Both tables must have the same influence count.
+	void CopyRow(size_t vertex, const SkinWeightTable& from, size_t fromVertex)
 	{
-		std::vector<float> flat;
-		flat.reserve(weights.size() * joints);
-		for (const std::vector<float>& row : weights)
-			flat.insert(flat.end(), row.begin(), row.end());
-		return flat;
+		std::ranges::copy(from.Row(fromVertex), Row(vertex).begin());
 	}
+
+	const std::vector<float>& Data() const { return weights; }
 
 private:
-	std::vector<std::vector<float>> weights;
-	// Kept separately so the joint count survives an empty table.
-	size_t joints = 0;
+	std::vector<float> weights;
+	// Kept separately so both counts survive an empty table.
+	size_t vertices = 0;
+	size_t influences = 0;
 };

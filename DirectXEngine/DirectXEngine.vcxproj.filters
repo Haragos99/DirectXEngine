@@ -431,6 +431,9 @@
     <ClInclude Include="src\Scene\Skinning\skinweights.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\Skinning\skininfluence.h">
+      <Filter>Header Files\Scene\Skinning</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene\Skinning\linearblendskinning.h">
       <Filter>Header Files\Scene\Skinning</Filter>
     </ClInclude>

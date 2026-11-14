@@ -1,9 +1,9 @@
-// Colours a skinned mesh by the joint that drives each vertex. The skinning
-// dispatch puts (dominant joint, its weight) in the texcoord while this is in
-// use, so no extra vertex attribute is needed.
+// Colours a skinned mesh by the bone that drives each vertex. The skinning
+// dispatch puts (dominant influence, its weight) in the texcoord while this is
+// in use, so no extra vertex attribute is needed.
 //
-// The palette must stay in step with BoneColors::For in bone.cpp, and bone i
-// ends at joint i + 1, which is why the joint index is shifted down by one.
+// Influence i is bone i, so the palette must stay in step with BoneColors::For
+// in bone.cpp. A rig without bones has one root influence, drawn in its colour 0.
 
 struct VS_OUT
 {
@@ -27,11 +27,10 @@ static const float3 kPalette[24] =
 
 float4 PSMain(VS_OUT input) : SV_TARGET
 {
-    const uint joint = (uint) (input.tex.x + 0.5f);
+    const uint influence = (uint) (input.tex.x + 0.5f);
     const float weight = saturate(input.tex.y);
 
-    // The root drives no bone of its own, so it gets a neutral grey.
-    const float3 color = (joint == 0) ? float3(0.6f, 0.6f, 0.6f) : kPalette[(joint - 1) % 24];
+    const float3 color = kPalette[influence % 24];
 
     // A little shading keeps the silhouette readable against flat colour.
     const float3 N = normalize(input.normal);

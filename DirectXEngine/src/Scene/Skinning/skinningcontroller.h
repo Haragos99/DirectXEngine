@@ -1,5 +1,6 @@
 #pragma once
 #include "iskinningtechnique.h"
+#include "skininfluence.h"
 
 #include <memory>
 #include <string>
@@ -56,7 +57,7 @@ public:
 	// in. Needed after the weight strategy, or anything feeding it, changes.
 	void ResolveWeights();
 
-	// Draws every bound mesh coloured by the joint that drives it.
+	// Draws every bound mesh coloured by the bone that drives it.
 	void SetShowWeights(bool show);
 	bool GetShowWeights() const { return showWeights; }
 
@@ -72,25 +73,29 @@ private:
 	{
 		std::weak_ptr<Object3D> mesh;
 		std::vector<VertexData> restVertices; // mesh local space, as bound
+		std::vector<SkinInfluence> influences; // the columns of `weights`
 		SkinWeightTable weights;
 		DirectX::XMFLOAT4X4 meshBindToRig;
 		std::wstring originalPixelShader; // restored when the weight view goes off
 		std::unique_ptr<ISkinningTechnique> technique;
 	};
 
-	// Points sampled along one bone, in the rig's bind pose.
+	// Points sampled along one influence's bone, in the rig's bind pose.
 	struct BoneSamples
 	{
-		int jointId = 0;
 		std::vector<DirectX::XMFLOAT3> points;
 	};
 
 	std::unique_ptr<ISkinningTechnique> CreateTechnique() const;
-	std::vector<BoneSamples> SampleBones() const;
+	// One influence per bone, or a single root one for a rig without bones.
+	std::vector<SkinInfluence> BuildInfluences() const;
+	// One entry per influence, in the same order.
+	std::vector<BoneSamples> SampleBones(const std::vector<SkinInfluence>& influences) const;
 	// Closest bone takes the whole vertex, as in the reference implementation.
 	// closestDistance comes back holding each vertex's distance to that bone,
 	// which is what bone heat weighs its constraint by.
-	SkinWeightTable CalculateWeights(const std::vector<VertexData>& restVertices,
+	SkinWeightTable CalculateWeights(const std::vector<SkinInfluence>& influences,
+	                                 const std::vector<VertexData>& restVertices,
 	                                 DirectX::FXMMATRIX meshBindToRig,
 	                                 std::vector<float>& closestDistance) const;
 	bool Solve(BoundMesh& bound) const;
