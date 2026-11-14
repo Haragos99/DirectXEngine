@@ -2,7 +2,9 @@
 #include "iskinningtechnique.h"
 #include "skininfluence.h"
 
+#include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 #include <wrl/client.h>
@@ -74,6 +76,17 @@ public:
 	// Columns of the bound mesh's weight table, null when it is not bound here.
 	const std::vector<SkinInfluence>* GetInfluences(const Object3D& mesh) const;
 
+	// Read access for the weight table. The references stay valid until the
+	// next bind, unbind or re-solve, so take a fresh view every frame.
+	struct BindingView
+	{
+		const SkinWeightTable& weights;
+		const std::vector<SkinInfluence>& influences;
+		// Changes whenever the weights are re-solved, so derived data can be cached.
+		uint64_t revision;
+	};
+	std::optional<BindingView> GetBinding(const Object3D& mesh) const;
+
 	// Re-solves the weights of every bound mesh. Needed after the rig gains a
 	// joint or a rest offset moves, because the bind pose is then a different one.
 	void RebindAll();
@@ -93,6 +106,7 @@ private:
 		std::wstring originalVertexShader;
 		std::wstring originalPixelShader;
 		std::unique_ptr<ISkinningTechnique> technique;
+		uint64_t revision = 0;
 	};
 
 	// Points sampled along one influence's bone, in the rig's bind pose.
@@ -131,4 +145,6 @@ private:
 	float boneHeatAlpha = 0.001f;
 	SkinWeightView weightView = SkinWeightView::Off;
 	int focusedBone = kNoBone;
+	// Source of BoundMesh::revision; Solve is const but hands out new ones.
+	mutable uint64_t lastRevision = 0;
 };

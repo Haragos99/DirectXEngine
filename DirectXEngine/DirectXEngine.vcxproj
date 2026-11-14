@@ -191,6 +191,7 @@
     <ClCompile Include="src\Scene\Skinning\boneheat.cpp" />
     <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp" />
     <ClCompile Include="src\UI\Sections\skinbindingsection.cpp" />
+    <ClCompile Include="src\UI\Sections\skinweightssection.cpp" />
     <ClCompile Include="src\Rendering\raytracer.cpp" />
     <ClCompile Include="src\Rendering\raytraceshader.cpp" />
     <ClCompile Include="src\Rendering\shaders.cpp" />
@@ -288,6 +289,7 @@
     <ClInclude Include="src\Scene\Skinning\boneheat.h" />
     <ClInclude Include="src\Scene\Skinning\skinningcontroller.h" />
     <ClInclude Include="src\UI\Sections\skinbindingsection.h" />
+    <ClInclude Include="src\UI\Sections\skinweightssection.h" />
     <ClInclude Include="src\Rendering\raytracer.h" />
     <ClInclude Include="src\Rendering\raytraceshader.h" />
     <ClInclude Include="src\Rendering\shaders.h" />

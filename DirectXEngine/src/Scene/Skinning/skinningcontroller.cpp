@@ -145,6 +145,16 @@ int SkinningController::GetHighlightedBone() const
 	return weightView == SkinWeightView::SingleInfluence && focusedBone >= 0 ? focusedBone : -1;
 }
 
+std::optional<SkinningController::BindingView> SkinningController::GetBinding(const Object3D& mesh) const
+{
+	for (const BoundMesh& bound : boundMeshes)
+	{
+		if (bound.mesh.lock().get() == &mesh)
+			return BindingView{ bound.weights, bound.influences, bound.revision };
+	}
+	return std::nullopt;
+}
+
 const std::vector<SkinInfluence>* SkinningController::GetInfluences(const Object3D& mesh) const
 {
 	for (const BoundMesh& bound : boundMeshes)
@@ -335,6 +345,7 @@ SkinWeightTable SkinningController::CalculateWeights(const std::vector<SkinInflu
 bool SkinningController::Solve(BoundMesh& bound) const
 {
 	bound.influences = BuildInfluences();
+	bound.revision = ++lastRevision;
 	if (bound.influences.empty() || bound.restVertices.empty())
 	{
 		return false;

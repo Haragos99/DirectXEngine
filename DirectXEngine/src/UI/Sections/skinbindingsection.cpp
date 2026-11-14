@@ -53,6 +53,19 @@ void SkinBindingSection::CollectSkeletons(const std::vector<std::shared_ptr<Obje
 	}
 }
 
+std::shared_ptr<Skeleton> SkinBindingSection::FindBoundSkeleton(const std::vector<std::shared_ptr<Object3D>>& objects,
+                                                                const Object3D& mesh)
+{
+	std::vector<std::shared_ptr<Skeleton>> rigs;
+	CollectSkeletons(objects, rigs);
+	for (const std::shared_ptr<Skeleton>& rig : rigs)
+	{
+		if (rig->GetSkinning().IsBound(mesh))
+			return rig;
+	}
+	return nullptr;
+}
+
 void SkinBindingSection::DrawBonePicker(SkinningController& skinning, const Object3D& mesh)
 {
 	const std::vector<SkinInfluence>* influences = skinning.GetInfluences(mesh);
@@ -197,6 +210,9 @@ void SkinBindingSection::Draw(UIState& state)
 
 	if (skinning.GetWeightView() == SkinWeightView::SingleInfluence)
 		DrawBonePicker(skinning, *mesh);
+
+	ImGui::Checkbox("Weight table", &state.skinWeightsWindowOpen);
+	ImGui::SetItemTooltip("Every vertex's weight per bone, in a window of its own.");
 
 	if (ImGui::Button("Unbind"))
 		skinning.UnbindMesh(*mesh);

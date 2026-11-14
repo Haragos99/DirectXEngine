@@ -318,6 +318,9 @@
     <ClCompile Include="src\UI\Sections\skinbindingsection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI\Sections\skinweightssection.cpp">
+      <Filter>Source Files\UI\Sections</Filter>
+    </ClCompile>
     <ClCompile Include="src\UI\Sections\marchingcubessection.cpp">
       <Filter>Source Files\UI\Sections</Filter>
     </ClCompile>
@@ -615,6 +618,9 @@
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\Sections\skinbindingsection.h">
+      <Filter>Header Files\UI\Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\Sections\skinweightssection.h">
       <Filter>Header Files\UI\Sections</Filter>
     </ClInclude>
     <ClInclude Include="src\UI\Sections\marchingcubessection.h">

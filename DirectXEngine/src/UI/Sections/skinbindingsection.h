@@ -17,10 +17,14 @@ public:
 	bool IsVisible(const UIState& state) const override;
 	void Draw(UIState& state) override;
 
-private:
 	// Every skeleton in the scene, however deeply it is parented.
 	static void CollectSkeletons(const std::vector<std::shared_ptr<Object3D>>& objects,
 	                             std::vector<std::shared_ptr<Skeleton>>& found);
+	// The skeleton `mesh` is bound to, or null.
+	static std::shared_ptr<Skeleton> FindBoundSkeleton(const std::vector<std::shared_ptr<Object3D>>& objects,
+	                                                   const Object3D& mesh);
+
+private:
 	// Which bone the single-bone weight view shows, each with its bone colour.
 	static void DrawBonePicker(SkinningController& skinning, const Object3D& mesh);
 
