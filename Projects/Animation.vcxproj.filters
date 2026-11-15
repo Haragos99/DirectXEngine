@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Skeleton">
+      <UniqueIdentifier>{70157f59-6977-4456-960d-964335df6a30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning">
+      <UniqueIdentifier>{5b0c2cd2-ce8f-4122-a40a-22500ab9303e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Correctives">
+      <UniqueIdentifier>{3327b4dc-2112-49c0-b77a-5db9b5aa72ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Deformers">
+      <UniqueIdentifier>{31eb8434-7857-430c-8690-67b3e59faafa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Weights">
+      <UniqueIdentifier>{10b129ef-2b74-486f-bcc2-05fdf93a7c53}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\bone.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\joint.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\jointhandle.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\skeleton.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\skeletongeometry.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skeleton\skeletonpose.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\Deformers\computeskindeformer.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\Deformers\dualquaternionskinning.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\Deformers\linearblendskinning.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\skinningcontroller.cpp">
+      <Filter>Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\skinningregistry.cpp">
+      <Filter>Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\Weights\boneheatweights.cpp">
+      <Filter>Skinning\Weights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\Skinning\Weights\closestboneweights.cpp">
+      <Filter>Skinning\Weights</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\bone.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\joint.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\jointhandle.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\skeleton.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\skeletongeometry.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skeleton\skeletonpose.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Correctives\iskincorrective.h">
+      <Filter>Skinning\Correctives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Deformers\computeskindeformer.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Deformers\dualquaternionskinning.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Deformers\iskindeformer.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Deformers\linearblendskinning.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\skinbindcontext.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\skininfluence.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\skinningcontroller.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\skinningregistry.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\skinweights.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Weights\boneheatweights.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Weights\closestboneweights.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\Scene\Skinning\Weights\iweightsolver.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

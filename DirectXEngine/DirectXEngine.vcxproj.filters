@@ -13,672 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="External">
-      <UniqueIdentifier>{90190580-a16f-4c23-92c5-86204ba3e422}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader Files">
-      <UniqueIdentifier>{0f0f477a-cdaa-4ae1-ba55-b6942c4af44d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="External\imgui">
-      <UniqueIdentifier>{d3a4b6ab-58e5-4b34-a4a3-3e2ac1c3f5b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Rendering">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Loaders">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Loaders\Ply">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Loaders\Importers">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a08}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Gizmos">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Skeleton">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Skinning">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Skinning\Deformers">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a22}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Skinning\Weights">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scene\Voxel">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\UI\Sections">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Rendering">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Loaders">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Loaders\Ply">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Loaders\Importers">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b08}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Gizmos">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Skeleton">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b0a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Skinning">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Skinning\Correctives">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Skinning\Deformers">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Skinning\Weights">
-      <UniqueIdentifier>{2b9a1c40-1d4e-4a2f-9a51-0f0c1c0f1a23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scene\Voxel">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UI">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\UI\Sections">
-      <UniqueIdentifier>{3c8b2d50-2e5f-4b3a-8b62-1f1d2d1f2b09}</UniqueIdentifier>
+      <UniqueIdentifier>{b7e846ef-21a5-4327-9fbe-13ef9035f260}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Scene\Skinning\skinningcontroller.cpp">
-      <Filter>Source Files\Scene\Skinning</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\skinningregistry.cpp">
-      <Filter>Source Files\Scene\Skinning</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\Weights\closestboneweights.cpp">
-      <Filter>Source Files\Scene\Skinning\Weights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\Weights\boneheatweights.cpp">
-      <Filter>Source Files\Scene\Skinning\Weights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\Deformers\computeskindeformer.cpp">
-      <Filter>Source Files\Scene\Skinning\Deformers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\Deformers\linearblendskinning.cpp">
-      <Filter>Source Files\Scene\Skinning\Deformers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skinning\Deformers\dualquaternionskinning.cpp">
-      <Filter>Source Files\Scene\Skinning\Deformers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\main.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="src\Core\camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\engine.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\windowapp.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\mouse.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\keyboard.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\camera.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="src\Core\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\External\DDSTextureLoader.cpp">
-      <Filter>External</Filter>
+    <ClCompile Include="src\Core\mouse.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\External\WICTextureLoader.cpp">
-      <Filter>External</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\envcube.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\texture.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\shaders.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\graphics.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\raytracer.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\raytraceshader.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\cube.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\plane.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\mesh.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\meshmodel.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\object3D.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\transform.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Gizmos\gizmo.cpp">
-      <Filter>Source Files\Scene\Gizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Gizmos\movegizmo.cpp">
-      <Filter>Source Files\Scene\Gizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Gizmos\scalegizmo.cpp">
-      <Filter>Source Files\Scene\Gizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Gizmos\gizmocontroller.cpp">
-      <Filter>Source Files\Scene\Gizmos</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\joint.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\jointhandle.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\bone.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\skeletonpose.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\skeletongeometry.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Skeleton\skeleton.cpp">
-      <Filter>Source Files\Scene\Skeleton</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\spherefield.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\voxelgrid.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\scalarfieldsampler.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\marchingcubestables.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\marchingcubes.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\splatdensityvolume.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\isosurfacejob.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Voxel\isosurfacemodel.cpp">
-      <Filter>Source Files\Scene\Voxel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\halfedgemesh.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\imodelloader.cpp">
-      <Filter>Source Files\Scene\Loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\objmodelloader.cpp">
-      <Filter>Source Files\Scene\Loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\modelloaderregistry.cpp">
-      <Filter>Source Files\Scene\Loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\plymodelloader.cpp">
-      <Filter>Source Files\Scene\Loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\gaussiansplatting.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\splatcloudobject.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\pointcloudmodel.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\modelimportservice.cpp">
-      <Filter>Source Files\Scene\Loaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Importers\meshobjectimporter.cpp">
-      <Filter>Source Files\Scene\Loaders\Importers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Importers\gaussiansplatimporter.cpp">
-      <Filter>Source Files\Scene\Loaders\Importers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Importers\pointcloudimporter.cpp">
-      <Filter>Source Files\Scene\Loaders\Importers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\pointcloud.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\pointcloudplyloader.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\gaussiansplatshader.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\splatdepthsorter.cpp">
-      <Filter>Source Files\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\plyheaderparser.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\plyelementreader.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplat.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\standardsplatdecoder.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene\Loaders\Ply\supersplatdecoder.cpp">
-      <Filter>Source Files\Scene\Loaders\Ply</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\ui.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\uistate.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\modelfiledialog.cpp">
-      <Filter>Source Files\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\importsection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\transformmodesection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\sceneoutlinersection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\objectpropertiessection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\skeletonsection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\skinbindingsection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\skinweightssection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\marchingcubessection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\splatmeshingsection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\splatsettingssection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\Sections\viewportsection.cpp">
-      <Filter>Source Files\UI\Sections</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\imgui.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\imgui_draw.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\imgui_tables.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\imgui_demo.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\backends\imgui_impl_win32.cpp">
-      <Filter>External\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\External\imgui\backends\imgui_impl_dx11.cpp">
-      <Filter>External\imgui</Filter>
+    <ClCompile Include="src\Core\windowapp.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Scene\Skinning\skinningcontroller.h">
-      <Filter>Header Files\Scene\Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\skinningregistry.h">
-      <Filter>Header Files\Scene\Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\skinweights.h">
-      <Filter>Header Files\Scene\Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\skininfluence.h">
-      <Filter>Header Files\Scene\Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\skinbindcontext.h">
-      <Filter>Header Files\Scene\Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Weights\iweightsolver.h">
-      <Filter>Header Files\Scene\Skinning\Weights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Weights\closestboneweights.h">
-      <Filter>Header Files\Scene\Skinning\Weights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Weights\boneheatweights.h">
-      <Filter>Header Files\Scene\Skinning\Weights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Deformers\iskindeformer.h">
-      <Filter>Header Files\Scene\Skinning\Deformers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Deformers\computeskindeformer.h">
-      <Filter>Header Files\Scene\Skinning\Deformers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Deformers\linearblendskinning.h">
-      <Filter>Header Files\Scene\Skinning\Deformers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Deformers\dualquaternionskinning.h">
-      <Filter>Header Files\Scene\Skinning\Deformers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skinning\Correctives\iskincorrective.h">
-      <Filter>Header Files\Scene\Skinning\Correctives</Filter>
+    <ClInclude Include="src\Core\camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\engine.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\windowapp.h">
-      <Filter>Header Files\Core</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\keyboard.h">
-      <Filter>Header Files\Core</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\mouse.h">
-      <Filter>Header Files\Core</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\graphics.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\camera.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\object3d.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\transform.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\envcube.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\DDSTextureLoader.h">
-      <Filter>External</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\WICTextureLoader.h">
-      <Filter>External</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\texture.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\shaders.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\vertex.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\cube.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\plane.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Gizmos\gizmo.h">
-      <Filter>Header Files\Scene\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Gizmos\gizmomode.h">
-      <Filter>Header Files\Scene\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Gizmos\movegizmo.h">
-      <Filter>Header Files\Scene\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Gizmos\scalegizmo.h">
-      <Filter>Header Files\Scene\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Gizmos\gizmocontroller.h">
-      <Filter>Header Files\Scene\Gizmos</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\joint.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\jointhandle.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\bone.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\halfedgemesh.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\skeletonpose.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\skeletongeometry.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Skeleton\skeleton.h">
-      <Filter>Header Files\Scene\Skeleton</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\iscalarfield.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\ivoxelsource.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\progressreporter.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\isosurfacejob.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\scalarfieldvolume.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\splatdensityvolume.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\spherefield.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\voxelgrid.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\scalarfieldsampler.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\marchingcubestables.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\marchingcubes.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Voxel\isosurfacemodel.h">
-      <Filter>Header Files\Scene\Voxel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\imodelloader.h">
-      <Filter>Header Files\Scene\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\objmodelloader.h">
-      <Filter>Header Files\Scene\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\modelloaderregistry.h">
-      <Filter>Header Files\Scene\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\plymodelloader.h">
-      <Filter>Header Files\Scene\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\gaussiansplatting.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\splatcloudobject.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\pointcloudmodel.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\modelimportservice.h">
-      <Filter>Header Files\Scene\Loaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Importers\iobjectimporter.h">
-      <Filter>Header Files\Scene\Loaders\Importers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Importers\meshobjectimporter.h">
-      <Filter>Header Files\Scene\Loaders\Importers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Importers\gaussiansplatimporter.h">
-      <Filter>Header Files\Scene\Loaders\Importers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Importers\pointcloudimporter.h">
-      <Filter>Header Files\Scene\Loaders\Importers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\pointcloud.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\pointcloudplyloader.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\gaussiansplatshader.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\splatdepthsorter.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\plytypes.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\plyheaderparser.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\plyelementreader.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplat.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\isplatdecoder.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\gaussiansplatplyloader.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\standardsplatdecoder.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\Loaders\Ply\supersplatdecoder.h">
-      <Filter>Header Files\Scene\Loaders\Ply</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\raytracer.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\raytraceshader.h">
-      <Filter>Header Files\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\mesh.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene\meshmodel.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\ui.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\uistate.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\ipanelsection.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\modelfiledialog.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\importsection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\transformmodesection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\sceneoutlinersection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\splatsettingssection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\viewportsection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\objectpropertiessection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\skeletonsection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\skinbindingsection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\skinweightssection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\marchingcubessection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="src\UI\Sections\splatmeshingsection.h">
-      <Filter>Header Files\UI\Sections</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\imgui\imgui.h">
-      <Filter>External\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\imgui\imgui_internal.h">
-      <Filter>External\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\imgui\imconfig.h">
-      <Filter>External\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\imgui\backends\imgui_impl_win32.h">
-      <Filter>External\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\External\imgui\backends\imgui_impl_dx11.h">
-      <Filter>External\imgui</Filter>
+    <ClInclude Include="src\Core\windowapp.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -691,19 +64,10 @@
     <FxCompile Include="shaders\EnvVertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\PixelShader.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\VertexShader.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\RaytracerVS.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\RaytracerPS.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\MeshPixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PlanePixelShader.hlsl">
@@ -712,16 +76,19 @@
     <FxCompile Include="shaders\PlaneVertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\RaytracerPS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerVS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
     <FxCompile Include="shaders\GizmoVertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GizmoPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
@@ -730,18 +97,29 @@
     <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
+    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="shaders\DualQuaternionSkinningCS.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\SkinningCommon.hlsli">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\Resources\Background.dds">
@@ -750,16 +128,11 @@
     <Image Include="..\Resources\cloudy_skybox.dds">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Resources\wood.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Resources\moss.png">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\SkinningCommon.hlsli">
-      <Filter>Shader Files</Filter>
-    </None>
+    <Image Include="..\Resources\wood.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

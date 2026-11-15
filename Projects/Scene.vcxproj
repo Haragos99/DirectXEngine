@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a1e0c0de-0006-4d58-9c10-5b0e6f2a0006}</ProjectGuid>
+    <RootNamespace>Scene</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Engine.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClCompile Include="..\DirectXEngine\src\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\Scene\cube.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\gaussiansplatting.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Gizmos\gizmo.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Gizmos\gizmocontroller.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Gizmos\movegizmo.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Gizmos\scalegizmo.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\halfedgemesh.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Loaders\Importers\gaussiansplatimporter.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Loaders\Importers\meshobjectimporter.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Loaders\Importers\pointcloudimporter.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\Loaders\modelimportservice.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\mesh.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\meshmodel.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\object3D.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\plane.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\pointcloudmodel.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\splatcloudobject.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\Scene\transform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DirectXEngine\src\pch.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\cube.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\gaussiansplatting.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Gizmos\gizmo.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Gizmos\gizmocontroller.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Gizmos\gizmomode.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Gizmos\movegizmo.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Gizmos\scalegizmo.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\halfedgemesh.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Loaders\Importers\gaussiansplatimporter.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Loaders\Importers\iobjectimporter.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Loaders\Importers\meshobjectimporter.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Loaders\Importers\pointcloudimporter.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\Loaders\modelimportservice.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\mesh.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\meshmodel.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\object3d.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\plane.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\pointcloudmodel.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\splatcloudobject.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\transform.h" />
+    <ClInclude Include="..\DirectXEngine\src\Scene\vertex.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

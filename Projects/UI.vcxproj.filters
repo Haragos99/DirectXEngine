@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sections">
+      <UniqueIdentifier>{ff4853d7-3b25-4d57-961e-fb5b850db1d3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\DirectXEngine\src\UI\modelfiledialog.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\importsection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\marchingcubessection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\objectpropertiessection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\sceneoutlinersection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\skeletonsection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\skinbindingsection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\skinweightssection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\splatmeshingsection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\splatsettingssection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\transformmodesection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\Sections\viewportsection.cpp">
+      <Filter>Sections</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DirectXEngine\src\UI\ui.cpp" />
+    <ClCompile Include="..\DirectXEngine\src\UI\uistate.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\DirectXEngine\src\UI\ipanelsection.h" />
+    <ClInclude Include="..\DirectXEngine\src\UI\modelfiledialog.h" />
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\importsection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\marchingcubessection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\objectpropertiessection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\sceneoutlinersection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\skeletonsection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\skinbindingsection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\skinweightssection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\splatmeshingsection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\splatsettingssection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\transformmodesection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\Sections\viewportsection.h">
+      <Filter>Sections</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DirectXEngine\src\UI\ui.h" />
+    <ClInclude Include="..\DirectXEngine\src\UI\uistate.h" />
+  </ItemGroup>
+</Project>
