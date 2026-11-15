@@ -82,5 +82,6 @@ private:
 	SkinningController skinning;
 	int skeletonNumber = 0;
 	int selectedJoint = -1;
+	int builtFocusedBone = -1;
 	bool poseDirty = false;
 };

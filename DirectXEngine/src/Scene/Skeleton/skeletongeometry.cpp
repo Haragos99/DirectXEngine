@@ -16,6 +16,7 @@ namespace
 
 	const XMFLOAT3 kJointColor(0.85f, 0.85f, 0.85f);
 	const XMFLOAT3 kHighlightColor(1.0f, 0.78f, 0.15f);
+	constexpr float kDimmedBrightness = 0.25f;
 
 	XMFLOAT3 ToFloat3(FXMVECTOR v)
 	{
@@ -28,7 +29,8 @@ namespace
 void SkeletonGeometry::Build(const std::vector<Joint>& joints,
                              const std::vector<Bone>& bones,
                              const SkeletonPose& pose,
-                             int highlightedJoint)
+                             int highlightedJoint,
+                             int focusedBone)
 {
 	vertices.clear();
 	indices.clear();
@@ -37,7 +39,8 @@ void SkeletonGeometry::Build(const std::vector<Joint>& joints,
 	{
 		const bool highlighted = bone.GetStartJoint() == highlightedJoint
 		                      || bone.GetEndJoint() == highlightedJoint;
-		AppendBone(bone, pose, highlighted);
+		const bool dimmed = focusedBone >= 0 && bone.GetId() != focusedBone;
+		AppendBone(bone, pose, highlighted, dimmed);
 	}
 
 	for (const Joint& joint : joints)
@@ -49,7 +52,7 @@ void SkeletonGeometry::Build(const std::vector<Joint>& joints,
 
 // Octahedron pointing from the start joint to the end joint: apex, a square
 // ring near the start, and a tip at the end.
-void SkeletonGeometry::AppendBone(const Bone& bone, const SkeletonPose& pose, bool highlighted)
+void SkeletonGeometry::AppendBone(const Bone& bone, const SkeletonPose& pose, bool highlighted, bool dimmed)
 {
 	const XMFLOAT3 startF = pose.GetJointPosition(bone.GetStartJoint());
 	const XMFLOAT3 endF = pose.GetJointPosition(bone.GetEndJoint());
@@ -71,7 +74,11 @@ void SkeletonGeometry::AppendBone(const Bone& bone, const SkeletonPose& pose, bo
 
 	const float radius = std::clamp(length * kRingRadius, kMinRadius, kMaxRadius);
 	const XMVECTOR ringCenter = XMVectorAdd(start, XMVectorScale(axis, length * kRingOffset));
-	const XMFLOAT3 color = highlighted ? kHighlightColor : bone.GetColor();
+	XMFLOAT3 color = highlighted ? kHighlightColor : bone.GetColor();
+	if (dimmed)
+	{
+		color = XMFLOAT3(color.x * kDimmedBrightness, color.y * kDimmedBrightness, color.z * kDimmedBrightness);
+	}
 
 	const UINT base = static_cast<UINT>(vertices.size());
 	AppendVertex(startF, color); // 0: apex

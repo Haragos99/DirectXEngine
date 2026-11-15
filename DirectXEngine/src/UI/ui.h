@@ -63,6 +63,8 @@ private:
     void BuildSections();
     // Inspector for the selected object, shown next to the control panel.
     void DrawPropertiesPanel();
+    // Per-vertex weight table of the selected bound mesh, in its own window.
+    void DrawSkinWeightsPanel();
     // Modal shown while a mesh is being built in the background.
     void DrawMeshingProgress();
 
@@ -71,6 +73,7 @@ private:
     UIState state;
     std::vector<std::unique_ptr<IPanelSection>> sections;
     std::unique_ptr<IPanelSection> propertiesSection; // own window, not part of `sections`
+    std::unique_ptr<IPanelSection> skinWeightsSection; // own window, not part of `sections`
     ImportSection* importSection = nullptr; // owned by `sections`
     SkeletonSection* skeletonSection = nullptr; // owned by `sections`
     MarchingCubesSection* marchingCubesSection = nullptr; // owned by `sections`

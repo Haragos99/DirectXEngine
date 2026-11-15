@@ -15,6 +15,7 @@ struct UIState
 	GizmoMode gizmoMode = GizmoMode::Move;
 	float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f };
 	bool renderModeChangeRequested = false;
+	bool skinWeightsWindowOpen = false;
 
 	// Refreshed every frame from the background meshing job. Sections read it to
 	// disable the buttons that would queue a second one.

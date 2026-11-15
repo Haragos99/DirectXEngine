@@ -1,30 +1,33 @@
 #pragma once
-#include "skinweights.h"
+#include "../skinweights.h"
 #include "vertex.h"
 
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include <vector>
 
+enum class SkinWeightView : UINT
+{
+	Off = 0,
+	Blended = 1,
+	SingleInfluence = 2,
+};
 
-class ISkinningTechnique
+class ISkinDeformer
 {
 public:
-	virtual ~ISkinningTechnique() = default;
+	virtual ~ISkinDeformer() = default;
 
 	virtual const char* GetName() const = 0;
 
 	// Uploads everything that stays constant while the mesh stays bound.
 	virtual bool Prepare(const std::vector<VertexData>& restVertices,
-	                     const std::vector<SkinWeights>& weights,
-	                     int jointCount) = 0;
+	                     const SkinWeightTable& weights,
+	                     const std::vector<DirectX::XMFLOAT3>& influenceColors) = 0;
 
-	// One matrix per joint, already expressed in the bound mesh's local space.
 	virtual void Deform(const std::vector<DirectX::XMFLOAT4X4>& palette) = 0;
 
-	// Optional: write the dominant joint into the texcoord so the weights can be
-	// looked at. Techniques that cannot show them simply keep drawing normally.
-	virtual void SetWeightDebug(bool /*enabled*/) {}
+	virtual void SetWeightView(SkinWeightView /*view*/, int /*selectedInfluence*/) {}
 
 	// Vertex buffer holding the deformed result, or null before Prepare.
 	virtual ID3D11Buffer* GetDeformedVertices() const = 0;

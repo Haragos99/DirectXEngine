@@ -5,12 +5,22 @@ using namespace DirectX;
 
 bool Mesh::loadMesh(const std::string& path)
 {
-	return ModelLoaderRegistry::Instance().Load(path, data);
+	return BuildTopology(ModelLoaderRegistry::Instance().Load(path, data));
 }
 
 bool Mesh::loadMesh(const std::string& path, const IModelLoader& loader)
 {
-	return loader.Load(path, data);
+	return BuildTopology(loader.Load(path, data));
+}
+
+bool Mesh::BuildTopology(bool loaded)
+{
+	halfEdge.Clear();
+	if (loaded)
+	{
+		halfEdge.Build(data.vertices, data.indices);
+	}
+	return loaded;
 }
 
 void Mesh::ComputeTangents()

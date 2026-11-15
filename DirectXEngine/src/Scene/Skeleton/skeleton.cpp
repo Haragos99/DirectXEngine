@@ -47,7 +47,8 @@ void Skeleton::CreateRenderResources()
 
 void Skeleton::createTexturedVertex()
 {
-	geometry.Build(joints, bones, pose, selectedJoint);
+	builtFocusedBone = skinning.GetHighlightedBone();
+	geometry.Build(joints, bones, pose, selectedJoint, builtFocusedBone);
 	vertices = geometry.GetVertices();
 	indices = geometry.GetIndices();
 }
@@ -102,8 +103,10 @@ void Skeleton::SyncJointHandles()
 
 void Skeleton::RefreshIfDirty()
 {
-	if (!poseDirty)
+	if (!poseDirty && builtFocusedBone == skinning.GetHighlightedBone())
+	{
 		return;
+	}
 
 	pose.Evaluate(joints);
 	createTexturedVertex();

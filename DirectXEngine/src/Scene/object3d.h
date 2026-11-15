@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <DirectXCollision.h>
 #include "camera.h"
+#include "halfedgemesh.h"
 #include <vector>
 #include <memory>
 #include "texture.h"
@@ -72,8 +73,12 @@ public:
 	// Pixel shader this object is drawn with; swapped for debug views.
 	const std::wstring& GetPixelShaderPath() const;
 	void SetPixelShader(const std::wstring& path);
+	const std::wstring& GetVertexShaderPath() const;
+	void SetShaders(const std::wstring& vertexPath, const std::wstring& pixelPath);
 	// Rest vertices a skeleton may deform, or null for objects that cannot be skinned.
 	virtual const std::vector<VertexData>* GetSkinVertices() const { return nullptr; }
+	// Connectivity behind those vertices, for anything that works over the surface.
+	virtual const HalfEdgeMesh* GetHalfEdgeMesh() const { return nullptr; }
 	// Draws from `buffer` instead of this object's own vertices; null restores them.
 	void SetDeformedVertices(ID3D11Buffer* buffer);
 

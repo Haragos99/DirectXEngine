@@ -6,6 +6,7 @@
 #include "Sections/sceneoutlinersection.h"
 #include "Sections/skeletonsection.h"
 #include "Sections/skinbindingsection.h"
+#include "Sections/skinweightssection.h"
 #include "Sections/splatsettingssection.h"
 #include "Sections/splatmeshingsection.h"
 #include "Sections/transformmodesection.h"
@@ -53,6 +54,7 @@ void UIPanel::BuildSections()
     sections.push_back(std::make_unique<ViewportSection>());
 
     propertiesSection = std::make_unique<ObjectPropertiesSection>();
+    skinWeightsSection = std::make_unique<SkinWeightsSection>();
 }
 
 void UIPanel::SetImportModelCallback(ImportModelCallback callback)
@@ -148,6 +150,7 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
     ImGui::End();
 
     DrawPropertiesPanel();
+    DrawSkinWeightsPanel();
     DrawMeshingProgress();
 
     state.sceneObjects = nullptr;
@@ -160,6 +163,21 @@ void UIPanel::DrawPropertiesPanel()
 
     ImGui::Begin(propertiesSection->GetTitle());
     propertiesSection->Draw(state);
+    ImGui::End();
+}
+
+void UIPanel::DrawSkinWeightsPanel()
+{
+    if (!skinWeightsSection->IsVisible(state))
+    {
+        return;
+    }
+
+    ImGui::SetNextWindowSize(ImVec2(640.0f, 420.0f), ImGuiCond_FirstUseEver);
+    if (ImGui::Begin(skinWeightsSection->GetTitle(), &state.skinWeightsWindowOpen))
+    {
+        skinWeightsSection->Draw(state);
+    }
     ImGui::End();
 }
 
