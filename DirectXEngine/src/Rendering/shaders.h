@@ -37,11 +37,9 @@ public:
 		}
 	}
 	void createInexxBuffer(std::vector<UINT> indices);
-	// Swap single stages, for debug views like skin weights.
 	const std::wstring& getPixelShaderPath() const { return pixelShaderName; }
 	void setPixelShader(const std::wstring& path);
 	const std::wstring& getVertexShaderPath() const { return vertexShaderName; }
-	// Also recreates the input layout against the new shader's signature.
 	void setVertexShader(const std::wstring& path);
 	// Draws from a buffer produced elsewhere, e.g. a skinning dispatch.
 	// Passing null goes back to this shader's own vertex buffer.

@@ -74,7 +74,6 @@ public:
 	const std::wstring& GetPixelShaderPath() const;
 	void SetPixelShader(const std::wstring& path);
 	const std::wstring& GetVertexShaderPath() const;
-	// Swaps both stages; an empty path leaves that stage as it is.
 	void SetShaders(const std::wstring& vertexPath, const std::wstring& pixelPath);
 	// Rest vertices a skeleton may deform, or null for objects that cannot be skinned.
 	virtual const std::vector<VertexData>* GetSkinVertices() const { return nullptr; }

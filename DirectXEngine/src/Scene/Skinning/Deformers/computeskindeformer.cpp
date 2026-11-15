@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 #include <windows.h>
 
+
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
@@ -19,7 +20,6 @@ namespace
 	static_assert(sizeof(SkinConstants) == 16, "constant buffers are 16 byte aligned");
 
 	constexpr UINT kThreadGroupSize = 64;
-	// t0 rest, t1 weights, t2 palette, t3 influence colours.
 	constexpr UINT kInputCount = 4;
 }
 
@@ -34,11 +34,12 @@ ComputeSkinDeformer::ComputeSkinDeformer(ComPtr<ID3D11Device> _device,
 bool ComputeSkinDeformer::LoadShader()
 {
 	if (computeShader)
+	{
 		return true;
+	}
 
 	ComPtr<ID3DBlob> blob;
 	ComPtr<ID3DBlob> errors;
-	// The standard include handler resolves SkinningCommon.hlsli next to the shader.
 	const HRESULT hr = D3DCompileFromFile(shaderPath.c_str(),
 	                                      nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
 	                                      "CSMain", "cs_5_0",
@@ -47,7 +48,9 @@ bool ComputeSkinDeformer::LoadShader()
 	if (FAILED(hr))
 	{
 		if (errors)
+		{
 			OutputDebugStringA(static_cast<const char*>(errors->GetBufferPointer()));
+		}
 		return false;
 	}
 
@@ -71,7 +74,9 @@ bool ComputeSkinDeformer::CreateInput(const void* data, UINT stride, UINT count,
 	initial.pSysMem = data;
 
 	if (FAILED(device->CreateBuffer(&desc, data ? &initial : nullptr, &buffer)))
+	{
 		return false;
+	}
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
 	viewDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -94,7 +99,9 @@ bool ComputeSkinDeformer::CreateOutput(const std::vector<VertexData>& restVertic
 	initial.pSysMem = restVertices.data();
 
 	if (FAILED(device->CreateBuffer(&desc, &initial, &deformedVertices)))
+	{
 		return false;
+	}
 
 	D3D11_UNORDERED_ACCESS_VIEW_DESC viewDesc = {};
 	viewDesc.Format = DXGI_FORMAT_R32_TYPELESS;
@@ -135,7 +142,9 @@ bool ComputeSkinDeformer::Prepare(const std::vector<VertexData>& restVertices,
 	}
 
 	if (!LoadShader())
+	{
 		return false;
+	}
 
 	const UINT count = static_cast<UINT>(restVertices.size());
 	const UINT influences = static_cast<UINT>(weights.InfluenceCount());
@@ -171,7 +180,9 @@ bool ComputeSkinDeformer::Prepare(const std::vector<VertexData>& restVertices,
 void ComputeSkinDeformer::UpdateConstants()
 {
 	if (!constantBuffer)
+	{
 		return;
+	}
 
 	const SkinConstants values{ vertexCount, influenceCount,
 	                            static_cast<UINT>(weightViewMode), selectedInfluence };
@@ -181,7 +192,9 @@ void ComputeSkinDeformer::UpdateConstants()
 void ComputeSkinDeformer::SetWeightView(SkinWeightView view, int selected)
 {
 	if (weightViewMode == view && selectedInfluence == selected)
+	{
 		return;
+	}
 
 	weightViewMode = view;
 	selectedInfluence = selected;
@@ -191,7 +204,9 @@ void ComputeSkinDeformer::SetWeightView(SkinWeightView view, int selected)
 void ComputeSkinDeformer::Deform(const std::vector<XMFLOAT4X4>& palette)
 {
 	if (!computeShader || vertexCount == 0 || palette.size() != influenceCount)
+	{
 		return;
+	}
 
 	context->UpdateSubresource(paletteBuffer.Get(), 0, nullptr, EncodePalette(palette), 0, 0);
 

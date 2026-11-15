@@ -76,7 +76,9 @@ void SkeletonGeometry::AppendBone(const Bone& bone, const SkeletonPose& pose, bo
 	const XMVECTOR ringCenter = XMVectorAdd(start, XMVectorScale(axis, length * kRingOffset));
 	XMFLOAT3 color = highlighted ? kHighlightColor : bone.GetColor();
 	if (dimmed)
+	{
 		color = XMFLOAT3(color.x * kDimmedBrightness, color.y * kDimmedBrightness, color.z * kDimmedBrightness);
+	}
 
 	const UINT base = static_cast<UINT>(vertices.size());
 	AppendVertex(startF, color); // 0: apex

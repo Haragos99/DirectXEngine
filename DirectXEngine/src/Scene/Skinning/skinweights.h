@@ -4,9 +4,6 @@
 #include <span>
 #include <vector>
 
-// Vertex x influence weights, stored row major in one array: vertex v owns
-// [v * InfluenceCount(), +InfluenceCount()). That is exactly how gWeights is
-// indexed in the skinning shaders, so the array uploads as it is.
 class SkinWeightTable
 {
 public:
@@ -26,7 +23,6 @@ public:
 	std::span<float> operator[](size_t vertex) { return Row(vertex); }
 	std::span<const float> operator[](size_t vertex) const { return Row(vertex); }
 
-	// Copies one row over another. Both tables must have the same influence count.
 	void CopyRow(size_t vertex, const SkinWeightTable& from, size_t fromVertex)
 	{
 		std::ranges::copy(from.Row(fromVertex), Row(vertex).begin());
@@ -36,7 +32,6 @@ public:
 
 private:
 	std::vector<float> weights;
-	// Kept separately so both counts survive an empty table.
 	size_t vertices = 0;
 	size_t influences = 0;
 };

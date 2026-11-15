@@ -103,9 +103,10 @@ void Skeleton::SyncJointHandles()
 
 void Skeleton::RefreshIfDirty()
 {
-	// The skinning panel can change which bone stands out without touching the pose.
 	if (!poseDirty && builtFocusedBone == skinning.GetHighlightedBone())
+	{
 		return;
+	}
 
 	pose.Evaluate(joints);
 	createTexturedVertex();

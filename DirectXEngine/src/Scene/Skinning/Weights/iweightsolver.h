@@ -1,11 +1,9 @@
 #pragma once
-#include "skinbindcontext.h"
-#include "skinweights.h"
+#include "../skinbindcontext.h"
+#include "../skinweights.h"
 
 #include <span>
 
-// How a solve ended. Anything but Ok still leaves a usable table behind (the
-// closest-bone binding), so the mesh keeps deforming; the UI shows the reason.
 enum class WeightSolveStatus
 {
 	Ok,
@@ -28,8 +26,6 @@ inline const char* GetWeightSolveStatusMessage(WeightSolveStatus status)
 	return "unknown error";
 }
 
-// A tunable value of a solver, drawn by the UI as a slider. The solver owns
-// the value; SkinningController::SetSolverParameter clamps it to [min, max].
 struct SolverParameter
 {
 	const char* name;
@@ -40,9 +36,6 @@ struct SolverParameter
 	bool logarithmic = false;
 };
 
-// Bind-time stage of skinning: decides how much each influence (bone) drives
-// each vertex. Runs whenever a mesh is bound, the rig's rest pose changes, or
-// one of the solver's parameters changes.
 class IWeightSolver
 {
 public:
@@ -55,6 +48,5 @@ public:
 		return const_cast<IWeightSolver*>(this)->GetParameters();
 	}
 
-	// Fills `out` with VertexCount x InfluenceCount weights, every row summing to 1.
 	virtual WeightSolveStatus Solve(const SkinBindContext& context, SkinWeightTable& out) = 0;
 };

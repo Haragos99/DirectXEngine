@@ -9,8 +9,6 @@
 //
 // Alpha trades the two sides off: large values pin the result to the rigid
 // binding, small ones let the heat spread further across the surface.
-//
-// Eigen stays inside the .cpp, so including this costs nothing.
 class BoneHeatWeights : public IWeightSolver
 {
 public:
@@ -25,8 +23,6 @@ public:
 	const char* GetName() const override { return "Bone Heat"; }
 	std::span<SolverParameter> GetParameters() override { return parameters; }
 
-	// Leaves the closest-bone binding in `weights` whenever it returns
-	// anything but Ok, so the mesh still deforms.
 	WeightSolveStatus Solve(const SkinBindContext& context, SkinWeightTable& weights) override;
 
 private:

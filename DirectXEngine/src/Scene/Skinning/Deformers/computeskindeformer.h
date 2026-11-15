@@ -19,17 +19,12 @@ public:
 	ID3D11Buffer* GetDeformedVertices() const final { return deformedVertices.Get(); }
 
 protected:
-	// `paletteStride` is the size of one encoded palette entry, as the shader's
-	// gPalette (t2) declares it.
 	ComputeSkinDeformer(Microsoft::WRL::ComPtr<ID3D11Device> _device,
 	                    Microsoft::WRL::ComPtr<ID3D11DeviceContext> _context,
 	                    std::wstring _shaderPath,
 	                    UINT _paletteStride);
 
-	// Called once Prepare has the influence count, before the first Deform.
 	virtual void OnPrepared(UINT /*influenceCount*/) {}
-	// Turns one matrix per influence into InfluenceCount() entries of
-	// `paletteStride` bytes each, ready to upload.
 	virtual const void* EncodePalette(const std::vector<DirectX::XMFLOAT4X4>& palette) = 0;
 
 	UINT InfluenceCount() const { return influenceCount; }

@@ -121,12 +121,18 @@ const std::wstring& Object3D::GetVertexShaderPath() const
 void Object3D::SetShaders(const std::wstring& vertexPath, const std::wstring& pixelPath)
 {
 	if (!shader)
+	{
 		return;
+	}
 
 	if (!vertexPath.empty() && vertexPath != shader->getVertexShaderPath())
+	{
 		shader->setVertexShader(vertexPath);
+	}
 	if (!pixelPath.empty() && pixelPath != shader->getPixelShaderPath())
+	{
 		shader->setPixelShader(pixelPath);
+	}
 }
 
 void Object3D::AttachChild(std::shared_ptr<Object3D> child)

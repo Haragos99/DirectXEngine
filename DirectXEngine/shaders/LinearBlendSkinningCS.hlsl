@@ -1,6 +1,3 @@
-// Linear blend skinning: every vertex is the weighted sum of where each of its
-// influences' matrices would put it.
-
 #include "SkinningCommon.hlsli"
 
 struct InfluenceMatrix
@@ -15,7 +12,9 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 {
     const uint index = id.x;
     if (index >= gVertexCount)
+    {
         return;
+    }
 
     const RestVertex rest = gRest[index];
     const uint weightBase = index * gInfluenceCount;
@@ -28,7 +27,9 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     {
         const float weight = gWeights[weightBase + i];
         if (weight <= 0.0f)
+        {
             continue;
+        }
 
         const float4x4 m = gPalette[i].m;
 

@@ -19,15 +19,15 @@ SkinningController::SkinningController(Skeleton& _rig, ComPtr<ID3D11Device> _dev
 	: rig(_rig), device(_device), context(_context)
 {
 	for (const WeightSolverEntry& entry : SkinningRegistry::WeightSolvers())
+	{
 		solvers.push_back(entry.create());
+	}
 }
 
 SkinningController::~SkinningController()
 {
 	UnbindAll();
 }
-
-// ---------------------------------------------------------------- techniques
 
 std::unique_ptr<ISkinDeformer> SkinningController::CreateDeformer() const
 {
@@ -42,7 +42,9 @@ const char* SkinningController::GetDeformerName() const
 void SkinningController::SetDeformer(size_t index)
 {
 	if (index == deformerIndex || index >= SkinningRegistry::Deformers().size())
+	{
 		return;
+	}
 
 	deformerIndex = index;
 	RebuildAll(RebuildScope::Deformer);
@@ -56,7 +58,9 @@ const char* SkinningController::GetWeightSolverName() const
 void SkinningController::SetWeightSolver(size_t index)
 {
 	if (index == solverIndex || index >= solvers.size())
+	{
 		return;
+	}
 
 	solverIndex = index;
 	ResolveWeights();
@@ -72,13 +76,16 @@ void SkinningController::SetSolverParameter(size_t parameter, float value)
 {
 	const std::span<SolverParameter> parameters = solvers[solverIndex]->GetParameters();
 	if (parameter >= parameters.size())
+	{
 		return;
+	}
 
-	// The limits live with the solver, so a typed-in value cannot break it.
 	SolverParameter& target = parameters[parameter];
 	value = std::clamp(value, target.min, target.max);
 	if (value == target.value)
+	{
 		return;
+	}
 
 	target.value = value;
 	ResolveWeights();
@@ -88,8 +95,6 @@ void SkinningController::ResolveWeights()
 {
 	RebuildAll(RebuildScope::Weights);
 }
-
-// ---------------------------------------------------------------- weight view
 
 const char* SkinningController::GetWeightViewName(SkinWeightView view)
 {
@@ -121,19 +126,24 @@ void SkinningController::RestoreShaders(const BoundMesh& bound, Object3D& mesh)
 
 void SkinningController::ApplyWeightView(const BoundMesh& bound, Object3D& mesh) const
 {
-	// The focused bone is a rig-wide choice; each mesh has its own columns.
 	int selected = -1;
 	for (size_t i = 0; i < bound.influences.size(); ++i)
 	{
 		if (bound.influences[i].bone == focusedBone)
+		{
 			selected = static_cast<int>(i);
+		}
 	}
 
 	bound.deformer->SetWeightView(weightView, selected);
 	if (weightView == SkinWeightView::Off)
+	{
 		RestoreShaders(bound, mesh);
+	}
 	else
+	{
 		mesh.SetShaders(kWeightVertexShader, kWeightPixelShader);
+	}
 }
 
 void SkinningController::ApplyWeightViewToAll() const
@@ -142,14 +152,18 @@ void SkinningController::ApplyWeightViewToAll() const
 	{
 		const std::shared_ptr<Object3D> mesh = bound.mesh.lock();
 		if (mesh && bound.deformer && bound.deformer->GetDeformedVertices())
+		{
 			ApplyWeightView(bound, *mesh);
+		}
 	}
 }
 
 void SkinningController::SetWeightView(SkinWeightView view)
 {
 	if (view == weightView)
+	{
 		return;
+	}
 
 	weightView = view;
 	ApplyWeightViewToAll();
@@ -158,7 +172,9 @@ void SkinningController::SetWeightView(SkinWeightView view)
 void SkinningController::SetFocusedBone(int bone)
 {
 	if (bone == focusedBone)
+	{
 		return;
+	}
 
 	focusedBone = bone;
 	ApplyWeightViewToAll();
@@ -169,14 +185,14 @@ int SkinningController::GetHighlightedBone() const
 	return weightView == SkinWeightView::SingleInfluence && focusedBone >= 0 ? focusedBone : -1;
 }
 
-// ---------------------------------------------------------------- read access
-
 std::optional<SkinningController::BindingView> SkinningController::GetBinding(const Object3D& mesh) const
 {
 	for (const BoundMesh& bound : boundMeshes)
 	{
 		if (bound.mesh.lock().get() == &mesh)
+		{
 			return BindingView{ bound.weights, bound.influences, bound.status, bound.revision };
+		}
 	}
 	return std::nullopt;
 }
@@ -186,12 +202,12 @@ const std::vector<SkinInfluence>* SkinningController::GetInfluences(const Object
 	for (const BoundMesh& bound : boundMeshes)
 	{
 		if (bound.mesh.lock().get() == &mesh)
+		{
 			return &bound.influences;
+		}
 	}
 	return nullptr;
 }
-
-// ---------------------------------------------------------------- solving
 
 std::vector<SkinInfluence> SkinningController::BuildInfluences() const
 {
@@ -210,15 +226,12 @@ std::vector<SkinInfluence> SkinningController::BuildInfluences() const
 
 		SkinInfluence influence;
 		influence.bone = static_cast<int>(b);
-		// The bone start->end sits still in the start joint's frame, so that
-		// joint's skinning matrix is what carries the skin around it.
 		influence.drivingJoint = start;
 		influence.color = bone.GetColor();
 		influence.name = rig.GetJoint(start).GetName() + " > " + rig.GetJoint(end).GetName();
 		influences.push_back(std::move(influence));
 	}
 
-	// Without bones every vertex simply rides on the root.
 	if (influences.empty() && jointCount > 0)
 	{
 		SkinInfluence root;
@@ -236,7 +249,9 @@ SkinBindContext SkinningController::BuildBindContext(const BoundMesh& bound, con
 	const auto bindPosition = [&](int joint)
 	{
 		if (joint < 0 || joint >= static_cast<int>(bindGlobals.size()))
+		{
 			return XMFLOAT3(0.0f, 0.0f, 0.0f);
+		}
 		const XMFLOAT4X4& m = bindGlobals[joint];
 		return XMFLOAT3(m._41, m._42, m._43);
 	};
@@ -277,19 +292,27 @@ bool SkinningController::Rebuild(BoundMesh& bound, Object3D& mesh, RebuildScope 
 	}
 
 	if (scope != RebuildScope::Deformer)
+	{
 		SolveWeights(bound, mesh);
+	}
 
 	if (scope == RebuildScope::Deformer || !bound.deformer)
+	{
 		bound.deformer = CreateDeformer();
+	}
 
 	const bool prepared = !bound.weights.IsEmpty()
 		&& bound.deformer->Prepare(bound.restVertices, bound.weights, InfluenceColors(bound));
 
 	mesh.SetDeformedVertices(prepared ? bound.deformer->GetDeformedVertices() : nullptr);
 	if (prepared)
-		ApplyWeightView(bound, mesh); // the columns, and the focused one's index, may have changed
+	{
+		ApplyWeightView(bound, mesh);
+	}
 	else
+	{
 		RestoreShaders(bound, mesh);
+	}
 	return prepared;
 }
 
@@ -298,11 +321,11 @@ void SkinningController::RebuildAll(RebuildScope scope)
 	for (BoundMesh& bound : boundMeshes)
 	{
 		if (const std::shared_ptr<Object3D> mesh = bound.mesh.lock())
+		{
 			Rebuild(bound, *mesh, scope);
+		}
 	}
 }
-
-// ---------------------------------------------------------------- lifecycle
 
 bool SkinningController::BindMesh(const std::shared_ptr<Object3D>& mesh)
 {
@@ -367,7 +390,9 @@ bool SkinningController::IsBound(const Object3D& mesh) const
 	for (const BoundMesh& bound : boundMeshes)
 	{
 		if (bound.mesh.lock().get() == &mesh)
+		{
 			return true;
+		}
 	}
 	return false;
 }
@@ -376,8 +401,6 @@ void SkinningController::RebindAll()
 {
 	RebuildAll(RebuildScope::BindPose);
 }
-
-// ---------------------------------------------------------------- per frame
 
 void SkinningController::BuildPalette(const BoundMesh& bound, const Object3D& mesh, std::vector<XMFLOAT4X4>& palette) const
 {

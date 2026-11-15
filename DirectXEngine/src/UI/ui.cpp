@@ -169,12 +169,15 @@ void UIPanel::DrawPropertiesPanel()
 void UIPanel::DrawSkinWeightsPanel()
 {
     if (!skinWeightsSection->IsVisible(state))
+    {
         return;
+    }
 
     ImGui::SetNextWindowSize(ImVec2(640.0f, 420.0f), ImGuiCond_FirstUseEver);
-    // The close button clears the same flag the Skin Binding checkbox sets.
     if (ImGui::Begin(skinWeightsSection->GetTitle(), &state.skinWeightsWindowOpen))
+    {
         skinWeightsSection->Draw(state);
+    }
     ImGui::End();
 }
 

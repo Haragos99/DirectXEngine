@@ -1,6 +1,3 @@
-// Skin weight view, vertex stage. While the view is on, the skinning dispatch
-// writes the weight colour into the NORMAL slot (see SkinningCommon.hlsli), so
-// it is passed through untouched instead of being transformed like a normal.
 cbuffer MatrixBuffer : register(b0)
 {
     matrix world;
@@ -11,7 +8,7 @@ cbuffer MatrixBuffer : register(b0)
 struct VS_IN
 {
     float3 pos   : POSITION;
-    float3 color : NORMAL; // weight colour, not a real normal
+    float3 color : NORMAL;
     float2 tex   : TEXCOORD;
 };
 

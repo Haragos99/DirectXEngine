@@ -1,9 +1,9 @@
 #include "skinningregistry.h"
 
-#include "boneheatweights.h"
-#include "closestboneweights.h"
-#include "dualquaternionskinning.h"
-#include "linearblendskinning.h"
+#include "Weights/boneheatweights.h"
+#include "Weights/closestboneweights.h"
+#include "Deformers/dualquaternionskinning.h"
+#include "Deformers/linearblendskinning.h"
 
 using Microsoft::WRL::ComPtr;
 

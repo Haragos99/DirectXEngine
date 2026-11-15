@@ -12,6 +12,5 @@ public:
 	const char* GetName() const override { return "Linear Blend"; }
 
 protected:
-	// The matrices go up as they are.
 	const void* EncodePalette(const std::vector<DirectX::XMFLOAT4X4>& palette) override { return palette.data(); }
 };

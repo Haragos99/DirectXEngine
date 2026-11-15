@@ -26,7 +26,9 @@ namespace
 	{
 		// A boundary half-edge has no triangle, so there is no angle to take.
 		if (halfEdge == HalfEdgeMesh::kInvalid || mesh.IsBoundary(halfEdge))
+		{
 			return 0.0;
+		}
 
 		const double theta = std::clamp(mesh.SectorAngle(mesh.Next(halfEdge)),
 		                                kMinimumAngle, kPi - kMinimumAngle);
@@ -63,7 +65,6 @@ namespace
 	}
 }
 
-// Cotangent Laplacian of the welded mesh (BoneHeat::createLaplaceMatrix).
 static Eigen::SparseMatrix<double> CreateLaplaceMatrix(const HalfEdgeMesh& mesh)
 {
 	const int n = static_cast<int>(mesh.VertexCount());
@@ -75,11 +76,15 @@ static Eigen::SparseMatrix<double> CreateLaplaceMatrix(const HalfEdgeMesh& mesh)
 		for (const int neighbour : mesh.Neighbours(v))
 		{
 			if (neighbour == v)
+			{
 				continue;
+			}
 
 			const int halfEdge = mesh.FindHalfEdge(v, neighbour);
 			if (halfEdge == HalfEdgeMesh::kInvalid)
+			{
 				continue;
+			}
 
 			// Mean of the cotangents of the two angles facing the edge.
 			const double weight = (OppositeCotangent(mesh, halfEdge)
@@ -100,7 +105,6 @@ static Eigen::SparseMatrix<double> CreateLaplaceMatrix(const HalfEdgeMesh& mesh)
 	return laplace;
 }
 
-// alpha / d^2 per welded vertex (BoneHeat::createDiagolaleMatrix).
 static Eigen::SparseMatrix<double> CreateDiagonalMatrix(const std::vector<double>& closestDistance, double alpha)
 {
 	const int n = static_cast<int>(closestDistance.size());
@@ -134,13 +138,16 @@ static void CalculateOptimalWeights(const Eigen::SparseMatrix<double>& diagonal,
 			used = used || baseWeight[v] != 0.0;
 		}
 
-		// An influence nothing binds to solves to zero, so there is nothing to gain.
 		if (!used)
+		{
 			continue;
+		}
 
 		const Eigen::VectorXd optimal = solver.solve(diagonal * baseWeight);
 		if (solver.info() != Eigen::Success || !optimal.allFinite())
+		{
 			continue;
+		}
 
 		for (int v = 0; v < n; ++v)
 			welded[v][influence] = static_cast<float>(optimal[v]);
@@ -156,20 +163,24 @@ BoneHeatWeights::BoneHeatWeights()
 
 WeightSolveStatus BoneHeatWeights::Solve(const SkinBindContext& context, SkinWeightTable& weights)
 {
-	// The rigid binding is both the seed and what is left behind on failure.
 	std::vector<float> closestDistance;
 	const WeightSolveStatus seeded = seed.Solve(context, weights, closestDistance);
 	if (seeded != WeightSolveStatus::Ok)
+	{
 		return seeded;
+	}
 
-	// Without connectivity there is no surface to diffuse over.
 	if (context.topology == nullptr || context.topology->IsEmpty())
+	{
 		return WeightSolveStatus::NoTopology;
+	}
 
 	const HalfEdgeMesh& mesh = *context.topology;
 	const size_t n = mesh.VertexCount();
 	if (weights.VertexCount() != mesh.RenderVertexCount())
+	{
 		return WeightSolveStatus::SizeMismatch;
+	}
 
 	const double alpha = std::clamp(static_cast<double>(parameters[0].value),
 	                                static_cast<double>(kMinAlpha), static_cast<double>(kMaxAlpha));
@@ -193,7 +204,9 @@ WeightSolveStatus BoneHeatWeights::Solve(const SkinBindContext& context, SkinWei
 	Eigen::SimplicialLDLT<Eigen::SparseMatrix<double>> solver;
 	solver.compute(system);
 	if (solver.info() != Eigen::Success)
+	{
 		return WeightSolveStatus::FactorisationFailed;
+	}
 
 	const SkinWeightTable rigid = welded;
 	CalculateOptimalWeights(diagonal, solver, welded);

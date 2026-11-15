@@ -10,7 +10,6 @@ namespace
 	// Enough points that a long bone still wins over a short one nearby.
 	constexpr int kSamplesPerBone = 16;
 
-	// Points along every bone, one list per influence.
 	std::vector<std::vector<XMFLOAT3>> SampleBones(const std::vector<BoneSegment>& bones)
 	{
 		std::vector<std::vector<XMFLOAT3>> samples(bones.size());
@@ -19,7 +18,6 @@ namespace
 			const XMVECTOR from = XMLoadFloat3(&bones[i].start);
 			const XMVECTOR to = XMLoadFloat3(&bones[i].end);
 
-			// A root fallback is a single point.
 			if (XMVector3Equal(from, to))
 			{
 				samples[i].push_back(bones[i].start);
@@ -52,7 +50,9 @@ WeightSolveStatus ClosestBoneWeights::Solve(const SkinBindContext& context, Skin
 	closestDistance.assign(vertices.size(), 0.0f);
 
 	if (context.bones.empty())
+	{
 		return WeightSolveStatus::NoInfluences;
+	}
 
 	const std::vector<std::vector<XMFLOAT3>> bones = SampleBones(context.bones);
 	const XMMATRIX meshBindToRig = XMLoadFloat4x4(&context.meshBindToRig);
@@ -79,7 +79,9 @@ WeightSolveStatus ClosestBoneWeights::Solve(const SkinBindContext& context, Skin
 
 		out[v][closestInfluence] = 1.0f;
 		if (std::isfinite(closest))
+		{
 			closestDistance[v] = std::sqrt(closest);
+		}
 	}
 	return WeightSolveStatus::Ok;
 }

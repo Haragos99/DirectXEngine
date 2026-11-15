@@ -15,8 +15,6 @@ class SkeletonGeometry
 public:
 	// Rebuilds the mesh for the given pose. `highlightedJoint` is drawn in the
 	// selection colour together with the bones that touch it; pass -1 for none.
-	// When `focusedBone` is a bone index, every other bone is drawn dimmed, so
-	// it reads against the single-bone weight view; pass -1 for none.
 	void Build(const std::vector<Joint>& joints,
 	           const std::vector<Bone>& bones,
 	           const SkeletonPose& pose,
