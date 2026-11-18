@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Gizmos">
+      <UniqueIdentifier>{01cd1ca1-cdb4-4b2a-90df-53f64f4fbff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Importers">
+      <UniqueIdentifier>{c0d84fc0-db75-436a-9624-892ac6ac344e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cube.cpp" />
+    <ClCompile Include="gaussiansplatting.cpp" />
+    <ClCompile Include="Gizmos\gizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\gizmocontroller.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\movegizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\scalegizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="halfedgemesh.cpp" />
+    <ClCompile Include="Importers\gaussiansplatimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\meshobjectimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\pointcloudimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="meshmodel.cpp" />
+    <ClCompile Include="modelimportservice.cpp" />
+    <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="plane.cpp" />
+    <ClCompile Include="pointcloudmodel.cpp" />
+    <ClCompile Include="splatcloudobject.cpp" />
+    <ClCompile Include="transform.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cube.h" />
+    <ClInclude Include="gaussiansplatting.h" />
+    <ClInclude Include="Gizmos\gizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\gizmocontroller.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\gizmomode.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\movegizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\scalegizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="halfedgemesh.h" />
+    <ClInclude Include="Importers\gaussiansplatimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\iobjectimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\meshobjectimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\pointcloudimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h" />
+    <ClInclude Include="meshmodel.h" />
+    <ClInclude Include="modelimportservice.h" />
+    <ClInclude Include="object3d.h" />
+    <ClInclude Include="plane.h" />
+    <ClInclude Include="pointcloudmodel.h" />
+    <ClInclude Include="splatcloudobject.h" />
+    <ClInclude Include="transform.h" />
+    <ClInclude Include="vertex.h" />
+  </ItemGroup>
+</Project>

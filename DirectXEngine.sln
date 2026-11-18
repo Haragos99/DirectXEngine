@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36310.24 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXEngine", "DirectXEngine\DirectXEngine.vcxproj", "{BEC07074-E71B-4C8A-9EF8-8B05D8643B73}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXEngine", "src\DirectXEngine\DirectXEngine.vcxproj", "{BEC07074-E71B-4C8A-9EF8-8B05D8643B73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{A1E0C0DE-00FF-4D58-9C10-5B0E6F2A00FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Projects\ImGui.vcxproj", "{A1E0C0DE-0001-4D58-9C10-5B0E6F2A0001}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGuiLib", "External\ImGuiLib\ImGuiLib.vcxproj", "{A1E0C0DE-0001-4D58-9C10-5B0E6F2A0001}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureLoaders", "Projects\TextureLoaders.vcxproj", "{A1E0C0DE-0002-4D58-9C10-5B0E6F2A0002}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureLoaders", "External\TextureLoaders\TextureLoaders.vcxproj", "{A1E0C0DE-0002-4D58-9C10-5B0E6F2A0002}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelIO", "Projects\ModelIO.vcxproj", "{A1E0C0DE-0003-4D58-9C10-5B0E6F2A0003}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelIO", "src\ModelIO\ModelIO.vcxproj", "{A1E0C0DE-0003-4D58-9C10-5B0E6F2A0003}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Voxel", "Projects\Voxel.vcxproj", "{A1E0C0DE-0004-4D58-9C10-5B0E6F2A0004}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Voxel", "src\Voxel\Voxel.vcxproj", "{A1E0C0DE-0004-4D58-9C10-5B0E6F2A0004}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Projects\Animation.vcxproj", "{A1E0C0DE-0005-4D58-9C10-5B0E6F2A0005}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "src\Animation\Animation.vcxproj", "{A1E0C0DE-0005-4D58-9C10-5B0E6F2A0005}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "Projects\Scene.vcxproj", "{A1E0C0DE-0006-4D58-9C10-5B0E6F2A0006}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "src\Scene\Scene.vcxproj", "{A1E0C0DE-0006-4D58-9C10-5B0E6F2A0006}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering", "Projects\Rendering.vcxproj", "{A1E0C0DE-0007-4D58-9C10-5B0E6F2A0007}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering", "src\Rendering\Rendering.vcxproj", "{A1E0C0DE-0007-4D58-9C10-5B0E6F2A0007}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "Projects\UI.vcxproj", "{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "src\UI\UI.vcxproj", "{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

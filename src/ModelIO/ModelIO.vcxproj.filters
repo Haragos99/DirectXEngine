@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Ply">
+      <UniqueIdentifier>{ce322748-5a8e-48c6-bc68-3300296a7d9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imodelloader.cpp" />
+    <ClCompile Include="modelloaderregistry.cpp" />
+    <ClCompile Include="objmodelloader.cpp" />
+    <ClCompile Include="Ply\gaussiansplat.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\gaussiansplatplyloader.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\plyelementreader.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\plyheaderparser.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\pointcloud.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\pointcloudplyloader.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\standardsplatdecoder.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\supersplatdecoder.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="plymodelloader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imodelloader.h" />
+    <ClInclude Include="modelloaderregistry.h" />
+    <ClInclude Include="objmodelloader.h" />
+    <ClInclude Include="Ply\gaussiansplat.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\gaussiansplatplyloader.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\isplatdecoder.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\plyelementreader.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\plyheaderparser.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\plytypes.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\pointcloud.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\pointcloudplyloader.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\standardsplatdecoder.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\supersplatdecoder.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="plymodelloader.h" />
+  </ItemGroup>
+</Project>

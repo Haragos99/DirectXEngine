@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="isosurfacejob.cpp" />
+    <ClCompile Include="isosurfacemodel.cpp" />
+    <ClCompile Include="marchingcubes.cpp" />
+    <ClCompile Include="marchingcubestables.cpp" />
+    <ClCompile Include="scalarfieldsampler.cpp" />
+    <ClCompile Include="spherefield.cpp" />
+    <ClCompile Include="splatdensityvolume.cpp" />
+    <ClCompile Include="voxelgrid.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="iscalarfield.h" />
+    <ClInclude Include="isosurfacejob.h" />
+    <ClInclude Include="isosurfacemodel.h" />
+    <ClInclude Include="ivoxelsource.h" />
+    <ClInclude Include="marchingcubes.h" />
+    <ClInclude Include="marchingcubestables.h" />
+    <ClInclude Include="progressreporter.h" />
+    <ClInclude Include="scalarfieldsampler.h" />
+    <ClInclude Include="scalarfieldvolume.h" />
+    <ClInclude Include="spherefield.h" />
+    <ClInclude Include="splatdensityvolume.h" />
+    <ClInclude Include="voxelgrid.h" />
+  </ItemGroup>
+</Project>

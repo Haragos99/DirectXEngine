@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings shared by every project in the solution. Change them here, not per project. -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EngineRoot>$(MSBuildThisFileDirectory)..\</EngineRoot>
+    <EngineSrc>$(EngineRoot)src\</EngineSrc>
+    <!-- vcpkg is only used for header-only Eigen. Its auto-link would pull in vcpkg's own
+         imgui library, which collides with the ImGui project built from External\imgui. -->
+    <VcpkgAutoLink>false</VcpkgAutoLink>
+    <IntDir>$(EngineRoot)x64\$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(ConfigurationType)'=='StaticLibrary'">$(EngineRoot)x64\$(Configuration)\lib\</OutDir>
+    <OutDir Condition="'$(ConfigurationType)'!='StaticLibrary'">$(EngineRoot)x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <!-- src\pch.h is force-included, so no source file has to include it. -->
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(EngineSrc);$(EngineSrc)DirectXEngine;$(EngineSrc)Animation\Skeleton;$(EngineSrc)Animation\Skinning;$(EngineSrc)ModelIO;$(EngineSrc)Scene;$(EngineSrc)Scene\Gizmos;$(EngineSrc)Rendering;$(EngineSrc)UI;$(EngineSrc)Voxel;$(EngineRoot)External\imgui;$(EngineRoot)External\imgui\backends;$(EngineRoot)External\TextureLoaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
