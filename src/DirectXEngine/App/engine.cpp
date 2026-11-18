@@ -76,10 +76,6 @@ void Engine::ProcessInput()
 	{ 
 		world.camera.Move(0, -speed, 0); // down
 	}
-	if(keyboardEvent->IsKeyDown(VK_DELETE))
-	{
-		RemoveSelectedObject();
-	}
 
 	const bool rDown = keyboardEvent->IsKeyDown('R');
 	if (rDown && !rKeyLatch)
@@ -120,6 +116,13 @@ void Engine::RenderUI()
 		world.CycleRenderMode();
 	}
 	ui.EndFrame();
+
+	// Delete (from the viewport or any panel) is detected by the UI; the object is
+	// removed after the UI has finished drawing this frame.
+	if (ui.RequestedDeleteSelection())
+	{
+		RemoveSelectedObject();
+	}
 }
 
 float Engine::calculateDeltaTime()

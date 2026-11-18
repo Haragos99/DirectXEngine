@@ -141,6 +141,12 @@ void UIPanel::DrawTestPanel(const std::vector<std::shared_ptr<Object3D>>& sceneO
     // Borrowed for this frame only, so sections never outlive the scene list.
     state.sceneObjects = &sceneObjects;
 
+
+    if (state.HasSelection() && !ImGui::GetIO().WantTextInput && ImGui::IsKeyPressed(ImGuiKey_Delete, false))
+    {
+        state.deleteSelectionRequested = true;
+    }
+
     ImGui::Begin("Control Panel");
 
     for (const std::unique_ptr<IPanelSection>& section : sections)

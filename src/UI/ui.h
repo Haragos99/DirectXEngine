@@ -40,6 +40,8 @@ public:
 
     // Panel state (read from Graphics/Engine).
     bool  RequestedRenderModeChange() { bool v = state.renderModeChangeRequested; state.renderModeChangeRequested = false; return v; }
+    // True once after Delete was pressed with an object selected, from the viewport or any panel.
+    bool  RequestedDeleteSelection() { bool v = state.deleteSelectionRequested; state.deleteSelectionRequested = false; return v; }
     const float* GetClearColor() const { return state.clearColor; }
     void SetImportModelCallback(ImportModelCallback callback);
     void SetCreateSkeletonCallback(CreateSkeletonCallback callback);
