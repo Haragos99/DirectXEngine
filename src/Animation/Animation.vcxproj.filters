@@ -2,22 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Skeleton">
-      <UniqueIdentifier>{964807cb-eb23-4a85-b335-39180dd1c3fa}</UniqueIdentifier>
+      <UniqueIdentifier>{e0fab78a-de16-4dc8-b637-54a945bf0db3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning">
-      <UniqueIdentifier>{679e0f95-e279-4d38-9102-de83b10b9dac}</UniqueIdentifier>
+      <UniqueIdentifier>{f5eac9e4-94f9-4f45-98fe-9d519c3ceaa2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Correctives">
-      <UniqueIdentifier>{9b77abd6-8ad7-491b-ba51-2c96d5369355}</UniqueIdentifier>
+      <UniqueIdentifier>{10e641f8-3cc9-45e6-be58-51b55fedb025}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Data">
-      <UniqueIdentifier>{5011e079-a685-4fe3-9286-316c42bb2421}</UniqueIdentifier>
+      <UniqueIdentifier>{6afe28e3-e143-431d-b98f-82dde8613588}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Deformers">
-      <UniqueIdentifier>{a7640ca3-848d-4470-9795-7557d6d8ff52}</UniqueIdentifier>
+      <UniqueIdentifier>{f561d5f8-bb91-464a-83b9-6e67d2260f3f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Weights">
-      <UniqueIdentifier>{757b60ff-2c97-476a-9101-2ff20290be83}</UniqueIdentifier>
+      <UniqueIdentifier>{bf93f870-cbb6-43f5-8397-efeac937e8b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

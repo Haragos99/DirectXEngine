@@ -16,6 +16,7 @@
     <ProjectGuid>{a1e0c0de-0002-4d58-9c10-5b0e6f2a0002}</ProjectGuid>
     <RootNamespace>TextureLoaders</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>External</EngineLayer>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

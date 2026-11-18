@@ -2,42 +2,42 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="App">
-      <UniqueIdentifier>{5b5a107b-0450-4a9c-99d3-8fbbc16f00b9}</UniqueIdentifier>
+      <UniqueIdentifier>{c951281e-9bb2-40b2-9377-c03a922fd770}</UniqueIdentifier>
     </Filter>
     <Filter Include="Input">
-      <UniqueIdentifier>{ff694f24-7a0c-4128-92b8-dc4e37c3fc1c}</UniqueIdentifier>
+      <UniqueIdentifier>{f7b7a4b3-ac81-41c7-a7fa-bbfb835fb656}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
-      <UniqueIdentifier>{84aaf6a4-0fc3-43e3-b30c-01a71f0c1c82}</UniqueIdentifier>
+      <UniqueIdentifier>{1f0afe3d-c84e-4c3d-b0c2-0e47291333bc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Common">
-      <UniqueIdentifier>{d0c356a6-3c4c-4ca6-b7e2-53215d75f03b}</UniqueIdentifier>
+      <UniqueIdentifier>{19090337-25b3-4c0f-b658-a6a91253494d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Environment">
-      <UniqueIdentifier>{a3121504-b45c-48e4-88ad-737ea430c843}</UniqueIdentifier>
+      <UniqueIdentifier>{ccc90f59-2ab4-457e-a4b3-51ec4adab1d5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Mesh">
-      <UniqueIdentifier>{e253e120-b27d-47f6-829e-6041a2987d4f}</UniqueIdentifier>
+      <UniqueIdentifier>{66c077a6-4926-4a88-a51b-71c0209224d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Raytracing">
-      <UniqueIdentifier>{8736b7b8-ca5c-4c6a-b248-b91e1abf2e52}</UniqueIdentifier>
+      <UniqueIdentifier>{69a2a607-413e-43ca-ad43-82de378f0ceb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Gizmo">
-      <UniqueIdentifier>{20667cd5-830d-43dc-b4a5-ccbc3b36c5e4}</UniqueIdentifier>
+      <UniqueIdentifier>{8c0fbda5-ea8e-4283-baaf-dc0de4b0ad41}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Animation">
-      <UniqueIdentifier>{ac8dfa7e-2183-47ae-93b5-08ccadae9600}</UniqueIdentifier>
+      <UniqueIdentifier>{d7524b26-b5bf-43e4-ba83-7a6c6dd4e790}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders\Splatting">
-      <UniqueIdentifier>{12c48067-d1f7-4987-a42c-19081405f4aa}</UniqueIdentifier>
+      <UniqueIdentifier>{b13c4e0f-d5ff-44d7-b270-f0bb53a0b54a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resources">
-      <UniqueIdentifier>{7d72a1c1-8a0a-4bfd-b47a-8a2321390fbb}</UniqueIdentifier>
+      <UniqueIdentifier>{ae3c2a5f-9ff0-4d3e-9a51-063a1f09eb86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\pch.cpp" />
-    <ClCompile Include="App\camera.cpp">
+    <ClCompile Include="App\graphics.cpp">
       <Filter>App</Filter>
     </ClCompile>
     <ClCompile Include="App\engine.cpp">
@@ -56,7 +56,7 @@
       <Filter>App</Filter>
     </ClCompile>
     <ClInclude Include="..\pch.h" />
-    <ClInclude Include="App\camera.h">
+    <ClInclude Include="App\graphics.h">
       <Filter>App</Filter>
     </ClInclude>
     <ClInclude Include="App\engine.h">

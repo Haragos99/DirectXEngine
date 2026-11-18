@@ -16,6 +16,7 @@
     <ProjectGuid>{bec07074-e71b-4c8a-9ef8-8b05d8643b73}</ProjectGuid>
     <RootNamespace>DirectXEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>App</EngineLayer>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -55,7 +56,7 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="App\camera.cpp" />
+    <ClCompile Include="App\graphics.cpp" />
     <ClCompile Include="App\engine.cpp" />
     <ClCompile Include="Input\keyboard.cpp" />
     <ClCompile Include="App\main.cpp" />
@@ -64,13 +65,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
-    <ClInclude Include="App\camera.h" />
+    <ClInclude Include="App\graphics.h" />
     <ClInclude Include="App\engine.h" />
     <ClInclude Include="Input\keyboard.h" />
     <ClInclude Include="Input\mouse.h" />
     <ClInclude Include="App\windowapp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{a1e0c0de-0009-4d58-9c10-5b0e6f2a0009}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\External\ImGuiLib\ImGuiLib.vcxproj">
       <Project>{a1e0c0de-0001-4d58-9c10-5b0e6f2a0001}</Project>
     </ProjectReference>

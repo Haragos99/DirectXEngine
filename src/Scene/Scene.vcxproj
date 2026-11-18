@@ -16,6 +16,7 @@
     <ProjectGuid>{a1e0c0de-0006-4d58-9c10-5b0e6f2a0006}</ProjectGuid>
     <RootNamespace>Scene</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>Scene</EngineLayer>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -45,6 +46,8 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Environment\envcube.cpp" />
+    <ClCompile Include="Environment\raytracer.cpp" />
     <ClCompile Include="Gizmos\gizmo.cpp" />
     <ClCompile Include="Gizmos\gizmocontroller.cpp" />
     <ClCompile Include="Gizmos\movegizmo.cpp" />
@@ -53,7 +56,6 @@
     <ClCompile Include="Importers\meshobjectimporter.cpp" />
     <ClCompile Include="Importers\modelimportservice.cpp" />
     <ClCompile Include="Importers\pointcloudimporter.cpp" />
-    <ClCompile Include="Mesh\halfedgemesh.cpp" />
     <ClCompile Include="Mesh\mesh.cpp" />
     <ClCompile Include="Mesh\meshmodel.cpp" />
     <ClCompile Include="object3D.cpp" />
@@ -62,10 +64,11 @@
     <ClCompile Include="PointClouds\splatcloudobject.cpp" />
     <ClCompile Include="Primitives\cube.cpp" />
     <ClCompile Include="Primitives\plane.cpp" />
-    <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
+    <ClInclude Include="Environment\envcube.h" />
+    <ClInclude Include="Environment\raytracer.h" />
     <ClInclude Include="Gizmos\gizmo.h" />
     <ClInclude Include="Gizmos\gizmocontroller.h" />
     <ClInclude Include="Gizmos\gizmomode.h" />
@@ -76,7 +79,6 @@
     <ClInclude Include="Importers\meshobjectimporter.h" />
     <ClInclude Include="Importers\modelimportservice.h" />
     <ClInclude Include="Importers\pointcloudimporter.h" />
-    <ClInclude Include="Mesh\halfedgemesh.h" />
     <ClInclude Include="Mesh\mesh.h" />
     <ClInclude Include="Mesh\meshmodel.h" />
     <ClInclude Include="object3d.h" />
@@ -85,8 +87,6 @@
     <ClInclude Include="PointClouds\splatcloudobject.h" />
     <ClInclude Include="Primitives\cube.h" />
     <ClInclude Include="Primitives\plane.h" />
-    <ClInclude Include="transform.h" />
-    <ClInclude Include="vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

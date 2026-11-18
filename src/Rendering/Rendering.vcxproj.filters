@@ -1,31 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Core">
-      <UniqueIdentifier>{5e258589-f396-42c4-b350-d001ca9fa5cb}</UniqueIdentifier>
+    <Filter Include="Device">
+      <UniqueIdentifier>{92053e15-3d75-4c13-af5e-69d10930d607}</UniqueIdentifier>
     </Filter>
     <Filter Include="Raytracing">
-      <UniqueIdentifier>{c9c30538-51f0-4b91-9db7-0d0c8e4b02cc}</UniqueIdentifier>
+      <UniqueIdentifier>{b369f965-84a0-4b30-a23b-0930a58a9a2b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Splatting">
-      <UniqueIdentifier>{4236514e-3567-4d3b-950d-0a4d006ba842}</UniqueIdentifier>
+      <UniqueIdentifier>{8d206ef0-a420-45a9-bd6f-3aa26df9e21e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\envcube.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Device\shaders.cpp">
+      <Filter>Device</Filter>
     </ClCompile>
-    <ClCompile Include="Core\graphics.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\shaders.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\texture.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Raytracing\raytracer.cpp">
-      <Filter>Raytracing</Filter>
+    <ClCompile Include="Device\texture.cpp">
+      <Filter>Device</Filter>
     </ClCompile>
     <ClCompile Include="Raytracing\raytraceshader.cpp">
       <Filter>Raytracing</Filter>
@@ -38,20 +29,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\envcube.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Device\shaders.h">
+      <Filter>Device</Filter>
     </ClInclude>
-    <ClInclude Include="Core\graphics.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\shaders.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\texture.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Raytracing\raytracer.h">
-      <Filter>Raytracing</Filter>
+    <ClInclude Include="Device\texture.h">
+      <Filter>Device</Filter>
     </ClInclude>
     <ClInclude Include="Raytracing\raytraceshader.h">
       <Filter>Raytracing</Filter>

@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering", "src\Rendering\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "src\UI\UI.vcxproj", "{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "src\Core\Core.vcxproj", "{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -65,6 +67,10 @@ Global
 		{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}.Debug|x64.Build.0 = Debug|x64
 		{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}.Release|x64.ActiveCfg = Release|x64
 		{A1E0C0DE-0008-4D58-9C10-5B0E6F2A0008}.Release|x64.Build.0 = Release|x64
+		{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}.Debug|x64.ActiveCfg = Debug|x64
+		{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}.Debug|x64.Build.0 = Debug|x64
+		{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}.Release|x64.ActiveCfg = Release|x64
+		{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,4 +82,6 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DABCD4FE-5228-4BBF-9FD2-6F988CD81D3A}
 	EndGlobalSection
-EndGlobal
+EndProject("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "src\Core\Core.vcxproj", "{A1E0C0DE-0009-4D58-9C10-5B0E6F2A0009}"
+EndProject
+Global

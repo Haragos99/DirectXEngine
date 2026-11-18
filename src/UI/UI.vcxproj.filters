@@ -2,16 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Sections">
-      <UniqueIdentifier>{dbb4a380-7e71-4320-803f-1fe3d9b6da81}</UniqueIdentifier>
+      <UniqueIdentifier>{54905cc5-56be-4a8d-8288-dff11e65914e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sections\Animation">
-      <UniqueIdentifier>{6b8ea56d-3792-45e0-8483-dcb1f719b789}</UniqueIdentifier>
+      <UniqueIdentifier>{b4df51bf-8db1-4f5d-91d9-094a59d4a927}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sections\Meshing">
-      <UniqueIdentifier>{c18bc7b3-18c6-45f5-a4fc-bf60a448ae4e}</UniqueIdentifier>
+      <UniqueIdentifier>{41952d1b-7418-4ce0-829d-d69978a75110}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sections\Scene">
-      <UniqueIdentifier>{5b6e0f4b-0027-46a9-bc00-2bc79fd4a104}</UniqueIdentifier>
+      <UniqueIdentifier>{315f9fa2-b3de-4c4b-9746-0ba1f091a1d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
