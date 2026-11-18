@@ -7,6 +7,7 @@
 #include "skeleton.h"
 #include "isosurfacemodel.h"
 #include "ivoxelsource.h"
+#include "assetpaths.h"
 
 Editor::Editor(World& world, Microsoft::WRL::ComPtr<ID3D11Device> device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> context)
     : world(world), device(device), context(context)
@@ -26,7 +27,7 @@ void Editor::CreateDefaultScene()
         world.Add(cube);
     }
 
-    auto teapot = std::make_shared<MeshModel>("..\\..\\Resources\\Models\\teapot.obj", L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl", device, context);
+    auto teapot = std::make_shared<MeshModel>(AssetPaths::ResourceA(L"Models\\teapot.obj"), L"shaders\\VertexShader.hlsl", L"shaders\\MeshPixelShader.hlsl", device, context);
     teapot->SetPosition(0.0f, -1.0f, 0.0f);
     world.Add(teapot);
 

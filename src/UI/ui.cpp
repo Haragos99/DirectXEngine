@@ -12,6 +12,7 @@
 #include "transformmodesection.h"
 #include "viewportsection.h"
 
+#include "assetpaths.h"
 #include "imgui.h"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
@@ -97,6 +98,11 @@ void UIPanel::Init(HWND _hwnd, ID3D11Device* device, ID3D11DeviceContext* contex
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    // Keep the window layout next to the exe instead of in the working directory.
+    // ImGui keeps the pointer, so the string has to outlive the context.
+    static const std::string iniPath = (AssetPaths::ExeDir() / "imgui.ini").string();
+    io.IniFilename = iniPath.c_str();
 
     ImGui::StyleColorsDark();
 

@@ -1,6 +1,6 @@
 #include "raytraceshader.h"
 #include <stdexcept>
-#include <d3dcompiler.h>
+#include "assetpaths.h"
 
 RaytraceShader::RaytraceShader(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext>  _context) : Shader(_device, _context)
 {
@@ -34,15 +34,7 @@ void RaytraceShader::createVertexRTBuffer(std::vector<VertexRT> vertices)
 
 void RaytraceShader::loadVertexShader(const std::wstring& vertexShaderPath)
 {
-    // Compile shaders
-    Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, err;
-
-    HRESULT hr = D3DCompileFromFile(vertexShaderPath.c_str(), nullptr, nullptr, "VSMain", "vs_5_0", 0, 0, &vsBlob, &err);
-
-    if (FAILED(hr))
-    {
-        throw std::runtime_error("Vertex Shader compilation failed");
-    }
+    Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = AssetPaths::RequireShader(vertexShaderPath);
 
     device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
    

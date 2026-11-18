@@ -1,12 +1,13 @@
 #include "plane.h"
+#include "assetpaths.h"
 
 Plane::Plane(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
 	normalMap = std::make_unique<Texture>(device, context);
 	createTexturedVertex();
 	createIndeces();
-	texture->LoadTextureFromFile(L"..\\..\\Resources\\B_S.png");
-	normalMap->LoadTextureFromFile(L"..\\..\\Resources\\B_N.png");
+	texture->LoadTextureFromFile(AssetPaths::Resource(L"B_S.png"));
+	normalMap->LoadTextureFromFile(AssetPaths::Resource(L"B_N.jpg"));
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();

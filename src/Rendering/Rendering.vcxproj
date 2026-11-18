@@ -46,6 +46,7 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Device\assetpaths.cpp" />
     <ClCompile Include="Device\renderer.cpp" />
     <ClCompile Include="Device\shaders.cpp" />
     <ClCompile Include="Device\texture.cpp" />
@@ -55,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
+    <ClInclude Include="Device\assetpaths.h" />
     <ClInclude Include="Device\renderer.h" />
     <ClInclude Include="Device\shaders.h" />
     <ClInclude Include="Device\texture.h" />

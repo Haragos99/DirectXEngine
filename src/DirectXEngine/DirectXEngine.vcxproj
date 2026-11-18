@@ -48,9 +48,18 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <!-- Shaders are compiled here, at build time (strict mode, /Ges), into x64\<Config>\shaders\.
+         The app loads these .cso files through AssetPaths::LoadShader, so a shader error is a build error. -->
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)shaders\%(Filename).cso</ObjectFileOutput>
+      <AdditionalOptions>/Ges %(AdditionalOptions)</AdditionalOptions>
     </FxCompile>
+    <!-- Seed the ImGui layout next to the exe from the tracked default, without overwriting a user's layout. -->
+    <PostBuildEvent>
+      <Command>if not exist "$(OutDir)imgui.ini" copy /Y "$(ProjectDir)imgui.ini" "$(OutDir)imgui.ini" &gt;nul</Command>
+      <Message>Seeding imgui.ini next to the exe</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\pch.cpp">

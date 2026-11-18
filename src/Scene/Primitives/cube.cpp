@@ -1,10 +1,11 @@
 #include "cube.h"
+#include "assetpaths.h"
 
 Cube::Cube(Microsoft::WRL::ComPtr<ID3D11Device> _device, Microsoft::WRL::ComPtr<ID3D11DeviceContext> _contex) : Object3D(_device, _contex)
 {
 	createTexturedVertex();
 	createIndeces();
-	texture->LoadTextureFromFile(L"..\\..\\Resources\\wood.png");
+	texture->LoadTextureFromFile(AssetPaths::Resource(L"wood.png"));
 	shader->createVertexBuffer(vertices);
 	shader->createInexxBuffer(indices);
 	shader->createConstantBuffer();

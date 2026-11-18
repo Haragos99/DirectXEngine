@@ -1,6 +1,6 @@
 #include "computeskindeformer.h"
 
-#include <d3dcompiler.h>
+#include "assetpaths.h"
 #include <windows.h>
 
 
@@ -38,19 +38,10 @@ bool ComputeSkinDeformer::LoadShader()
 		return true;
 	}
 
-	ComPtr<ID3DBlob> blob;
-	ComPtr<ID3DBlob> errors;
-	const HRESULT hr = D3DCompileFromFile(shaderPath.c_str(),
-	                                      nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-	                                      "CSMain", "cs_5_0",
-	                                      D3DCOMPILE_ENABLE_STRICTNESS, 0,
-	                                      &blob, &errors);
-	if (FAILED(hr))
+	// A missing shader only disables this deformer; LoadShader reports the path.
+	const ComPtr<ID3DBlob> blob = AssetPaths::LoadShader(shaderPath);
+	if (!blob)
 	{
-		if (errors)
-		{
-			OutputDebugStringA(static_cast<const char*>(errors->GetBufferPointer()));
-		}
 		return false;
 	}
 

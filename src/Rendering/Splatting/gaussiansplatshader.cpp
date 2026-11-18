@@ -1,6 +1,6 @@
 #include "gaussiansplatshader.h"
 
-#include <d3dcompiler.h>
+#include "assetpaths.h"
 #include <stdexcept>
 
 using Microsoft::WRL::ComPtr;
@@ -128,16 +128,7 @@ void GaussianSplatShader::CreateBlendState()
 
 void GaussianSplatShader::loadVertexShader(const std::wstring& vertexShaderPath)
 {
-	ComPtr<ID3DBlob> vsBlob;
-	ComPtr<ID3DBlob> errorBlob;
-	HRESULT hr = D3DCompileFromFile(
-		vertexShaderPath.c_str(), nullptr, nullptr,
-		"VSMain", "vs_5_0",
-		D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		&vsBlob, &errorBlob);
-
-	if (FAILED(hr))
-		throw std::runtime_error("Gaussian splat vertex shader compilation failed");
+	ComPtr<ID3DBlob> vsBlob = AssetPaths::RequireShader(vertexShaderPath);
 
 	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
 

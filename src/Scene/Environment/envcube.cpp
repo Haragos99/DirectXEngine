@@ -1,11 +1,11 @@
 #include "envcube.h"
-#include <d3dcompiler.h>
 #include <stdexcept>
 #include "DDSTextureLoader.h"
-EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> fx) 
+#include "assetpaths.h"
+EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> fx)
 {
 
-    std::wstring name =  L"..\\..\\Resources\\cloudy_skybox.dds";
+    std::wstring name = AssetPaths::Resource(L"cloudy_skybox.dds");
 
     // Initialize cube vertex & index buffers same as Object3D (reuse your cube data)
     HRESULT hr = DirectX::CreateDDSTextureFromFile(
@@ -19,18 +19,12 @@ EnvCube::EnvCube(Microsoft::WRL::ComPtr<ID3D11Device> gfx, Microsoft::WRL::ComPt
     if (FAILED(hr))
     {
 
-        throw std::runtime_error("CUBE compilation failed");
+        throw std::runtime_error("Failed to load the environment cube map: " + AssetPaths::ResourceA(L"cloudy_skybox.dds"));
     }
 
-    std::wstring shaderPathV = L"shaders\\EnvVertexShader.hlsl";
-    std::wstring shaderPathP = L"shaders\\EnvPixelShader.hlsl";
-
     // Load environment shaders
-    Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
-    D3DCompileFromFile(shaderPathV.c_str(), nullptr, nullptr, "VSMain", "vs_5_0",
-        D3DCOMPILE_ENABLE_STRICTNESS, 0, &vsBlob, nullptr);
-    D3DCompileFromFile(shaderPathP.c_str(), nullptr, nullptr, "PSMain", "ps_5_0",
-        D3DCOMPILE_ENABLE_STRICTNESS, 0, &psBlob, nullptr);
+    Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = AssetPaths::RequireShader(L"shaders\\EnvVertexShader.hlsl");
+    Microsoft::WRL::ComPtr<ID3DBlob> psBlob = AssetPaths::RequireShader(L"shaders\\EnvPixelShader.hlsl");
 
 
 

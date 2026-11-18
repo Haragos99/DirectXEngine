@@ -2,16 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Device">
-      <UniqueIdentifier>{cce23784-14ab-4750-b0db-0a22d57f6aed}</UniqueIdentifier>
+      <UniqueIdentifier>{e77037cd-7c74-47ce-8852-9acc2fa8499f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Raytracing">
-      <UniqueIdentifier>{e48e1849-0d4e-4692-866a-e1faa935275c}</UniqueIdentifier>
+      <UniqueIdentifier>{1d9341b4-46cc-4eeb-9b83-eda9e9ec048d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Splatting">
-      <UniqueIdentifier>{0feca8cc-c0b8-4011-a2d0-776d148e32d9}</UniqueIdentifier>
+      <UniqueIdentifier>{6789d2f1-59e0-48a7-b11d-c2143786317d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Device\assetpaths.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
     <ClCompile Include="Device\renderer.cpp">
       <Filter>Device</Filter>
     </ClCompile>
@@ -32,6 +35,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Device\assetpaths.h">
+      <Filter>Device</Filter>
+    </ClInclude>
     <ClInclude Include="Device\renderer.h">
       <Filter>Device</Filter>
     </ClInclude>

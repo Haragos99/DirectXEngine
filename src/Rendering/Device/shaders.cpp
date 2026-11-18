@@ -1,6 +1,5 @@
 #include "shaders.h"
-
-#include <d3dcompiler.h>
+#include "assetpaths.h"
 
 #include <stdexcept>
 
@@ -26,20 +25,7 @@ void Shader::LoadShaders(const std::wstring& vertexShaderPath, const std::wstrin
 
 void Shader::loadVertexShader(const std::wstring& vertexShaderPath)
 {
-	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob, psBlob;
-	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob; // This will hold compilation errors
-	HRESULT hr = D3DCompileFromFile(
-		vertexShaderPath.c_str(),  // file path
-		nullptr, nullptr,
-		"VSMain", "vs_5_0",
-		D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		&vsBlob, &errorBlob
-	);
-
-	if (FAILED(hr))
-	{
-		throw std::runtime_error("Vertex Shader compilation failed");
-	}
+	Microsoft::WRL::ComPtr<ID3DBlob> vsBlob = AssetPaths::RequireShader(vertexShaderPath);
 	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vertexShader);
 
 	// Input Layout
@@ -55,27 +41,13 @@ void Shader::loadVertexShader(const std::wstring& vertexShaderPath)
 }
 void Shader::loadPixelShader(const std::wstring& pixelShaderPath)
 {
-	Microsoft::WRL::ComPtr<ID3DBlob>  psBlob;
-	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob; // This will hold compilation errors
-	HRESULT hr = D3DCompileFromFile(
-		pixelShaderPath.c_str(), nullptr, nullptr,
-		"PSMain", "ps_5_0",
-		D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		&psBlob, &errorBlob
-	);
-	if (FAILED(hr))
-	{
-		throw std::runtime_error("Vertex Shader compilation failed");
-	}
+	Microsoft::WRL::ComPtr<ID3DBlob> psBlob = AssetPaths::RequireShader(pixelShaderPath);
 	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &pixelShader);
 }
 void Shader::loadwireframePixelShader()
 {
 	// Black pixel shader (for wireframe)
-	Microsoft::WRL::ComPtr<ID3DBlob> psBlobB;
-	D3DCompileFromFile(L"shaders\\BlackPixelShader.hlsl", nullptr, nullptr,
-		"PSMain", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0,
-		&psBlobB, nullptr);
+	Microsoft::WRL::ComPtr<ID3DBlob> psBlobB = AssetPaths::RequireShader(L"shaders\\BlackPixelShader.hlsl");
 
 	device->CreatePixelShader(psBlobB->GetBufferPointer(), psBlobB->GetBufferSize(), nullptr, &blackPixelShader);
 }
