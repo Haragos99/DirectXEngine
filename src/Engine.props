@@ -27,7 +27,7 @@
     <VoxelDirs>$(EngineSrc)Voxel\Fields;$(EngineSrc)Voxel\MarchingCubes;$(EngineSrc)Voxel\Meshing</VoxelDirs>
     <ImGuiDirs>$(EngineRoot)External\imgui;$(EngineRoot)External\imgui\backends</ImGuiDirs>
     <UIDirs>$(EngineSrc)UI;$(EngineSrc)UI\Sections\Animation;$(EngineSrc)UI\Sections\Meshing;$(EngineSrc)UI\Sections\Scene</UIDirs>
-    <AppDirs>$(EngineSrc)DirectXEngine\App;$(EngineSrc)DirectXEngine\Input</AppDirs>
+    <AppDirs>$(EngineSrc)DirectXEngine\App;$(EngineSrc)DirectXEngine\Editor;$(EngineSrc)DirectXEngine\Input</AppDirs>
 
     <EngineIncludes Condition="'$(EngineLayer)'=='Core'">$(CoreDirs)</EngineIncludes>
     <EngineIncludes Condition="'$(EngineLayer)'=='Rendering'">$(CoreDirs);$(RenderingDirs)</EngineIncludes>

@@ -4,20 +4,22 @@
 #include <cmath>
 
 
-Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"DirectX Engine Window", L"DirectX Engine Class", 1280, 720, nCmdShow), graphics(GetHWND(), 1280, 720)
+Engine::Engine(HINSTANCE hInstance, int nCmdShow) : WindowApp(hInstance, L"DirectX Engine Window", L"DirectX Engine Class", 1280, 720, nCmdShow), renderer(GetHWND(), 1280, 720),
+	world(renderer.Device(), renderer.Context(), 1280.0f / 720.0f),
+	editor(world, renderer.Device(), renderer.Context())
 {
-	ui.Init(GetHWND(), graphics.GetDevice(), graphics.GetContext());
+	ui.Init(GetHWND(), renderer.GetDevice(), renderer.GetContext());
 	ui.SetImportModelCallback([this](const std::wstring& path) {
 		Import(path);
 	});
 	ui.SetCreateSkeletonCallback([this]() {
-		graphics.AddSkeleton();
+		editor.AddSkeleton();
 	});
 	ui.SetCreateIsoSurfaceCallback([this](std::shared_ptr<IVoxelSource> volume, int resolution, float isoLevel) {
-		graphics.AddIsoSurface(volume, resolution, isoLevel);
+		editor.AddIsoSurface(volume, resolution, isoLevel);
 	});
 	ui.SetReparentCallback([this](std::shared_ptr<Object3D> child, std::shared_ptr<Object3D> newParent) {
-		graphics.Reparent(child, newParent);
+		world.Reparent(child, newParent);
 	});
 }
 
@@ -34,13 +36,13 @@ int Engine::Run()
 		else
 		{
 			const float* clearColor = ui.GetClearColor();
-			graphics.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
+			renderer.Clear(clearColor[0], clearColor[1], clearColor[2], 1.0f);
 
 			const float dt = calculateDeltaTime();
 			HandleGizmoDrag();
 			ProcessInput();
 			UpdateSelection();
-			graphics.Update(dt);
+			editor.Update(dt);
 			Render();
 		}
 	}
@@ -52,27 +54,27 @@ void Engine::ProcessInput()
 	const float speed = 0.05f;
 	if (keyboardEvent->IsKeyDown('W'))     
 	{ 
-		graphics.camera.Move(0, 0, speed); // forward
+		world.camera.Move(0, 0, speed); // forward
 	}   
 	if (keyboardEvent->IsKeyDown('S'))     
 	{ 
-		graphics.camera.Move(0, 0, -speed); // back
+		world.camera.Move(0, 0, -speed); // back
 	}  
 	if (keyboardEvent->IsKeyDown('A'))     
 	{ 
-		graphics.camera.Move(-speed, 0, 0); // strafe left
+		world.camera.Move(-speed, 0, 0); // strafe left
 	}  
 	if (keyboardEvent->IsKeyDown('D'))    
 	{ 
-		graphics.camera.Move(speed, 0, 0); // strafe right
+		world.camera.Move(speed, 0, 0); // strafe right
 	}  
 	if (keyboardEvent->IsKeyDown(VK_SPACE)) 
 	{ 
-		graphics.camera.Move(0, speed, 0); // up
+		world.camera.Move(0, speed, 0); // up
 	}  
 	if (keyboardEvent->IsKeyDown(VK_SHIFT)) 
 	{ 
-		graphics.camera.Move(0, -speed, 0); // down
+		world.camera.Move(0, -speed, 0); // down
 	}
 	if(keyboardEvent->IsKeyDown(VK_DELETE))
 	{
@@ -81,7 +83,7 @@ void Engine::ProcessInput()
 
 	const bool rDown = keyboardEvent->IsKeyDown('R');
 	if (rDown && !rKeyLatch)
-		graphics.changeRenderMode();
+		world.CycleRenderMode();
 	rKeyLatch = rDown;
 
 	// Drag with the left button to orbit the camera (unless a gizmo axis is
@@ -90,30 +92,32 @@ void Engine::ProcessInput()
 	{
 		const int deltax = mouseEvent->GetDeltaX();
 		const int deltay = mouseEvent->GetDeltaY();
-		graphics.camera.Rotate(deltay * 0.005f, deltax * 0.005f);
+		world.camera.Rotate(deltay * 0.005f, deltax * 0.005f);
 	}
 
 	const int wheelDelta = mouseEvent->GetWheelDelta();
 	if (wheelDelta != 0)
-		graphics.camera.Zoom(static_cast<float>(wheelDelta));
+		world.camera.Zoom(static_cast<float>(wheelDelta));
 }
 
 void Engine::Render()
 {
-	graphics.RenderFrame();
+	renderer.BeginFrame();
+	world.Draw(renderer);
+	editor.DrawOverlay();
 	RenderUI();
-	graphics.swapChainPresent();
+	renderer.Present();
 }
 
 void Engine::RenderUI()
 {
 	// ImGui overlay
 	ui.BeginFrame();
-	ui.SetMeshingStatus(graphics.IsMeshing(), graphics.GetMeshingProgress(), graphics.GetMeshingLabel());
-	ui.DrawTestPanel(graphics.sceenObjects);
+	ui.SetMeshingStatus(editor.IsMeshing(), editor.GetMeshingProgress(), editor.GetMeshingLabel());
+	ui.DrawTestPanel(world.Objects());
 	if (ui.RequestedRenderModeChange())
 	{
-		graphics.changeRenderMode();
+		world.CycleRenderMode();
 	}
 	ui.EndFrame();
 }
@@ -134,7 +138,9 @@ void Engine::OnResize(int width, int height)
 {
 	windowHeight = height;
 	windowWidth = width;
-	graphics.Resize(static_cast<UINT>(width), static_cast<UINT>(height));
+	renderer.Resize(static_cast<UINT>(width), static_cast<UINT>(height));
+	if (width > 0 && height > 0)
+		world.camera.SetAspect(static_cast<float>(width) / static_cast<float>(height));
 }
 
 void Engine::UpdateSelection()
@@ -145,12 +151,12 @@ void Engine::UpdateSelection()
 	// Single left click: report the click position in screen and world space.
 	if (mouseEvent->ConsumeLeftClick(clickX, clickY))
 	{
-		const Ray ray = graphics.camera.ScreenPointToRay(
+		const Ray ray = world.camera.ScreenPointToRay(
 			static_cast<float>(clickX), static_cast<float>(clickY),
 			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
-		DirectX::XMFLOAT3 world{};
-		const bool onObject = graphics.PickObject(ray, &world) != nullptr;
+		DirectX::XMFLOAT3 hitPoint{};
+		const bool onObject = world.PickObject(ray, &hitPoint) != nullptr;
 
 		if (!onObject)
 		{
@@ -158,34 +164,34 @@ void Engine::UpdateSelection()
 			if (fabsf(ray.direction.y) > 1e-6f)
 			{
 				const float t = -ray.origin.y / ray.direction.y;
-				world.x = ray.origin.x + ray.direction.x * t;
-				world.y = 0.0f;
-				world.z = ray.origin.z + ray.direction.z * t;
+				hitPoint.x = ray.origin.x + ray.direction.x * t;
+				hitPoint.y = 0.0f;
+				hitPoint.z = ray.origin.z + ray.direction.z * t;
 			}
 			else
 			{
-				world = ray.origin;
+				hitPoint = ray.origin;
 			}
 		}
 
 		char buffer[256];
 		sprintf_s(buffer, "[Click] screen=(%d, %d)  world=(%.3f, %.3f, %.3f)%s\n",
-			clickX, clickY, world.x, world.y, world.z, onObject ? "  (on object)" : "");
+			clickX, clickY, hitPoint.x, hitPoint.y, hitPoint.z, onObject ? "  (on object)" : "");
 		OutputDebugStringA(buffer);
 	}
 
 	// Double left click: pick the object under the cursor and make it the selection.
 	if (mouseEvent->ConsumeLeftDoubleClick(clickX, clickY))
 	{
-		const Ray ray = graphics.camera.ScreenPointToRay(
+		const Ray ray = world.camera.ScreenPointToRay(
 			static_cast<float>(clickX), static_cast<float>(clickY),
 			static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
-		ui.SetSelectedObject(graphics.PickObject(ray, nullptr));
+		ui.SetSelectedObject(world.PickObject(ray, nullptr));
 	}
 
 	// Keep the gizmo attached to whatever is selected (via double-click or the UI panel).
-	graphics.SetSelectedObject(ui.GetSelectedObject());
+	editor.SetSelectedObject(ui.GetSelectedObject());
 }
 
 void Engine::HandleGizmoDrag()
@@ -193,38 +199,38 @@ void Engine::HandleGizmoDrag()
 	const bool leftDown = mouseEvent->IsButtonDown(VK_LBUTTON);
 
 	// Apply the transform mode (Move/Scale) chosen in the UI panel.
-	graphics.SetGizmoMode(ui.GetGizmoMode());
+	editor.SetGizmoMode(ui.GetGizmoMode());
 
-	if (!graphics.gizmo || !graphics.gizmo->IsVisible())
+	if (!editor.Gizmo() || !editor.Gizmo()->IsVisible())
 	{
 		if (gizmoDragging)
-			graphics.gizmo->EndDrag();
+			editor.Gizmo()->EndDrag();
 		gizmoDragging = false;
 		leftWasDown = leftDown;
 		return;
 	}
 
-	const Ray ray = graphics.camera.ScreenPointToRay(
+	const Ray ray = world.camera.ScreenPointToRay(
 		static_cast<float>(mouseEvent->GetX()), static_cast<float>(mouseEvent->GetY()),
 		static_cast<float>(windowWidth), static_cast<float>(windowHeight));
 
 	if (leftDown && !leftWasDown)
 	{
 		// Button just pressed: grab the axis handle under the cursor, if any.
-		const GizmoController::Axis axis = graphics.gizmo->PickAxis(ray);
+		const GizmoController::Axis axis = editor.Gizmo()->PickAxis(ray);
 		if (axis != GizmoController::Axis::None)
 		{
-			graphics.gizmo->BeginDrag(axis, ray);
+			editor.Gizmo()->BeginDrag(axis, ray);
 			gizmoDragging = true;
 		}
 	}
 	else if (leftDown && gizmoDragging)
 	{
-		graphics.gizmo->UpdateDrag(ray);
+		editor.Gizmo()->UpdateDrag(ray);
 	}
 	else if (!leftDown && gizmoDragging)
 	{
-		graphics.gizmo->EndDrag();
+		editor.Gizmo()->EndDrag();
 		gizmoDragging = false;
 	}
 
@@ -233,7 +239,7 @@ void Engine::HandleGizmoDrag()
 
 void Engine::Import(const std::wstring& path)
 {
-	graphics.ImportModel(path);
+	editor.ImportModel(path);
 }
 
 void Engine::RemoveSelectedObject()
@@ -241,6 +247,6 @@ void Engine::RemoveSelectedObject()
 	if (const std::shared_ptr<Object3D> selected = ui.GetSelectedObject())
 	{
 		ui.SetSelectedObject(nullptr); // clear before the object goes away
-		graphics.RemoveObject(selected);
+		world.RemoveObject(selected);
 	}
 }

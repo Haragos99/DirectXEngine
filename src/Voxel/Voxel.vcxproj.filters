@@ -2,13 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Fields">
-      <UniqueIdentifier>{e92a6425-d001-4243-97e4-b82fac7f8e2f}</UniqueIdentifier>
+      <UniqueIdentifier>{50402bd9-27d5-49d3-b5d5-aefd4abb1b4f}</UniqueIdentifier>
     </Filter>
     <Filter Include="MarchingCubes">
-      <UniqueIdentifier>{8c7ea3a9-2f74-483a-a060-9b2b025dde22}</UniqueIdentifier>
+      <UniqueIdentifier>{aa8af12e-cc60-4e61-9c8a-e23162aff361}</UniqueIdentifier>
     </Filter>
     <Filter Include="Meshing">
-      <UniqueIdentifier>{627ea478-66bb-4558-9229-07f8e3db85f5}</UniqueIdentifier>
+      <UniqueIdentifier>{4ebc06f2-efff-48f7-af3a-3ac381a6b662}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

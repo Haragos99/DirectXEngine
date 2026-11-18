@@ -1,6 +1,9 @@
 #pragma once
 #include "windowapp.h"
-#include "graphics.h"
+#include "renderer.h"
+#include "world.h"
+#include "editor.h"
+#include "ui.h"
 #include <chrono>
 class Engine : public WindowApp {
 
@@ -11,7 +14,10 @@ public:
 	int Run();
 	void OnResize(int width, int height) override;
 private:
-	Graphics graphics;
+	// Declaration order is construction order: the world and the editor need the device.
+	Renderer renderer;
+	World world;
+	Editor editor;
 	UIPanel ui;
 	bool rKeyLatch = false;
 	bool gizmoDragging = false; // true while dragging a gizmo axis handle

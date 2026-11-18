@@ -2,16 +2,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Device">
-      <UniqueIdentifier>{92053e15-3d75-4c13-af5e-69d10930d607}</UniqueIdentifier>
+      <UniqueIdentifier>{cce23784-14ab-4750-b0db-0a22d57f6aed}</UniqueIdentifier>
     </Filter>
     <Filter Include="Raytracing">
-      <UniqueIdentifier>{b369f965-84a0-4b30-a23b-0930a58a9a2b}</UniqueIdentifier>
+      <UniqueIdentifier>{e48e1849-0d4e-4692-866a-e1faa935275c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Splatting">
-      <UniqueIdentifier>{8d206ef0-a420-45a9-bd6f-3aa26df9e21e}</UniqueIdentifier>
+      <UniqueIdentifier>{0feca8cc-c0b8-4011-a2d0-776d148e32d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Device\renderer.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
     <ClCompile Include="Device\shaders.cpp">
       <Filter>Device</Filter>
     </ClCompile>
@@ -29,6 +32,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Device\renderer.h">
+      <Filter>Device</Filter>
+    </ClInclude>
     <ClInclude Include="Device\shaders.h">
       <Filter>Device</Filter>
     </ClInclude>

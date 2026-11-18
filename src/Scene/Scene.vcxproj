@@ -64,6 +64,7 @@
     <ClCompile Include="PointClouds\splatcloudobject.cpp" />
     <ClCompile Include="Primitives\cube.cpp" />
     <ClCompile Include="Primitives\plane.cpp" />
+    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="PointClouds\splatcloudobject.h" />
     <ClInclude Include="Primitives\cube.h" />
     <ClInclude Include="Primitives\plane.h" />
+    <ClInclude Include="world.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

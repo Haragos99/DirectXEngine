@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Obj">
-      <UniqueIdentifier>{10cc1d60-ac0d-464c-8adf-aaed78a60030}</UniqueIdentifier>
+      <UniqueIdentifier>{375c28a4-45f1-4136-a360-aa3043b5386d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Ply">
-      <UniqueIdentifier>{8d9debd0-dbef-4677-b8f9-b9970a172035}</UniqueIdentifier>
+      <UniqueIdentifier>{4538c0f1-f74b-46a4-806a-a00e9521782f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -2,22 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Environment">
-      <UniqueIdentifier>{bfc37dc6-af8d-48f0-a62c-6e51a222468f}</UniqueIdentifier>
+      <UniqueIdentifier>{69563e2c-8d41-4f63-9084-44445e27fb27}</UniqueIdentifier>
     </Filter>
     <Filter Include="Gizmos">
-      <UniqueIdentifier>{8b4e4e4d-1b2e-49d2-a62c-1cd35f0fb3a9}</UniqueIdentifier>
+      <UniqueIdentifier>{07c89007-032b-407f-9434-2c3e23d038c9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Importers">
-      <UniqueIdentifier>{63ae4b00-41a1-448b-acee-58e8a14fd05c}</UniqueIdentifier>
+      <UniqueIdentifier>{2e3d61a5-b206-4d3f-aad0-fd0350b121d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mesh">
-      <UniqueIdentifier>{07bb4d7e-86cb-4cf1-91a3-ef7a8f5b1de1}</UniqueIdentifier>
+      <UniqueIdentifier>{4da92a4a-259f-475b-adf0-dc3cf194d415}</UniqueIdentifier>
     </Filter>
     <Filter Include="PointClouds">
-      <UniqueIdentifier>{e470c51c-054d-41e1-9eb5-32bf8cc3724b}</UniqueIdentifier>
+      <UniqueIdentifier>{17a4cb34-6aca-4b16-a85f-82958a6df50e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Primitives">
-      <UniqueIdentifier>{32be3103-abd2-4f44-9d3d-81f2232ccbf3}</UniqueIdentifier>
+      <UniqueIdentifier>{cfa21dae-127a-4fc0-bb8a-56aeea7d8df4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +73,7 @@
     <ClCompile Include="Primitives\plane.cpp">
       <Filter>Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Environment\envcube.h">
@@ -133,5 +134,6 @@
     <ClInclude Include="Primitives\plane.h">
       <Filter>Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="world.h" />
   </ItemGroup>
 </Project>
