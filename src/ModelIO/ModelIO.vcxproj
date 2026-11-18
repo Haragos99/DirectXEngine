@@ -47,33 +47,33 @@
     </ClCompile>
     <ClCompile Include="imodelloader.cpp" />
     <ClCompile Include="modelloaderregistry.cpp" />
-    <ClCompile Include="objmodelloader.cpp" />
+    <ClCompile Include="Obj\objmodelloader.cpp" />
     <ClCompile Include="Ply\gaussiansplat.cpp" />
     <ClCompile Include="Ply\gaussiansplatplyloader.cpp" />
     <ClCompile Include="Ply\plyelementreader.cpp" />
     <ClCompile Include="Ply\plyheaderparser.cpp" />
+    <ClCompile Include="Ply\plymodelloader.cpp" />
     <ClCompile Include="Ply\pointcloud.cpp" />
     <ClCompile Include="Ply\pointcloudplyloader.cpp" />
     <ClCompile Include="Ply\standardsplatdecoder.cpp" />
     <ClCompile Include="Ply\supersplatdecoder.cpp" />
-    <ClCompile Include="plymodelloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
     <ClInclude Include="imodelloader.h" />
     <ClInclude Include="modelloaderregistry.h" />
-    <ClInclude Include="objmodelloader.h" />
+    <ClInclude Include="Obj\objmodelloader.h" />
     <ClInclude Include="Ply\gaussiansplat.h" />
     <ClInclude Include="Ply\gaussiansplatplyloader.h" />
     <ClInclude Include="Ply\isplatdecoder.h" />
     <ClInclude Include="Ply\plyelementreader.h" />
     <ClInclude Include="Ply\plyheaderparser.h" />
+    <ClInclude Include="Ply\plymodelloader.h" />
     <ClInclude Include="Ply\plytypes.h" />
     <ClInclude Include="Ply\pointcloud.h" />
     <ClInclude Include="Ply\pointcloudplyloader.h" />
     <ClInclude Include="Ply\standardsplatdecoder.h" />
     <ClInclude Include="Ply\supersplatdecoder.h" />
-    <ClInclude Include="plymodelloader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

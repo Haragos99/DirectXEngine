@@ -1,5 +1,5 @@
 #include "pointcloudmodel.h"
-#include "Ply/pointcloudplyloader.h"
+#include "pointcloudplyloader.h"
 
 #include <algorithm>
 #include <filesystem>

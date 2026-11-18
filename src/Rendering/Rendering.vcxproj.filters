@@ -1,23 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="envcube.cpp" />
-    <ClCompile Include="gaussiansplatshader.cpp" />
-    <ClCompile Include="graphics.cpp" />
-    <ClCompile Include="raytracer.cpp" />
-    <ClCompile Include="raytraceshader.cpp" />
-    <ClCompile Include="shaders.cpp" />
-    <ClCompile Include="splatdepthsorter.cpp" />
-    <ClCompile Include="texture.cpp" />
+    <Filter Include="Core">
+      <UniqueIdentifier>{5e258589-f396-42c4-b350-d001ca9fa5cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Raytracing">
+      <UniqueIdentifier>{c9c30538-51f0-4b91-9db7-0d0c8e4b02cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Splatting">
+      <UniqueIdentifier>{4236514e-3567-4d3b-950d-0a4d006ba842}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="envcube.h" />
-    <ClInclude Include="gaussiansplatshader.h" />
-    <ClInclude Include="graphics.h" />
-    <ClInclude Include="raytracer.h" />
-    <ClInclude Include="raytraceshader.h" />
-    <ClInclude Include="shaders.h" />
-    <ClInclude Include="splatdepthsorter.h" />
-    <ClInclude Include="texture.h" />
+    <ClCompile Include="Core\envcube.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\graphics.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\shaders.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\texture.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Raytracing\raytracer.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="Raytracing\raytraceshader.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="Splatting\gaussiansplatshader.cpp">
+      <Filter>Splatting</Filter>
+    </ClCompile>
+    <ClCompile Include="Splatting\splatdepthsorter.cpp">
+      <Filter>Splatting</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core\envcube.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\graphics.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\shaders.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\texture.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Raytracing\raytracer.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="Raytracing\raytraceshader.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="Splatting\gaussiansplatshader.h">
+      <Filter>Splatting</Filter>
+    </ClInclude>
+    <ClInclude Include="Splatting\splatdepthsorter.h">
+      <Filter>Splatting</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

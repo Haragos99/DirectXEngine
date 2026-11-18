@@ -1,6 +1,6 @@
 #pragma once
 #include "splatcloudobject.h"
-#include "Ply/gaussiansplat.h"
+#include "gaussiansplat.h"
 
 #include <string>
 

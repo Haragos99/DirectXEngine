@@ -1,6 +1,6 @@
 #include "pointcloudimporter.h"
 #include "pointcloudmodel.h"
-#include "Ply/pointcloudplyloader.h"
+#include "pointcloudplyloader.h"
 
 bool PointCloudImporter::CanImport(const std::string& path) const
 {

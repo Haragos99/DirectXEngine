@@ -23,7 +23,9 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(EngineSrc);$(EngineSrc)DirectXEngine;$(EngineSrc)Animation\Skeleton;$(EngineSrc)Animation\Skinning;$(EngineSrc)ModelIO;$(EngineSrc)Scene;$(EngineSrc)Scene\Gizmos;$(EngineSrc)Rendering;$(EngineSrc)UI;$(EngineSrc)Voxel;$(EngineRoot)External\imgui;$(EngineRoot)External\imgui\backends;$(EngineRoot)External\TextureLoaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <!-- Every src folder that holds headers, so headers are included by bare name ("mesh.h").
+           When you add a new folder with headers, add it here too. -->
+      <AdditionalIncludeDirectories>$(EngineSrc);$(EngineSrc)DirectXEngine\App;$(EngineSrc)DirectXEngine\Input;$(EngineSrc)Animation\Skeleton;$(EngineSrc)Animation\Skinning;$(EngineSrc)Animation\Skinning\Correctives;$(EngineSrc)Animation\Skinning\Data;$(EngineSrc)Animation\Skinning\Deformers;$(EngineSrc)Animation\Skinning\Weights;$(EngineSrc)ModelIO;$(EngineSrc)ModelIO\Obj;$(EngineSrc)ModelIO\Ply;$(EngineSrc)Rendering\Core;$(EngineSrc)Rendering\Raytracing;$(EngineSrc)Rendering\Splatting;$(EngineSrc)Scene;$(EngineSrc)Scene\Gizmos;$(EngineSrc)Scene\Importers;$(EngineSrc)Scene\Mesh;$(EngineSrc)Scene\PointClouds;$(EngineSrc)Scene\Primitives;$(EngineSrc)UI;$(EngineSrc)UI\Sections\Animation;$(EngineSrc)UI\Sections\Meshing;$(EngineSrc)UI\Sections\Scene;$(EngineSrc)Voxel\Fields;$(EngineSrc)Voxel\MarchingCubes;$(EngineSrc)Voxel\Meshing;$(EngineRoot)External\imgui;$(EngineRoot)External\imgui\backends;$(EngineRoot)External\TextureLoaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">

@@ -46,17 +46,17 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="modelfiledialog.cpp" />
-    <ClCompile Include="Sections\importsection.cpp" />
-    <ClCompile Include="Sections\marchingcubessection.cpp" />
-    <ClCompile Include="Sections\objectpropertiessection.cpp" />
-    <ClCompile Include="Sections\sceneoutlinersection.cpp" />
-    <ClCompile Include="Sections\skeletonsection.cpp" />
-    <ClCompile Include="Sections\skinbindingsection.cpp" />
-    <ClCompile Include="Sections\skinweightssection.cpp" />
-    <ClCompile Include="Sections\splatmeshingsection.cpp" />
-    <ClCompile Include="Sections\splatsettingssection.cpp" />
-    <ClCompile Include="Sections\transformmodesection.cpp" />
-    <ClCompile Include="Sections\viewportsection.cpp" />
+    <ClCompile Include="Sections\Animation\skeletonsection.cpp" />
+    <ClCompile Include="Sections\Animation\skinbindingsection.cpp" />
+    <ClCompile Include="Sections\Animation\skinweightssection.cpp" />
+    <ClCompile Include="Sections\Meshing\marchingcubessection.cpp" />
+    <ClCompile Include="Sections\Meshing\splatmeshingsection.cpp" />
+    <ClCompile Include="Sections\Scene\importsection.cpp" />
+    <ClCompile Include="Sections\Scene\objectpropertiessection.cpp" />
+    <ClCompile Include="Sections\Scene\sceneoutlinersection.cpp" />
+    <ClCompile Include="Sections\Scene\splatsettingssection.cpp" />
+    <ClCompile Include="Sections\Scene\transformmodesection.cpp" />
+    <ClCompile Include="Sections\Scene\viewportsection.cpp" />
     <ClCompile Include="ui.cpp" />
     <ClCompile Include="uistate.cpp" />
   </ItemGroup>
@@ -64,17 +64,17 @@
     <ClInclude Include="..\pch.h" />
     <ClInclude Include="ipanelsection.h" />
     <ClInclude Include="modelfiledialog.h" />
-    <ClInclude Include="Sections\importsection.h" />
-    <ClInclude Include="Sections\marchingcubessection.h" />
-    <ClInclude Include="Sections\objectpropertiessection.h" />
-    <ClInclude Include="Sections\sceneoutlinersection.h" />
-    <ClInclude Include="Sections\skeletonsection.h" />
-    <ClInclude Include="Sections\skinbindingsection.h" />
-    <ClInclude Include="Sections\skinweightssection.h" />
-    <ClInclude Include="Sections\splatmeshingsection.h" />
-    <ClInclude Include="Sections\splatsettingssection.h" />
-    <ClInclude Include="Sections\transformmodesection.h" />
-    <ClInclude Include="Sections\viewportsection.h" />
+    <ClInclude Include="Sections\Animation\skeletonsection.h" />
+    <ClInclude Include="Sections\Animation\skinbindingsection.h" />
+    <ClInclude Include="Sections\Animation\skinweightssection.h" />
+    <ClInclude Include="Sections\Meshing\marchingcubessection.h" />
+    <ClInclude Include="Sections\Meshing\splatmeshingsection.h" />
+    <ClInclude Include="Sections\Scene\importsection.h" />
+    <ClInclude Include="Sections\Scene\objectpropertiessection.h" />
+    <ClInclude Include="Sections\Scene\sceneoutlinersection.h" />
+    <ClInclude Include="Sections\Scene\splatsettingssection.h" />
+    <ClInclude Include="Sections\Scene\transformmodesection.h" />
+    <ClInclude Include="Sections\Scene\viewportsection.h" />
     <ClInclude Include="ui.h" />
     <ClInclude Include="uistate.h" />
   </ItemGroup>

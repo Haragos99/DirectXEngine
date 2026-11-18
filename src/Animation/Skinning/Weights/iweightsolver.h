@@ -1,6 +1,6 @@
 #pragma once
-#include "../skinbindcontext.h"
-#include "../skinweights.h"
+#include "skinbindcontext.h"
+#include "skinweights.h"
 
 #include <span>
 

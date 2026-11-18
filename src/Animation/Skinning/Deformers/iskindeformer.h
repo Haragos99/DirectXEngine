@@ -1,5 +1,5 @@
 #pragma once
-#include "../skinweights.h"
+#include "skinweights.h"
 #include "vertex.h"
 
 #include <DirectXMath.h>

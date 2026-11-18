@@ -45,29 +45,29 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="isosurfacejob.cpp" />
-    <ClCompile Include="isosurfacemodel.cpp" />
-    <ClCompile Include="marchingcubes.cpp" />
-    <ClCompile Include="marchingcubestables.cpp" />
-    <ClCompile Include="scalarfieldsampler.cpp" />
-    <ClCompile Include="spherefield.cpp" />
-    <ClCompile Include="splatdensityvolume.cpp" />
-    <ClCompile Include="voxelgrid.cpp" />
+    <ClCompile Include="Fields\scalarfieldsampler.cpp" />
+    <ClCompile Include="Fields\spherefield.cpp" />
+    <ClCompile Include="Fields\splatdensityvolume.cpp" />
+    <ClCompile Include="Fields\voxelgrid.cpp" />
+    <ClCompile Include="MarchingCubes\marchingcubes.cpp" />
+    <ClCompile Include="MarchingCubes\marchingcubestables.cpp" />
+    <ClCompile Include="Meshing\isosurfacejob.cpp" />
+    <ClCompile Include="Meshing\isosurfacemodel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
-    <ClInclude Include="iscalarfield.h" />
-    <ClInclude Include="isosurfacejob.h" />
-    <ClInclude Include="isosurfacemodel.h" />
-    <ClInclude Include="ivoxelsource.h" />
-    <ClInclude Include="marchingcubes.h" />
-    <ClInclude Include="marchingcubestables.h" />
-    <ClInclude Include="progressreporter.h" />
-    <ClInclude Include="scalarfieldsampler.h" />
-    <ClInclude Include="scalarfieldvolume.h" />
-    <ClInclude Include="spherefield.h" />
-    <ClInclude Include="splatdensityvolume.h" />
-    <ClInclude Include="voxelgrid.h" />
+    <ClInclude Include="Fields\iscalarfield.h" />
+    <ClInclude Include="Fields\ivoxelsource.h" />
+    <ClInclude Include="Fields\scalarfieldsampler.h" />
+    <ClInclude Include="Fields\scalarfieldvolume.h" />
+    <ClInclude Include="Fields\spherefield.h" />
+    <ClInclude Include="Fields\splatdensityvolume.h" />
+    <ClInclude Include="Fields\voxelgrid.h" />
+    <ClInclude Include="MarchingCubes\marchingcubes.h" />
+    <ClInclude Include="MarchingCubes\marchingcubestables.h" />
+    <ClInclude Include="Meshing\isosurfacejob.h" />
+    <ClInclude Include="Meshing\isosurfacemodel.h" />
+    <ClInclude Include="Meshing\progressreporter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

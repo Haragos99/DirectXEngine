@@ -1,5 +1,5 @@
 #include "gaussiansplatting.h"
-#include "Ply/gaussiansplatplyloader.h"
+#include "gaussiansplatplyloader.h"
 
 #include <filesystem>
 #include <iostream>

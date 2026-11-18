@@ -1,14 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Obj">
+      <UniqueIdentifier>{76309c19-c316-44b7-af33-9bb59c8ffe2d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Ply">
-      <UniqueIdentifier>{ce322748-5a8e-48c6-bc68-3300296a7d9c}</UniqueIdentifier>
+      <UniqueIdentifier>{4f6fffcb-0e0a-4436-9699-cbeeea3a5aad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imodelloader.cpp" />
     <ClCompile Include="modelloaderregistry.cpp" />
-    <ClCompile Include="objmodelloader.cpp" />
+    <ClCompile Include="Obj\objmodelloader.cpp">
+      <Filter>Obj</Filter>
+    </ClCompile>
     <ClCompile Include="Ply\gaussiansplat.cpp">
       <Filter>Ply</Filter>
     </ClCompile>
@@ -19,6 +24,9 @@
       <Filter>Ply</Filter>
     </ClCompile>
     <ClCompile Include="Ply\plyheaderparser.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\plymodelloader.cpp">
       <Filter>Ply</Filter>
     </ClCompile>
     <ClCompile Include="Ply\pointcloud.cpp">
@@ -33,12 +41,13 @@
     <ClCompile Include="Ply\supersplatdecoder.cpp">
       <Filter>Ply</Filter>
     </ClCompile>
-    <ClCompile Include="plymodelloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imodelloader.h" />
     <ClInclude Include="modelloaderregistry.h" />
-    <ClInclude Include="objmodelloader.h" />
+    <ClInclude Include="Obj\objmodelloader.h">
+      <Filter>Obj</Filter>
+    </ClInclude>
     <ClInclude Include="Ply\gaussiansplat.h">
       <Filter>Ply</Filter>
     </ClInclude>
@@ -52,6 +61,9 @@
       <Filter>Ply</Filter>
     </ClInclude>
     <ClInclude Include="Ply\plyheaderparser.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\plymodelloader.h">
       <Filter>Ply</Filter>
     </ClInclude>
     <ClInclude Include="Ply\plytypes.h">
@@ -69,6 +81,5 @@
     <ClInclude Include="Ply\supersplatdecoder.h">
       <Filter>Ply</Filter>
     </ClInclude>
-    <ClInclude Include="plymodelloader.h" />
   </ItemGroup>
 </Project>

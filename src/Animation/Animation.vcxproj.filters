@@ -2,19 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Skeleton">
-      <UniqueIdentifier>{d692d16c-5876-4271-bd4c-08a50c4feaa9}</UniqueIdentifier>
+      <UniqueIdentifier>{964807cb-eb23-4a85-b335-39180dd1c3fa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning">
-      <UniqueIdentifier>{c87659a7-814c-4714-a284-f8a0f65928c2}</UniqueIdentifier>
+      <UniqueIdentifier>{679e0f95-e279-4d38-9102-de83b10b9dac}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Correctives">
-      <UniqueIdentifier>{4a0d7a01-96a0-4994-af00-aa8b4edf927d}</UniqueIdentifier>
+      <UniqueIdentifier>{9b77abd6-8ad7-491b-ba51-2c96d5369355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Data">
+      <UniqueIdentifier>{5011e079-a685-4fe3-9286-316c42bb2421}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Deformers">
-      <UniqueIdentifier>{ec55632a-0c25-474b-94ad-278abaa167d6}</UniqueIdentifier>
+      <UniqueIdentifier>{a7640ca3-848d-4470-9795-7557d6d8ff52}</UniqueIdentifier>
     </Filter>
     <Filter Include="Skinning\Weights">
-      <UniqueIdentifier>{a8e4c8ff-81e3-4de2-b097-64b5fc3132b0}</UniqueIdentifier>
+      <UniqueIdentifier>{757b60ff-2c97-476a-9101-2ff20290be83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +83,15 @@
     <ClInclude Include="Skinning\Correctives\iskincorrective.h">
       <Filter>Skinning\Correctives</Filter>
     </ClInclude>
+    <ClInclude Include="Skinning\Data\skinbindcontext.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Data\skininfluence.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Data\skinweights.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
     <ClInclude Include="Skinning\Deformers\computeskindeformer.h">
       <Filter>Skinning\Deformers</Filter>
     </ClInclude>
@@ -92,19 +104,10 @@
     <ClInclude Include="Skinning\Deformers\linearblendskinning.h">
       <Filter>Skinning\Deformers</Filter>
     </ClInclude>
-    <ClInclude Include="Skinning\skinbindcontext.h">
-      <Filter>Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="Skinning\skininfluence.h">
-      <Filter>Skinning</Filter>
-    </ClInclude>
     <ClInclude Include="Skinning\skinningcontroller.h">
       <Filter>Skinning</Filter>
     </ClInclude>
     <ClInclude Include="Skinning\skinningregistry.h">
-      <Filter>Skinning</Filter>
-    </ClInclude>
-    <ClInclude Include="Skinning\skinweights.h">
       <Filter>Skinning</Filter>
     </ClInclude>
     <ClInclude Include="Skinning\Weights\boneheatweights.h">

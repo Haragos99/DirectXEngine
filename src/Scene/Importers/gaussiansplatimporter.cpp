@@ -1,6 +1,6 @@
 #include "gaussiansplatimporter.h"
 #include "gaussiansplatting.h"
-#include "Ply/gaussiansplatplyloader.h"
+#include "gaussiansplatplyloader.h"
 
 bool GaussianSplatImporter::CanImport(const std::string& path) const
 {

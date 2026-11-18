@@ -1,138 +1,150 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="App">
+      <UniqueIdentifier>{5b5a107b-0450-4a9c-99d3-8fbbc16f00b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Input">
+      <UniqueIdentifier>{ff694f24-7a0c-4128-92b8-dc4e37c3fc1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{84aaf6a4-0fc3-43e3-b30c-01a71f0c1c82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader Files">
-      <UniqueIdentifier>{b7e846ef-21a5-4327-9fbe-13ef9035f260}</UniqueIdentifier>
+    <Filter Include="Shaders\Common">
+      <UniqueIdentifier>{d0c356a6-3c4c-4ca6-b7e2-53215d75f03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Environment">
+      <UniqueIdentifier>{a3121504-b45c-48e4-88ad-737ea430c843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Mesh">
+      <UniqueIdentifier>{e253e120-b27d-47f6-829e-6041a2987d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Raytracing">
+      <UniqueIdentifier>{8736b7b8-ca5c-4c6a-b248-b91e1abf2e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Gizmo">
+      <UniqueIdentifier>{20667cd5-830d-43dc-b4a5-ccbc3b36c5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Animation">
+      <UniqueIdentifier>{ac8dfa7e-2183-47ae-93b5-08ccadae9600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Splatting">
+      <UniqueIdentifier>{12c48067-d1f7-4987-a42c-19081405f4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{7d72a1c1-8a0a-4bfd-b47a-8a2321390fbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="camera.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\pch.cpp" />
+    <ClCompile Include="App\camera.cpp">
+      <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="engine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="App\engine.cpp">
+      <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="keyboard.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\keyboard.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="App\main.cpp">
+      <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="mouse.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Input\mouse.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="windowapp.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="App\windowapp.cpp">
+      <Filter>App</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="App\camera.h">
+      <Filter>App</Filter>
     </ClInclude>
-    <ClInclude Include="engine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="App\engine.h">
+      <Filter>App</Filter>
     </ClInclude>
-    <ClInclude Include="keyboard.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\keyboard.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="mouse.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Input\mouse.h">
+      <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="windowapp.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="App\windowapp.h">
+      <Filter>App</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="shaders\BlackPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Common</Filter>
     </FxCompile>
     <FxCompile Include="shaders\EnvPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Environment</Filter>
     </FxCompile>
     <FxCompile Include="shaders\EnvVertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Environment</Filter>
     </FxCompile>
     <FxCompile Include="shaders\MeshPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Mesh</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Common</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PlanePixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Environment</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PlaneVertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Environment</Filter>
     </FxCompile>
     <FxCompile Include="shaders\RaytracerPS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Raytracing</Filter>
     </FxCompile>
     <FxCompile Include="shaders\RaytracerVS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Raytracing</Filter>
     </FxCompile>
     <FxCompile Include="shaders\VertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Common</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GizmoVertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Gizmo</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GizmoPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Gizmo</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GaussianSplatVS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Splatting</Filter>
     </FxCompile>
     <FxCompile Include="shaders\GaussianSplatPS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Splatting</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\DualQuaternionSkinningCS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
     <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Animation</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="shaders\SkinningCommon.hlsli">
-      <Filter>Shader Files</Filter>
+      <Filter>Shaders\Common</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="..\..\Resources\Background.dds">
-      <Filter>Resource Files</Filter>
+      <Filter>Resources</Filter>
     </Image>
     <Image Include="..\..\Resources\cloudy_skybox.dds">
-      <Filter>Resource Files</Filter>
+      <Filter>Resources</Filter>
     </Image>
     <Image Include="..\..\Resources\moss.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resources</Filter>
     </Image>
     <Image Include="..\..\Resources\wood.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resources</Filter>
     </Image>
   </ItemGroup>
 </Project>

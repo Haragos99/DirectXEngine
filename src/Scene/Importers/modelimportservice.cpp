@@ -1,7 +1,7 @@
 #include "modelimportservice.h"
-#include "Importers/gaussiansplatimporter.h"
-#include "Importers/meshobjectimporter.h"
-#include "Importers/pointcloudimporter.h"
+#include "gaussiansplatimporter.h"
+#include "meshobjectimporter.h"
+#include "pointcloudimporter.h"
 
 #include <filesystem>
 #include <iostream>

@@ -1,6 +1,6 @@
 #include "plymodelloader.h"
-#include "Ply/plyelementreader.h"
-#include "Ply/plyheaderparser.h"
+#include "plyelementreader.h"
+#include "plyheaderparser.h"
 
 #include <fstream>
 #include <iostream>

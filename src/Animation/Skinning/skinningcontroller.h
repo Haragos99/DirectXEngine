@@ -1,6 +1,6 @@
 #pragma once
-#include "Deformers/iskindeformer.h"
-#include "Weights/iweightsolver.h"
+#include "iskindeformer.h"
+#include "iweightsolver.h"
 #include "skinbindcontext.h"
 #include "skininfluence.h"
 

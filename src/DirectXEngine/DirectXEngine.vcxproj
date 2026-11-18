@@ -55,20 +55,20 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="engine.cpp" />
-    <ClCompile Include="keyboard.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="mouse.cpp" />
-    <ClCompile Include="windowapp.cpp" />
+    <ClCompile Include="App\camera.cpp" />
+    <ClCompile Include="App\engine.cpp" />
+    <ClCompile Include="Input\keyboard.cpp" />
+    <ClCompile Include="App\main.cpp" />
+    <ClCompile Include="Input\mouse.cpp" />
+    <ClCompile Include="App\windowapp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="engine.h" />
-    <ClInclude Include="keyboard.h" />
-    <ClInclude Include="mouse.h" />
-    <ClInclude Include="windowapp.h" />
+    <ClInclude Include="App\camera.h" />
+    <ClInclude Include="App\engine.h" />
+    <ClInclude Include="Input\keyboard.h" />
+    <ClInclude Include="Input\mouse.h" />
+    <ClInclude Include="App\windowapp.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\External\ImGuiLib\ImGuiLib.vcxproj">

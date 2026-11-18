@@ -45,46 +45,46 @@
     <ClCompile Include="..\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="cube.cpp" />
-    <ClCompile Include="gaussiansplatting.cpp" />
     <ClCompile Include="Gizmos\gizmo.cpp" />
     <ClCompile Include="Gizmos\gizmocontroller.cpp" />
     <ClCompile Include="Gizmos\movegizmo.cpp" />
     <ClCompile Include="Gizmos\scalegizmo.cpp" />
-    <ClCompile Include="halfedgemesh.cpp" />
     <ClCompile Include="Importers\gaussiansplatimporter.cpp" />
     <ClCompile Include="Importers\meshobjectimporter.cpp" />
+    <ClCompile Include="Importers\modelimportservice.cpp" />
     <ClCompile Include="Importers\pointcloudimporter.cpp" />
-    <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="meshmodel.cpp" />
-    <ClCompile Include="modelimportservice.cpp" />
+    <ClCompile Include="Mesh\halfedgemesh.cpp" />
+    <ClCompile Include="Mesh\mesh.cpp" />
+    <ClCompile Include="Mesh\meshmodel.cpp" />
     <ClCompile Include="object3D.cpp" />
-    <ClCompile Include="plane.cpp" />
-    <ClCompile Include="pointcloudmodel.cpp" />
-    <ClCompile Include="splatcloudobject.cpp" />
+    <ClCompile Include="PointClouds\gaussiansplatting.cpp" />
+    <ClCompile Include="PointClouds\pointcloudmodel.cpp" />
+    <ClCompile Include="PointClouds\splatcloudobject.cpp" />
+    <ClCompile Include="Primitives\cube.cpp" />
+    <ClCompile Include="Primitives\plane.cpp" />
     <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\pch.h" />
-    <ClInclude Include="cube.h" />
-    <ClInclude Include="gaussiansplatting.h" />
     <ClInclude Include="Gizmos\gizmo.h" />
     <ClInclude Include="Gizmos\gizmocontroller.h" />
     <ClInclude Include="Gizmos\gizmomode.h" />
     <ClInclude Include="Gizmos\movegizmo.h" />
     <ClInclude Include="Gizmos\scalegizmo.h" />
-    <ClInclude Include="halfedgemesh.h" />
     <ClInclude Include="Importers\gaussiansplatimporter.h" />
     <ClInclude Include="Importers\iobjectimporter.h" />
     <ClInclude Include="Importers\meshobjectimporter.h" />
+    <ClInclude Include="Importers\modelimportservice.h" />
     <ClInclude Include="Importers\pointcloudimporter.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="meshmodel.h" />
-    <ClInclude Include="modelimportservice.h" />
+    <ClInclude Include="Mesh\halfedgemesh.h" />
+    <ClInclude Include="Mesh\mesh.h" />
+    <ClInclude Include="Mesh\meshmodel.h" />
     <ClInclude Include="object3d.h" />
-    <ClInclude Include="plane.h" />
-    <ClInclude Include="pointcloudmodel.h" />
-    <ClInclude Include="splatcloudobject.h" />
+    <ClInclude Include="PointClouds\gaussiansplatting.h" />
+    <ClInclude Include="PointClouds\pointcloudmodel.h" />
+    <ClInclude Include="PointClouds\splatcloudobject.h" />
+    <ClInclude Include="Primitives\cube.h" />
+    <ClInclude Include="Primitives\plane.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="vertex.h" />
   </ItemGroup>

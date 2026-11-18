@@ -1,6 +1,6 @@
 #pragma once
 #include "splatcloudobject.h"
-#include "Ply/pointcloud.h"
+#include "pointcloud.h"
 
 #include <string>
 

@@ -8,9 +8,9 @@
 
 #include "ipanelsection.h"
 #include "uistate.h"
-#include "Sections/marchingcubessection.h"
-#include "Sections/sceneoutlinersection.h"
-#include "Sections/splatmeshingsection.h"
+#include "marchingcubessection.h"
+#include "sceneoutlinersection.h"
+#include "splatmeshingsection.h"
 
 class ImportSection;
 class SkeletonSection;

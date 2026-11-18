@@ -1,27 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="isosurfacejob.cpp" />
-    <ClCompile Include="isosurfacemodel.cpp" />
-    <ClCompile Include="marchingcubes.cpp" />
-    <ClCompile Include="marchingcubestables.cpp" />
-    <ClCompile Include="scalarfieldsampler.cpp" />
-    <ClCompile Include="spherefield.cpp" />
-    <ClCompile Include="splatdensityvolume.cpp" />
-    <ClCompile Include="voxelgrid.cpp" />
+    <Filter Include="Fields">
+      <UniqueIdentifier>{0853247d-00ea-4afb-922d-d333ef76b0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MarchingCubes">
+      <UniqueIdentifier>{632b27f7-f9e8-40d8-ab3d-d7db7b17b400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshing">
+      <UniqueIdentifier>{cd0f445c-c72d-4fc4-8e85-50984e8fd358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="iscalarfield.h" />
-    <ClInclude Include="isosurfacejob.h" />
-    <ClInclude Include="isosurfacemodel.h" />
-    <ClInclude Include="ivoxelsource.h" />
-    <ClInclude Include="marchingcubes.h" />
-    <ClInclude Include="marchingcubestables.h" />
-    <ClInclude Include="progressreporter.h" />
-    <ClInclude Include="scalarfieldsampler.h" />
-    <ClInclude Include="scalarfieldvolume.h" />
-    <ClInclude Include="spherefield.h" />
-    <ClInclude Include="splatdensityvolume.h" />
-    <ClInclude Include="voxelgrid.h" />
+    <ClCompile Include="Fields\scalarfieldsampler.cpp">
+      <Filter>Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="Fields\spherefield.cpp">
+      <Filter>Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="Fields\splatdensityvolume.cpp">
+      <Filter>Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="Fields\voxelgrid.cpp">
+      <Filter>Fields</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingCubes\marchingcubes.cpp">
+      <Filter>MarchingCubes</Filter>
+    </ClCompile>
+    <ClCompile Include="MarchingCubes\marchingcubestables.cpp">
+      <Filter>MarchingCubes</Filter>
+    </ClCompile>
+    <ClCompile Include="Meshing\isosurfacejob.cpp">
+      <Filter>Meshing</Filter>
+    </ClCompile>
+    <ClCompile Include="Meshing\isosurfacemodel.cpp">
+      <Filter>Meshing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Fields\iscalarfield.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\ivoxelsource.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\scalarfieldsampler.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\scalarfieldvolume.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\spherefield.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\splatdensityvolume.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="Fields\voxelgrid.h">
+      <Filter>Fields</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchingCubes\marchingcubes.h">
+      <Filter>MarchingCubes</Filter>
+    </ClInclude>
+    <ClInclude Include="MarchingCubes\marchingcubestables.h">
+      <Filter>MarchingCubes</Filter>
+    </ClInclude>
+    <ClInclude Include="Meshing\isosurfacejob.h">
+      <Filter>Meshing</Filter>
+    </ClInclude>
+    <ClInclude Include="Meshing\isosurfacemodel.h">
+      <Filter>Meshing</Filter>
+    </ClInclude>
+    <ClInclude Include="Meshing\progressreporter.h">
+      <Filter>Meshing</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
