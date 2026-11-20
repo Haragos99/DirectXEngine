@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{bec07074-e71b-4c8a-9ef8-8b05d8643b73}</ProjectGuid>
+    <RootNamespace>DirectXEngine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>App</EngineLayer>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Engine.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <!-- Shaders are compiled here, at build time (strict mode, /Ges), into x64\<Config>\shaders\.
+         The app loads these .cso files through AssetPaths::LoadShader, so a shader error is a build error. -->
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+      <ObjectFileOutput>$(OutDir)shaders\%(Filename).cso</ObjectFileOutput>
+      <AdditionalOptions>/Ges %(AdditionalOptions)</AdditionalOptions>
+    </FxCompile>
+    <!-- Seed the ImGui layout next to the exe from the tracked default, without overwriting a user's layout. -->
+    <PostBuildEvent>
+      <Command>if not exist "$(OutDir)imgui.ini" copy /Y "$(ProjectDir)imgui.ini" "$(OutDir)imgui.ini" &gt;nul</Command>
+      <Message>Seeding imgui.ini next to the exe</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Editor\editor.cpp" />
+    <ClCompile Include="App\engine.cpp" />
+    <ClCompile Include="Input\keyboard.cpp" />
+    <ClCompile Include="App\main.cpp" />
+    <ClCompile Include="Input\mouse.cpp" />
+    <ClCompile Include="App\windowapp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="Editor\editor.h" />
+    <ClInclude Include="App\engine.h" />
+    <ClInclude Include="Input\keyboard.h" />
+    <ClInclude Include="Input\mouse.h" />
+    <ClInclude Include="App\windowapp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{a1e0c0de-0009-4d58-9c10-5b0e6f2a0009}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\ImGuiLib\ImGuiLib.vcxproj">
+      <Project>{a1e0c0de-0001-4d58-9c10-5b0e6f2a0001}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\External\TextureLoaders\TextureLoaders.vcxproj">
+      <Project>{a1e0c0de-0002-4d58-9c10-5b0e6f2a0002}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelIO\ModelIO.vcxproj">
+      <Project>{a1e0c0de-0003-4d58-9c10-5b0e6f2a0003}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Voxel\Voxel.vcxproj">
+      <Project>{a1e0c0de-0004-4d58-9c10-5b0e6f2a0004}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Animation\Animation.vcxproj">
+      <Project>{a1e0c0de-0005-4d58-9c10-5b0e6f2a0005}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Scene\Scene.vcxproj">
+      <Project>{a1e0c0de-0006-4d58-9c10-5b0e6f2a0006}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Rendering\Rendering.vcxproj">
+      <Project>{a1e0c0de-0007-4d58-9c10-5b0e6f2a0007}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\UI\UI.vcxproj">
+      <Project>{a1e0c0de-0008-4d58-9c10-5b0e6f2a0008}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\BlackPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\EnvPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\EnvVertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\MeshPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\PixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\PlanePixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\PlaneVertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\VertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoVertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <EntryPointName>VSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <EntryPointName>PSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\DualQuaternionSkinningCS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <EntryPointName>CSMain</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+      <ShaderType>Compute</ShaderType>
+      <EntryPointName>CSMain</EntryPointName>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\SkinningCommon.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Resources\Background.dds" />
+    <Image Include="..\..\Resources\cloudy_skybox.dds" />
+    <Image Include="..\..\Resources\moss.png" />
+    <Image Include="..\..\Resources\wood.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

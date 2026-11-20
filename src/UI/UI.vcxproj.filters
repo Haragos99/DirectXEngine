@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sections">
+      <UniqueIdentifier>{165ef7d7-c694-48cd-9172-e6c2db91214c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sections\Animation">
+      <UniqueIdentifier>{490fbde9-5964-4ed9-9d34-f111d9797ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sections\Meshing">
+      <UniqueIdentifier>{3835b729-778d-4259-b59b-5001caf7094e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sections\Scene">
+      <UniqueIdentifier>{dbdc299c-2e0b-4124-8fff-f990182493cc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="modelfiledialog.cpp" />
+    <ClCompile Include="Sections\Animation\skeletonsection.cpp">
+      <Filter>Sections\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Animation\skinbindingsection.cpp">
+      <Filter>Sections\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Animation\skinweightssection.cpp">
+      <Filter>Sections\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Meshing\marchingcubessection.cpp">
+      <Filter>Sections\Meshing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Meshing\splatmeshingsection.cpp">
+      <Filter>Sections\Meshing</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\importsection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\objectpropertiessection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\sceneoutlinersection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\splatsettingssection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\transformmodesection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sections\Scene\viewportsection.cpp">
+      <Filter>Sections\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.cpp" />
+    <ClCompile Include="uistate.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ipanelsection.h" />
+    <ClInclude Include="modelfiledialog.h" />
+    <ClInclude Include="Sections\Animation\skeletonsection.h">
+      <Filter>Sections\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Animation\skinbindingsection.h">
+      <Filter>Sections\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Animation\skinweightssection.h">
+      <Filter>Sections\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Meshing\marchingcubessection.h">
+      <Filter>Sections\Meshing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Meshing\splatmeshingsection.h">
+      <Filter>Sections\Meshing</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\importsection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\objectpropertiessection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\sceneoutlinersection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\splatsettingssection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\transformmodesection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sections\Scene\viewportsection.h">
+      <Filter>Sections\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ui.h" />
+    <ClInclude Include="uistate.h" />
+  </ItemGroup>
+</Project>

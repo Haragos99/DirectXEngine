@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a1e0c0de-0006-4d58-9c10-5b0e6f2a0006}</ProjectGuid>
+    <RootNamespace>Scene</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>Scene</EngineLayer>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Engine.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClCompile Include="..\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Environment\envcube.cpp" />
+    <ClCompile Include="Environment\raytracer.cpp" />
+    <ClCompile Include="Gizmos\gizmo.cpp" />
+    <ClCompile Include="Gizmos\gizmocontroller.cpp" />
+    <ClCompile Include="Gizmos\movegizmo.cpp" />
+    <ClCompile Include="Gizmos\scalegizmo.cpp" />
+    <ClCompile Include="Importers\gaussiansplatimporter.cpp" />
+    <ClCompile Include="Importers\meshobjectimporter.cpp" />
+    <ClCompile Include="Importers\modelimportservice.cpp" />
+    <ClCompile Include="Importers\pointcloudimporter.cpp" />
+    <ClCompile Include="Mesh\mesh.cpp" />
+    <ClCompile Include="Mesh\meshmodel.cpp" />
+    <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="PointClouds\gaussiansplatting.cpp" />
+    <ClCompile Include="PointClouds\pointcloudmodel.cpp" />
+    <ClCompile Include="PointClouds\splatcloudobject.cpp" />
+    <ClCompile Include="Primitives\cube.cpp" />
+    <ClCompile Include="Primitives\plane.cpp" />
+    <ClCompile Include="world.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="Environment\envcube.h" />
+    <ClInclude Include="Environment\raytracer.h" />
+    <ClInclude Include="Gizmos\gizmo.h" />
+    <ClInclude Include="Gizmos\gizmocontroller.h" />
+    <ClInclude Include="Gizmos\gizmomode.h" />
+    <ClInclude Include="Gizmos\movegizmo.h" />
+    <ClInclude Include="Gizmos\scalegizmo.h" />
+    <ClInclude Include="Importers\gaussiansplatimporter.h" />
+    <ClInclude Include="Importers\iobjectimporter.h" />
+    <ClInclude Include="Importers\meshobjectimporter.h" />
+    <ClInclude Include="Importers\modelimportservice.h" />
+    <ClInclude Include="Importers\pointcloudimporter.h" />
+    <ClInclude Include="Mesh\mesh.h" />
+    <ClInclude Include="Mesh\meshmodel.h" />
+    <ClInclude Include="object3d.h" />
+    <ClInclude Include="PointClouds\gaussiansplatting.h" />
+    <ClInclude Include="PointClouds\pointcloudmodel.h" />
+    <ClInclude Include="PointClouds\splatcloudobject.h" />
+    <ClInclude Include="Primitives\cube.h" />
+    <ClInclude Include="Primitives\plane.h" />
+    <ClInclude Include="world.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

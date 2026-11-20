@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Skeleton">
+      <UniqueIdentifier>{85c8bb28-839b-47d1-935e-5f96cf621d8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning">
+      <UniqueIdentifier>{53e9814e-155f-4f70-9853-c6ab16905e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Correctives">
+      <UniqueIdentifier>{542c8aaa-99d5-4164-a885-d43de136e500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Data">
+      <UniqueIdentifier>{95344622-cd61-4730-8ea8-88a0b231fda3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Deformers">
+      <UniqueIdentifier>{bf130530-5750-4f86-968b-5103a5bca5f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skinning\Weights">
+      <UniqueIdentifier>{05b81365-35ae-43a6-9fb4-063b07c4e6c4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Skeleton\bone.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton\joint.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton\jointhandle.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton\skeleton.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton\skeletongeometry.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton\skeletonpose.cpp">
+      <Filter>Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\Deformers\computeskindeformer.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\Deformers\dualquaternionskinning.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\Deformers\linearblendskinning.cpp">
+      <Filter>Skinning\Deformers</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\skinningcontroller.cpp">
+      <Filter>Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\skinningregistry.cpp">
+      <Filter>Skinning</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\Weights\boneheatweights.cpp">
+      <Filter>Skinning\Weights</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinning\Weights\closestboneweights.cpp">
+      <Filter>Skinning\Weights</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Skeleton\bone.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton\joint.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton\jointhandle.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton\skeleton.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton\skeletongeometry.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton\skeletonpose.h">
+      <Filter>Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Correctives\iskincorrective.h">
+      <Filter>Skinning\Correctives</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Data\skinbindcontext.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Data\skininfluence.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Data\skinweights.h">
+      <Filter>Skinning\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Deformers\computeskindeformer.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Deformers\dualquaternionskinning.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Deformers\iskindeformer.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Deformers\linearblendskinning.h">
+      <Filter>Skinning\Deformers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\skinningcontroller.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\skinningregistry.h">
+      <Filter>Skinning</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Weights\boneheatweights.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Weights\closestboneweights.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinning\Weights\iweightsolver.h">
+      <Filter>Skinning\Weights</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{0efd8ab1-b873-4e4f-868c-2e05f0faeca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{19055b43-bde1-4075-b152-a9afb4696006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{cfdbb047-48f4-40f3-81d5-f858e8341671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{f573c528-f679-491e-bb8d-a8bdc1161602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Common">
+      <UniqueIdentifier>{ca3a5b15-9f6f-4c69-94f5-70251bd1dd82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Environment">
+      <UniqueIdentifier>{afa1ce7e-2e0f-4fb0-91d5-7d7673f19b7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Mesh">
+      <UniqueIdentifier>{af7566c3-4c68-4386-9884-596de5e64aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Raytracing">
+      <UniqueIdentifier>{3e71ec1d-9877-44c4-a69d-610e3e948533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Gizmo">
+      <UniqueIdentifier>{3ff6fbfb-4d6e-467b-94bb-8747b4443c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Animation">
+      <UniqueIdentifier>{ec692f7c-6501-4c06-b180-e7a660ad663f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Splatting">
+      <UniqueIdentifier>{ab038cef-0cac-49a6-addb-5f435e1a579e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{06196ee0-003e-4f48-b2d3-1d900bbf0422}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\pch.cpp" />
+    <ClCompile Include="Editor\editor.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="App\engine.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="App\main.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="App\windowapp.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="Editor\editor.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="App\engine.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="App\windowapp.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <FxCompile Include="shaders\BlackPixelShader.hlsl">
+      <Filter>Shaders\Common</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\EnvPixelShader.hlsl">
+      <Filter>Shaders\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\EnvVertexShader.hlsl">
+      <Filter>Shaders\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\MeshPixelShader.hlsl">
+      <Filter>Shaders\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\PixelShader.hlsl">
+      <Filter>Shaders\Common</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\PlanePixelShader.hlsl">
+      <Filter>Shaders\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\PlaneVertexShader.hlsl">
+      <Filter>Shaders\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerPS.hlsl">
+      <Filter>Shaders\Raytracing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\RaytracerVS.hlsl">
+      <Filter>Shaders\Raytracing</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\VertexShader.hlsl">
+      <Filter>Shaders\Common</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoVertexShader.hlsl">
+      <Filter>Shaders\Gizmo</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GizmoPixelShader.hlsl">
+      <Filter>Shaders\Gizmo</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonVertexShader.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkeletonPixelShader.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatVS.hlsl">
+      <Filter>Shaders\Splatting</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\GaussianSplatPS.hlsl">
+      <Filter>Shaders\Splatting</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightVertexShader.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinWeightPixelShader.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\DualQuaternionSkinningCS.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\LinearBlendSkinningCS.hlsl">
+      <Filter>Shaders\Animation</Filter>
+    </FxCompile>
+    <None Include="shaders\SkinningCommon.hlsli">
+      <Filter>Shaders\Common</Filter>
+    </None>
+    <Image Include="..\..\Resources\Background.dds">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="..\..\Resources\cloudy_skybox.dds">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="..\..\Resources\moss.png">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="..\..\Resources\wood.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

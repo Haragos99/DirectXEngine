@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{69563e2c-8d41-4f63-9084-44445e27fb27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gizmos">
+      <UniqueIdentifier>{07c89007-032b-407f-9434-2c3e23d038c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Importers">
+      <UniqueIdentifier>{2e3d61a5-b206-4d3f-aad0-fd0350b121d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{4da92a4a-259f-475b-adf0-dc3cf194d415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PointClouds">
+      <UniqueIdentifier>{17a4cb34-6aca-4b16-a85f-82958a6df50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primitives">
+      <UniqueIdentifier>{cfa21dae-127a-4fc0-bb8a-56aeea7d8df4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Environment\envcube.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\raytracer.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\gizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\gizmocontroller.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\movegizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmos\scalegizmo.cpp">
+      <Filter>Gizmos</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\gaussiansplatimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\meshobjectimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\modelimportservice.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Importers\pointcloudimporter.cpp">
+      <Filter>Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\meshmodel.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="object3D.cpp" />
+    <ClCompile Include="PointClouds\gaussiansplatting.cpp">
+      <Filter>PointClouds</Filter>
+    </ClCompile>
+    <ClCompile Include="PointClouds\pointcloudmodel.cpp">
+      <Filter>PointClouds</Filter>
+    </ClCompile>
+    <ClCompile Include="PointClouds\splatcloudobject.cpp">
+      <Filter>PointClouds</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives\cube.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives\plane.cpp">
+      <Filter>Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="world.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Environment\envcube.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\raytracer.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\gizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\gizmocontroller.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\gizmomode.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\movegizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmos\scalegizmo.h">
+      <Filter>Gizmos</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\gaussiansplatimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\iobjectimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\meshobjectimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\modelimportservice.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Importers\pointcloudimporter.h">
+      <Filter>Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\meshmodel.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="object3d.h" />
+    <ClInclude Include="PointClouds\gaussiansplatting.h">
+      <Filter>PointClouds</Filter>
+    </ClInclude>
+    <ClInclude Include="PointClouds\pointcloudmodel.h">
+      <Filter>PointClouds</Filter>
+    </ClInclude>
+    <ClInclude Include="PointClouds\splatcloudobject.h">
+      <Filter>PointClouds</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives\cube.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives\plane.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="world.h" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Device">
+      <UniqueIdentifier>{e77037cd-7c74-47ce-8852-9acc2fa8499f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Raytracing">
+      <UniqueIdentifier>{1d9341b4-46cc-4eeb-9b83-eda9e9ec048d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Splatting">
+      <UniqueIdentifier>{6789d2f1-59e0-48a7-b11d-c2143786317d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Device\assetpaths.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\renderer.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\shaders.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\texture.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Raytracing\raytraceshader.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="Splatting\gaussiansplatshader.cpp">
+      <Filter>Splatting</Filter>
+    </ClCompile>
+    <ClCompile Include="Splatting\splatdepthsorter.cpp">
+      <Filter>Splatting</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Device\assetpaths.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\renderer.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\shaders.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\texture.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Raytracing\raytraceshader.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="Splatting\gaussiansplatshader.h">
+      <Filter>Splatting</Filter>
+    </ClInclude>
+    <ClInclude Include="Splatting\splatdepthsorter.h">
+      <Filter>Splatting</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

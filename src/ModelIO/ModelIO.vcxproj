@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a1e0c0de-0003-4d58-9c10-5b0e6f2a0003}</ProjectGuid>
+    <RootNamespace>ModelIO</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <EngineLayer>ModelIO</EngineLayer>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Engine.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClCompile Include="..\pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imodelloader.cpp" />
+    <ClCompile Include="modelloaderregistry.cpp" />
+    <ClCompile Include="Obj\objmodelloader.cpp" />
+    <ClCompile Include="Ply\gaussiansplat.cpp" />
+    <ClCompile Include="Ply\gaussiansplatplyloader.cpp" />
+    <ClCompile Include="Ply\plyelementreader.cpp" />
+    <ClCompile Include="Ply\plyheaderparser.cpp" />
+    <ClCompile Include="Ply\plymodelloader.cpp" />
+    <ClCompile Include="Ply\pointcloud.cpp" />
+    <ClCompile Include="Ply\pointcloudplyloader.cpp" />
+    <ClCompile Include="Ply\standardsplatdecoder.cpp" />
+    <ClCompile Include="Ply\supersplatdecoder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pch.h" />
+    <ClInclude Include="imodelloader.h" />
+    <ClInclude Include="modelloaderregistry.h" />
+    <ClInclude Include="Obj\objmodelloader.h" />
+    <ClInclude Include="Ply\gaussiansplat.h" />
+    <ClInclude Include="Ply\gaussiansplatplyloader.h" />
+    <ClInclude Include="Ply\isplatdecoder.h" />
+    <ClInclude Include="Ply\plyelementreader.h" />
+    <ClInclude Include="Ply\plyheaderparser.h" />
+    <ClInclude Include="Ply\plymodelloader.h" />
+    <ClInclude Include="Ply\plytypes.h" />
+    <ClInclude Include="Ply\pointcloud.h" />
+    <ClInclude Include="Ply\pointcloudplyloader.h" />
+    <ClInclude Include="Ply\standardsplatdecoder.h" />
+    <ClInclude Include="Ply\supersplatdecoder.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

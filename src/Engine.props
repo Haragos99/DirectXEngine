@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings shared by every project in the solution. Change them here, not per project. -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EngineRoot>$(MSBuildThisFileDirectory)..\</EngineRoot>
+    <EngineSrc>$(EngineRoot)src\</EngineSrc>
+    <!-- vcpkg is only used for header-only Eigen. Its auto-link would pull in vcpkg's own
+         imgui library, which collides with the ImGui project built from External\imgui. -->
+    <VcpkgAutoLink>false</VcpkgAutoLink>
+    <IntDir>$(EngineRoot)x64\$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(ConfigurationType)'=='StaticLibrary'">$(EngineRoot)x64\$(Configuration)\lib\</OutDir>
+    <OutDir Condition="'$(ConfigurationType)'!='StaticLibrary'">$(EngineRoot)x64\$(Configuration)\</OutDir>
+  </PropertyGroup>
+
+  <!-- Layering. Each layer may include its own headers and those of the layers below it:
+         Core <- Rendering, ModelIO <- Scene <- Animation, Voxel <- UI <- App (exe)
+       A project picks its layer with <EngineLayer> in its Globals property group, and gets only
+       those include folders, so including a header from a higher layer fails to compile.
+       Headers are included by bare name ("mesh.h"): when you add a folder with headers,
+       add it to its layer's *Dirs list below. -->
+  <PropertyGroup>
+    <CoreDirs>$(EngineSrc)Core</CoreDirs>
+    <RenderingDirs>$(EngineSrc)Rendering\Device;$(EngineSrc)Rendering\Raytracing;$(EngineSrc)Rendering\Splatting;$(EngineRoot)External\TextureLoaders</RenderingDirs>
+    <ModelIODirs>$(EngineSrc)ModelIO;$(EngineSrc)ModelIO\Obj;$(EngineSrc)ModelIO\Ply</ModelIODirs>
+    <SceneDirs>$(EngineSrc)Scene;$(EngineSrc)Scene\Environment;$(EngineSrc)Scene\Gizmos;$(EngineSrc)Scene\Importers;$(EngineSrc)Scene\Mesh;$(EngineSrc)Scene\PointClouds;$(EngineSrc)Scene\Primitives</SceneDirs>
+    <AnimationDirs>$(EngineSrc)Animation\Skeleton;$(EngineSrc)Animation\Skinning;$(EngineSrc)Animation\Skinning\Correctives;$(EngineSrc)Animation\Skinning\Data;$(EngineSrc)Animation\Skinning\Deformers;$(EngineSrc)Animation\Skinning\Weights</AnimationDirs>
+    <VoxelDirs>$(EngineSrc)Voxel\Fields;$(EngineSrc)Voxel\MarchingCubes;$(EngineSrc)Voxel\Meshing</VoxelDirs>
+    <ImGuiDirs>$(EngineRoot)External\imgui;$(EngineRoot)External\imgui\backends</ImGuiDirs>
+    <UIDirs>$(EngineSrc)UI;$(EngineSrc)UI\Sections\Animation;$(EngineSrc)UI\Sections\Meshing;$(EngineSrc)UI\Sections\Scene</UIDirs>
+    <AppDirs>$(EngineSrc)DirectXEngine\App;$(EngineSrc)DirectXEngine\Editor;$(EngineSrc)DirectXEngine\Input</AppDirs>
+
+    <EngineIncludes Condition="'$(EngineLayer)'=='Core'">$(CoreDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='Rendering'">$(CoreDirs);$(RenderingDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='ModelIO'">$(CoreDirs);$(ModelIODirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='Scene'">$(CoreDirs);$(RenderingDirs);$(ModelIODirs);$(SceneDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='Animation'">$(CoreDirs);$(RenderingDirs);$(ModelIODirs);$(SceneDirs);$(AnimationDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='Voxel'">$(CoreDirs);$(RenderingDirs);$(ModelIODirs);$(SceneDirs);$(VoxelDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='UI'">$(CoreDirs);$(RenderingDirs);$(ModelIODirs);$(SceneDirs);$(AnimationDirs);$(VoxelDirs);$(ImGuiDirs);$(UIDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='App'">$(CoreDirs);$(RenderingDirs);$(ModelIODirs);$(SceneDirs);$(AnimationDirs);$(VoxelDirs);$(ImGuiDirs);$(UIDirs);$(AppDirs)</EngineIncludes>
+    <EngineIncludes Condition="'$(EngineLayer)'=='ImGui'">$(ImGuiDirs)</EngineIncludes>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <!-- src\pch.h is force-included, so no source file has to include it. -->
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!-- src (for pch.h) plus the folders this project's layer may see; see Layering above. -->
+      <AdditionalIncludeDirectories>$(EngineSrc);$(EngineIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
